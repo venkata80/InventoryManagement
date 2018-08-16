@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="InventoryManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="IM_ADDRESS_DETAILS">
+    <Key>
+      <PropertyRef Name="Address_ID" />
+    </Key>
+    <Property Name="Address_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Address1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Address2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Address3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="State" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="City" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="PostalCode" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="PostalExCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="EMPID" Type="Int32" />
+    <Property Name="HomePhone" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="WorkPhone" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="Fax" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="Cell_Phone" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="Email_ID" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="Created_By" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Created_On" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Modified_By" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="Modified_On" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="IM_Employer" Relationship="Self.FK_IM_ADDRESS_DETAILS_IM_Employer" FromRole="IM_ADDRESS_DETAILS" ToRole="IM_Employer" />
+  </EntityType>
+  <EntityType Name="IM_Employer">
+    <Key>
+      <PropertyRef Name="EMPID" />
+    </Key>
+    <Property Name="EMPID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Middlename" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Designation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="JoinDate" Type="DateTime" Precision="0" />
+    <Property Name="RelievedDate" Type="DateTime" Precision="0" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="IM_ADDRESS_DETAILS" Relationship="Self.FK_IM_ADDRESS_DETAILS_IM_Employer" FromRole="IM_Employer" ToRole="IM_ADDRESS_DETAILS" />
+  </EntityType>
+  <EntityType Name="IM_SUPPLIER">
+    <Key>
+      <PropertyRef Name="SupplierID" />
+    </Key>
+    <Property Name="SupplierID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SupplierName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="SuplierPhone" Type="Int32" />
+    <Property Name="SupplierAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+  </EntityType>
+  <Association Name="FK_IM_ADDRESS_DETAILS_IM_Employer">
+    <End Role="IM_Employer" Type="Self.IM_Employer" Multiplicity="0..1" />
+    <End Role="IM_ADDRESS_DETAILS" Type="Self.IM_ADDRESS_DETAILS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="IM_Employer">
+        <PropertyRef Name="EMPID" />
+      </Principal>
+      <Dependent Role="IM_ADDRESS_DETAILS">
+        <PropertyRef Name="EMPID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="InventoryManagementEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="IM_ADDRESS_DETAILS" EntityType="Self.IM_ADDRESS_DETAILS" />
+    <EntitySet Name="IM_Employer" EntityType="Self.IM_Employer" />
+    <EntitySet Name="IM_SUPPLIER" EntityType="Self.IM_SUPPLIER" />
+    <AssociationSet Name="FK_IM_ADDRESS_DETAILS_IM_Employer" Association="Self.FK_IM_ADDRESS_DETAILS_IM_Employer">
+      <End Role="IM_Employer" EntitySet="IM_Employer" />
+      <End Role="IM_ADDRESS_DETAILS" EntitySet="IM_ADDRESS_DETAILS" />
+    </AssociationSet>
+    <FunctionImport Name="USP_IM_SUPPLIER_DELETE">
+      <Parameter Name="SupplierID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="USP_IM_SUPPLIER_GETBYSUPPLIERID" ReturnType="Collection(InventoryManagementModel.USP_IM_SUPPLIER_GETBYSUPPLIERID_Result)">
+      <Parameter Name="SupplierID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="USP_IM_SUPPLIER_INSERT">
+      <Parameter Name="SupplierName" Mode="In" Type="String" />
+      <Parameter Name="SuplierPhone" Mode="In" Type="Int32" />
+      <Parameter Name="SupplierAddress" Mode="In" Type="String" />
+      <Parameter Name="IsActive" Mode="In" Type="Boolean" />
+      <Parameter Name="CreatedBy" Mode="In" Type="String" />
+      <Parameter Name="CreatedOn" Mode="In" Type="DateTime" />
+      <Parameter Name="ModifiedBy" Mode="In" Type="String" />
+      <Parameter Name="ModifiedOn" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="USP_IM_SUPPLIER_UPDATE">
+      <Parameter Name="SupplierID" Mode="In" Type="Int32" />
+      <Parameter Name="SupplierName" Mode="In" Type="String" />
+      <Parameter Name="SuplierPhone" Mode="In" Type="Int32" />
+      <Parameter Name="SupplierAddress" Mode="In" Type="String" />
+      <Parameter Name="IsActive" Mode="In" Type="Boolean" />
+      <Parameter Name="CreatedBy" Mode="In" Type="String" />
+      <Parameter Name="CreatedOn" Mode="In" Type="DateTime" />
+      <Parameter Name="ModifiedBy" Mode="In" Type="String" />
+      <Parameter Name="ModifiedOn" Mode="In" Type="DateTime" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="USP_IM_SUPPLIER_GETBYSUPPLIERID_Result">
+    <Property Type="Int32" Name="SupplierID" Nullable="false" />
+    <Property Type="String" Name="SupplierName" Nullable="true" MaxLength="250" />
+    <Property Type="Int32" Name="SuplierPhone" Nullable="true" />
+    <Property Type="String" Name="SupplierAddress" Nullable="true" />
+    <Property Type="Boolean" Name="IsActive" Nullable="true" />
+    <Property Type="String" Name="CreatedBy" Nullable="true" MaxLength="250" />
+    <Property Type="DateTime" Name="CreatedOn" Nullable="true" Precision="23" />
+    <Property Type="String" Name="ModifiedBy" Nullable="true" MaxLength="250" />
+    <Property Type="DateTime" Name="ModifiedOn" Nullable="true" Precision="23" />
+  </ComplexType>
+</Schema>

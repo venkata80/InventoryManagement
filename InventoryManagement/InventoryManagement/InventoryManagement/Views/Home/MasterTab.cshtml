@@ -1,0 +1,52 @@
+﻿@using InventoryManagement.Models
+
+@{
+    ViewBag.Title = "MasterTab";
+    string DataType = TempData["MaterDataType"] != null ? (MasterDataDTO.GetDisplayName(((MasterDataType)TempData["MaterDataType"]))) : null;
+}
+
+<style>
+    table, th, td {
+        border: .5px solid black;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 5px;
+        text-align: left;
+    }
+</style>
+<div class="panel panel-default" style=" padding: 10px; margin: 10px">
+    <div id="Tabs" role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            @foreach (MasterDataType item in Enum.GetValues(typeof(MasterDataType)))
+            {
+                if (item != MasterDataType.None)
+                {
+                    <li class="lidatatype">
+                        @Ajax.ActionLink(MasterDataDTO.GetDisplayName(item), "MasterDataView", "Home", new { Type = item },
+                                        new AjaxOptions { UpdateTargetId = "dvmasterdatacontent" },
+                                        new { id = "li" + MasterDataDTO.GetDisplayName(item), @onclick = "$('.lidatatype').removeClass('active'); $(this).parent().addClass('active');" })
+                    </li>
+                }
+            }
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content in" style="padding-top: 20px">
+            <div role="tabpanel" class="tab-pane active" id="dvmasterdatacontent"></div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if ('@DataType' == 'null' || '@DataType' == 'undefined' || '@DataType' == '') {
+                $('#liBrand').trigger('click');
+            } else {
+                $('@Html.Raw("#li"+ DataType)').trigger('click');
+            }
+        });
+
+    </script>
+}

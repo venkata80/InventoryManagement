@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="InventoryManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="IM_ADDRESS_DETAILS">
+    <Key>
+      <PropertyRef Name="Address_ID" />
+    </Key>
+    <Property Name="Address_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Address1" Type="nvarchar(max)" />
+    <Property Name="Address2" Type="nvarchar(max)" />
+    <Property Name="Address3" Type="nvarchar(max)" />
+    <Property Name="State" Type="nvarchar" MaxLength="64" />
+    <Property Name="City" Type="nvarchar" MaxLength="64" />
+    <Property Name="PostalCode" Type="nvarchar" MaxLength="64" />
+    <Property Name="PostalExCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="EMPID" Type="int" />
+    <Property Name="HomePhone" Type="nvarchar" MaxLength="64" />
+    <Property Name="WorkPhone" Type="nvarchar" MaxLength="64" />
+    <Property Name="Fax" Type="nvarchar" MaxLength="64" />
+    <Property Name="Cell_Phone" Type="nvarchar" MaxLength="64" />
+    <Property Name="Email_ID" Type="nvarchar" MaxLength="64" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="Created_By" Type="nvarchar" MaxLength="64" Nullable="false" />
+    <Property Name="Created_On" Type="datetime" Nullable="false" />
+    <Property Name="Modified_By" Type="nvarchar" MaxLength="64" />
+    <Property Name="Modified_On" Type="datetime" />
+  </EntityType>
+  <EntityType Name="IM_Employer">
+    <Key>
+      <PropertyRef Name="EMPID" />
+    </Key>
+    <Property Name="EMPID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Middlename" Type="nvarchar" MaxLength="50" />
+    <Property Name="Designation" Type="nvarchar" MaxLength="50" />
+    <Property Name="JoinDate" Type="date" />
+    <Property Name="RelievedDate" Type="date" />
+    <Property Name="IsActive" Type="bit" />
+    <Property Name="CreateBy" Type="nvarchar" MaxLength="250" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="nvarchar" MaxLength="250" />
+    <Property Name="ModifiedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="IM_SUPPLIER">
+    <Key>
+      <PropertyRef Name="SupplierID" />
+    </Key>
+    <Property Name="SupplierID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SupplierName" Type="nvarchar" MaxLength="250" />
+    <Property Name="SuplierPhone" Type="int" />
+    <Property Name="SupplierAddress" Type="nvarchar(max)" />
+    <Property Name="IsActive" Type="bit" />
+    <Property Name="CreatedBy" Type="nvarchar" MaxLength="250" />
+    <Property Name="CreatedOn" Type="datetime" />
+    <Property Name="ModifiedBy" Type="nvarchar" MaxLength="250" />
+    <Property Name="ModifiedOn" Type="datetime" />
+  </EntityType>
+  <Association Name="FK_IM_ADDRESS_DETAILS_IM_Employer">
+    <End Role="IM_Employer" Type="Self.IM_Employer" Multiplicity="0..1" />
+    <End Role="IM_ADDRESS_DETAILS" Type="Self.IM_ADDRESS_DETAILS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="IM_Employer">
+        <PropertyRef Name="EMPID" />
+      </Principal>
+      <Dependent Role="IM_ADDRESS_DETAILS">
+        <PropertyRef Name="EMPID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="USP_IM_SUPPLIER_DELETE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SupplierID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="USP_IM_SUPPLIER_GETBYSUPPLIERID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SupplierID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="USP_IM_SUPPLIER_INSERT" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SupplierName" Type="nvarchar" Mode="In" />
+    <Parameter Name="SuplierPhone" Type="int" Mode="In" />
+    <Parameter Name="SupplierAddress" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="IsActive" Type="bit" Mode="In" />
+    <Parameter Name="CreatedBy" Type="nvarchar" Mode="In" />
+    <Parameter Name="CreatedOn" Type="datetime" Mode="In" />
+    <Parameter Name="ModifiedBy" Type="nvarchar" Mode="In" />
+    <Parameter Name="ModifiedOn" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="USP_IM_SUPPLIER_UPDATE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SupplierID" Type="int" Mode="In" />
+    <Parameter Name="SupplierName" Type="nvarchar" Mode="In" />
+    <Parameter Name="SuplierPhone" Type="int" Mode="In" />
+    <Parameter Name="SupplierAddress" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="IsActive" Type="bit" Mode="In" />
+    <Parameter Name="CreatedBy" Type="nvarchar" Mode="In" />
+    <Parameter Name="CreatedOn" Type="datetime" Mode="In" />
+    <Parameter Name="ModifiedBy" Type="nvarchar" Mode="In" />
+    <Parameter Name="ModifiedOn" Type="datetime" Mode="In" />
+  </Function>
+  <EntityContainer Name="InventoryManagementModelStoreContainer">
+    <EntitySet Name="IM_ADDRESS_DETAILS" EntityType="Self.IM_ADDRESS_DETAILS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="IM_Employer" EntityType="Self.IM_Employer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="IM_SUPPLIER" EntityType="Self.IM_SUPPLIER" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_IM_ADDRESS_DETAILS_IM_Employer" Association="Self.FK_IM_ADDRESS_DETAILS_IM_Employer">
+      <End Role="IM_Employer" EntitySet="IM_Employer" />
+      <End Role="IM_ADDRESS_DETAILS" EntitySet="IM_ADDRESS_DETAILS" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

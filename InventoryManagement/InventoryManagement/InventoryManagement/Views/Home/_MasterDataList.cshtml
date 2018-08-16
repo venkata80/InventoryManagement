@@ -1,0 +1,59 @@
+﻿@using InventoryManagement.Models
+@model IEnumerable<MasterDataDTO>
+<div class="panel panel-default table-responsive">
+    <div class="panel-heading">
+         <span class="label label-info ">
+            <span class="glyphicon glyphicon-star"></span>
+            <b style="font-size:medium">   @MasterDataDTO.GetDisplayName((MasterDataType)ViewBag.MaterDataType)</b>
+        </span>
+        <span class="label label-info pull-right">  @Model.Count()  @MasterDataDTO.GetDisplayName((MasterDataType)ViewBag.MaterDataType) </span>
+    </div>
+</div>
+<table style="width:100%">
+    @*<tr>
+            <th colspan="2"><h3> @MasterDataDTO.GetDisplayName((MasterDataType)ViewBag.MaterDataType)   </h3>    </th>
+        </tr>*@
+    <tr>
+        <td valign="top" width="500px" style=" padding: 10px; margin: 5px">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayName("Name")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Descrption")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Isactive")
+                    </th>
+                    <th>Action</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MasterName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Isactive)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "MasterDataView1", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </td>
+        <td valign="top" width="500px" style=" padding: 10px; margin: 5px">
+            @Html.Action("MasterRecordInsert", "Home", new { Type = ViewBag.MaterDataType })
+        </td>
+    </tr>
+</table>
+
+

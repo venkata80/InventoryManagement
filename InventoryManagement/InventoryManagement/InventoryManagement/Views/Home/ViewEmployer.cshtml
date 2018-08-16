@@ -1,0 +1,122 @@
+﻿@model IEnumerable<InventoryManagement.Models.BaseEmployerDTO>
+
+@{
+    ViewBag.Title = "ViewEmployer";
+}
+
+<h2>ViewEmployer</h2>
+<div class="padding-md">
+    <div class="main-header clearfix">
+        @*<div class="page-title" style="float:left;">
+
+                <h3  class="no-margin" > ViewEmployer</h3>
+                <span>
+                    @Html.ActionLink("Create New", "CreateEmployer", "Home")
+                </span>
+            </div>
+            <div style="float:right;">
+                <span> Total count: </span>
+                @Model.Count()<a class="btn btn-xs btn-success"><i class="fa fa-plus-circle fa-lg"></i>
+            </div>*@
+        <div class="panel panel-default table-responsive">
+            <div class="panel-heading">
+                <b>ViewEmployer</b> <span class="label label-info ">
+                    <span class="glyphicon glyphicon-plus-sign"></span>
+                    @Html.ActionLink("Create New", "CreateEmployer", "Home")
+                </span>
+                <span class="label label-info pull-right">  @Model.Count() Employers</span>
+            </div>
+        </div>
+        <div class="padding-md clearfix">
+            <table class="table table-striped" id="dataTable">
+                <tr>                  
+                    @*<th>
+                        @Html.DisplayNameFor(model => model.Fullname)
+                    </th>*@
+                    <th>
+                        @Html.DisplayNameFor(model => model.Dateofbirth)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.gender)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ResPhone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CellPhone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.State)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Zipcode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.JoinDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Relieved)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Isactive)
+                    </th>                    
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>                      
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.Fullname)
+                        </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Dateofbirth)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.gender)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ResPhone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CellPhone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.State)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Zipcode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.JoinDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Relieved)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Isactive)
+                        </td>                       
+                        <td>
+                            @Html.ActionLink("Edit", "EditEmployer", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "DeleteEmployer", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');" })
+                        </td>
+                    </tr>
+
+                }
+
+            </table>
+        </div>
+    </div>
+</div>

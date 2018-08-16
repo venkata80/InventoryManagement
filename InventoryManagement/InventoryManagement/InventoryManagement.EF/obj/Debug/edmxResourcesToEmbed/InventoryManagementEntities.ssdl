@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="InventoryManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="IM_Employer">
+    <Key>
+      <PropertyRef Name="EMPID" />
+    </Key>
+    <Property Name="EMPID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Middlename" Type="nvarchar" MaxLength="50" />
+    <Property Name="DOB" Type="date" />
+    <Property Name="Gender" Type="nvarchar" MaxLength="50" />
+    <Property Name="ResPhone" Type="int" />
+    <Property Name="CellPhone" Type="int" />
+    <Property Name="Address" Type="nvarchar(max)" />
+    <Property Name="City" Type="nvarchar" MaxLength="100" />
+    <Property Name="State" Type="nvarchar" MaxLength="100" />
+    <Property Name="Zipcode" Type="int" />
+    <Property Name="Designation" Type="nvarchar" MaxLength="50" />
+    <Property Name="JoinDate" Type="date" />
+    <Property Name="RelievedDate" Type="date" />
+    <Property Name="IsActive" Type="bit" />
+    <Property Name="CreateBy" Type="nvarchar" MaxLength="250" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="nvarchar" MaxLength="250" />
+    <Property Name="ModifiedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="IM_MasterData">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MasterName" Type="nvarchar" MaxLength="250" />
+    <Property Name="Descrption" Type="nvarchar(max)" />
+    <Property Name="Type" Type="nvarchar" MaxLength="50" />
+    <Property Name="Isactive" Type="bit" />
+    <Property Name="CreatedBy" Type="nvarchar" MaxLength="100" />
+    <Property Name="CreatedOn" Type="datetime" />
+    <Property Name="ModifiedBy" Type="nvarchar" MaxLength="100" />
+    <Property Name="ModifiedOn" Type="datetime" />
+  </EntityType>
+  <EntityType Name="IM_SUPPLIER">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BusinessName" Type="nvarchar(max)" />
+    <Property Name="Name" Type="nvarchar" MaxLength="250" />
+    <Property Name="Phone" Type="int" />
+    <Property Name="Address" Type="nvarchar(max)" />
+    <Property Name="City" Type="nvarchar" MaxLength="100" />
+    <Property Name="State" Type="nvarchar" MaxLength="100" />
+    <Property Name="Zipcode" Type="int" />
+    <Property Name="PlantId" Type="int" />
+    <Property Name="CoreTypeId" Type="int" />
+    <Property Name="EmailId" Type="nvarchar" MaxLength="100" />
+    <Property Name="ExpectedDays" Type="nvarchar" MaxLength="100" />
+    <Property Name="GSTno" Type="nvarchar" MaxLength="50" />
+    <Property Name="SACcode" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsActive" Type="bit" />
+    <Property Name="CreatedBy" Type="nvarchar" MaxLength="250" />
+    <Property Name="CreatedOn" Type="datetime" />
+    <Property Name="ModifiedBy" Type="nvarchar" MaxLength="250" />
+    <Property Name="ModifiedOn" Type="datetime" />
+  </EntityType>
+  <EntityContainer Name="InventoryManagementModelStoreContainer">
+    <EntitySet Name="IM_Employer" EntityType="Self.IM_Employer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="IM_MasterData" EntityType="Self.IM_MasterData" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="IM_SUPPLIER" EntityType="Self.IM_SUPPLIER" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

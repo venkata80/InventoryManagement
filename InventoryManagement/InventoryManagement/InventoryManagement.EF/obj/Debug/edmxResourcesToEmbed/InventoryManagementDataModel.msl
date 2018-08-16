@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="InventoryManagementModelStoreContainer" CdmEntityContainer="InventoryManagementEntities1">
+    <EntitySetMapping Name="IM_ADDRESS_DETAILS">
+      <EntityTypeMapping TypeName="InventoryManagementModel.IM_ADDRESS_DETAILS">
+        <MappingFragment StoreEntitySet="IM_ADDRESS_DETAILS">
+          <ScalarProperty Name="Address_ID" ColumnName="Address_ID" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="Address2" ColumnName="Address2" />
+          <ScalarProperty Name="Address3" ColumnName="Address3" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+          <ScalarProperty Name="PostalExCode" ColumnName="PostalExCode" />
+          <ScalarProperty Name="EMPID" ColumnName="EMPID" />
+          <ScalarProperty Name="HomePhone" ColumnName="HomePhone" />
+          <ScalarProperty Name="WorkPhone" ColumnName="WorkPhone" />
+          <ScalarProperty Name="Fax" ColumnName="Fax" />
+          <ScalarProperty Name="Cell_Phone" ColumnName="Cell_Phone" />
+          <ScalarProperty Name="Email_ID" ColumnName="Email_ID" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Created_By" ColumnName="Created_By" />
+          <ScalarProperty Name="Created_On" ColumnName="Created_On" />
+          <ScalarProperty Name="Modified_By" ColumnName="Modified_By" />
+          <ScalarProperty Name="Modified_On" ColumnName="Modified_On" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="IM_Employer">
+      <EntityTypeMapping TypeName="InventoryManagementModel.IM_Employer">
+        <MappingFragment StoreEntitySet="IM_Employer">
+          <ScalarProperty Name="EMPID" ColumnName="EMPID" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="Middlename" ColumnName="Middlename" />
+          <ScalarProperty Name="Designation" ColumnName="Designation" />
+          <ScalarProperty Name="JoinDate" ColumnName="JoinDate" />
+          <ScalarProperty Name="RelievedDate" ColumnName="RelievedDate" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="IM_SUPPLIER">
+      <EntityTypeMapping TypeName="InventoryManagementModel.IM_SUPPLIER">
+        <MappingFragment StoreEntitySet="IM_SUPPLIER">
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+          <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+          <ScalarProperty Name="SuplierPhone" ColumnName="SuplierPhone" />
+          <ScalarProperty Name="SupplierAddress" ColumnName="SupplierAddress" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="USP_IM_SUPPLIER_DELETE" FunctionName="InventoryManagementModel.Store.USP_IM_SUPPLIER_DELETE" />
+    <FunctionImportMapping FunctionImportName="USP_IM_SUPPLIER_GETBYSUPPLIERID" FunctionName="InventoryManagementModel.Store.USP_IM_SUPPLIER_GETBYSUPPLIERID">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="InventoryManagementModel.USP_IM_SUPPLIER_GETBYSUPPLIERID_Result">
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+          <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+          <ScalarProperty Name="SuplierPhone" ColumnName="SuplierPhone" />
+          <ScalarProperty Name="SupplierAddress" ColumnName="SupplierAddress" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="USP_IM_SUPPLIER_INSERT" FunctionName="InventoryManagementModel.Store.USP_IM_SUPPLIER_INSERT" />
+    <FunctionImportMapping FunctionImportName="USP_IM_SUPPLIER_UPDATE" FunctionName="InventoryManagementModel.Store.USP_IM_SUPPLIER_UPDATE" />
+  </EntityContainerMapping>
+</Mapping>

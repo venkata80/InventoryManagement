@@ -1,0 +1,111 @@
+﻿@model IEnumerable<InventoryManagement.Models.SuppliersDTO>
+
+@{
+    ViewBag.Title = "ViewSuppliers";
+}
+<div class="padding-md">
+    <div class="main-header clearfix">
+        <div class="panel panel-default table-responsive">
+            <div class="panel-heading">
+                <b>ViewEmployer</b> <span class="label label-info ">
+                    <span class="glyphicon glyphicon-plus-sign"></span>
+                    @Html.ActionLink("Create New", "CreateSupplier", "Home")
+                </span>
+                <span class="label label-info pull-right">  @Model.Count() Suppliers</span>
+            </div>
+        </div>
+        <div class="padding-md clearfix">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SupplierBussinessName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PlantName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CoretYpeName)
+                    </th>
+                  
+                    <th>
+                        @Html.DisplayNameFor(model => model.Fullname)
+                    </th>                  
+                    
+                    <th>
+                        @Html.DisplayNameFor(model => model.CellPhone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.State)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Zipcode)
+                    </th>   
+                    <th>
+                        @Html.DisplayNameFor(model => model.ExpertedDays)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SACCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GSTNumber)
+                    </th>                   
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SupplierBussinessName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PlantName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoretYpeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fullname)
+                    </td>                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CellPhone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.State)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Zipcode)
+                    </td>                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ExpertedDays)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SACCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GSTNumber)
+                    </td>                   
+                    <td>
+                        @Html.ActionLink("Edit", "EditSupplier", new { id = item.Id }) |
+                        @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
+                        @Html.ActionLink("Delete", "DeleteSuppliers", new { id = item.Id })
+                    </td>
+                </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>
