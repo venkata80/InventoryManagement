@@ -34,15 +34,14 @@
                     @Html.LabelFor(model => model.MiddleName, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.MiddleName, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Fullname, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.Fullname, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Fullname, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
@@ -57,8 +56,10 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.gender, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.gender, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.gender, "", new { @class = "text-danger" })
+                        @Html.RadioButtonFor(model => model.gender, "Male", htmlAttributes: new { @id = "rdMale" })
+                        @Html.LabelFor(model => model.gender, "Male", new { @for = "rdMale" })
+                        @Html.RadioButtonFor(model => model.gender, "Female", htmlAttributes: new { @id = "rdFemale" })
+                        @Html.LabelFor(model => model.gender, "Female", new { @for = "rdFemale" })
                     </div>
                 </div>
 
@@ -66,7 +67,6 @@
                     @Html.LabelFor(model => model.ResPhone, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.ResPhone, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.ResPhone, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
@@ -74,7 +74,6 @@
                     @Html.LabelFor(model => model.CellPhone, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.CellPhone, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.CellPhone, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
@@ -122,7 +121,6 @@
                     @Html.LabelFor(model => model.Relieved, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.Relieved, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Relieved, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
@@ -130,15 +128,14 @@
                     @Html.LabelFor(model => model.Isactive, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         <div class="checkbox">
-                            @Html.EditorFor(model => model.Isactive)
-                            @Html.ValidationMessageFor(model => model.Isactive, "", new { @class = "text-danger" })
+                            @Html.CheckBoxFor(model => model.Isactive, new { @style = "margin-left : 0px;" })
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Create" class="btn btn-default" />
+                        <input type="submit" value="@(Model.Id > 0 ? "Save" : "Create")" class="btn btn-default" />
                     </div>
                 </div>
             </div>

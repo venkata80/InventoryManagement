@@ -2,7 +2,7 @@
 @model IEnumerable<MasterDataDTO>
 <div class="panel panel-default table-responsive">
     <div class="panel-heading">
-         <span class="label label-info ">
+        <span class="label label-info ">
             <span class="glyphicon glyphicon-star"></span>
             <b style="font-size:medium">   @MasterDataDTO.GetDisplayName((MasterDataType)ViewBag.MaterDataType)</b>
         </span>
@@ -42,15 +42,17 @@
                             @Html.DisplayFor(modelItem => item.Isactive)
                         </td>
                         <td>
-                            @Html.ActionLink("Edit", "MasterDataView1", new { id = item.Id }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                            @Ajax.ActionLink("Edit", "MasterDataView1", "Home", new { id = item.Id },
+                                        new AjaxOptions { UpdateTargetId = "tdmasterdata", LoadingElementId = "loading" }) |
+                            @Ajax.ActionLink("Delete", "DeleteMasterData", "Home", new { id = item.Id },
+                                       new AjaxOptions { OnSuccess=string.Format("OnSuccessDeleteMasterData(data,'{0}')", item.Type) })
                         </td>
                     </tr>
                 }
 
             </table>
         </td>
-        <td valign="top" width="500px" style=" padding: 10px; margin: 5px">
+        <td id="tdmasterdata" valign="top" width="500px" style=" padding: 10px; margin: 5px">
             @Html.Action("MasterRecordInsert", "Home", new { Type = ViewBag.MaterDataType })
         </td>
     </tr>

@@ -32,7 +32,7 @@ namespace InventoryManagement.Controllers.api
                     LastName = s.LastName,
                     FirstName = s.FirstName,
                     MiddleName = s.Middlename,
-                   //Fullname=(s.FirstName+ ' '+s.Middlename+' '+s.LastName),
+                    //Fullname=(s.FirstName+ ' '+s.Middlename+' '+s.LastName),
                     Designation = s.Designation,
                     Dateofbirth = s.DOB,
                     gender = s.Gender,
@@ -109,21 +109,21 @@ namespace InventoryManagement.Controllers.api
                 {
 
                     existingSupplier.EMPID = s.Id;
-                     existingSupplier.FirstName = s.FirstName;
-                     existingSupplier.LastName = s.LastName;
-                     existingSupplier.Middlename = s.MiddleName;
-                     existingSupplier.Designation = s.Designation;
-                     existingSupplier.DOB = s.Dateofbirth;
-                     existingSupplier.Gender = s.gender;
-                     existingSupplier.ResPhone = s.ResPhone;
-                     existingSupplier.CellPhone = s.CellPhone;
-                     existingSupplier.Address = s.Address;
-                     existingSupplier.City = s.City;
-                     existingSupplier.State = s.State;
-                     existingSupplier.Zipcode = s.Zipcode;
-                     existingSupplier.JoinDate = s.JoinDate;
-                     existingSupplier.RelievedDate = s.Relieved;
-                     existingSupplier.IsActive = s.Isactive;                   
+                    existingSupplier.FirstName = s.FirstName;
+                    existingSupplier.LastName = s.LastName;
+                    existingSupplier.Middlename = s.MiddleName;
+                    existingSupplier.Designation = s.Designation;
+                    existingSupplier.DOB = s.Dateofbirth;
+                    existingSupplier.Gender = s.gender;
+                    existingSupplier.ResPhone = s.ResPhone;
+                    existingSupplier.CellPhone = s.CellPhone;
+                    existingSupplier.Address = s.Address;
+                    existingSupplier.City = s.City;
+                    existingSupplier.State = s.State;
+                    existingSupplier.Zipcode = s.Zipcode;
+                    existingSupplier.JoinDate = s.JoinDate;
+                    existingSupplier.RelievedDate = s.Relieved;
+                    existingSupplier.IsActive = s.Isactive;
                     existingSupplier.ModifiedBy = s.ModifiedBy;
                     existingSupplier.ModifiedDate = DateTime.Now;
                     ctx.SaveChanges();
@@ -188,7 +188,7 @@ namespace InventoryManagement.Controllers.api
                     Supplier.Isactive = s.IsActive.Value;
                     Supplier.ModifiedBy = s.ModifiedBy;
                     Supplier.ModifiedOn = DateTime.Now;
-                    
+
                 }
             }
             if (Supplier.Id == 0)
@@ -239,9 +239,6 @@ namespace InventoryManagement.Controllers.api
         [ActionName("InsertSupplierData")]
         public IHttpActionResult PostNewSuppliers([FromBody]SuppliersDTO s)
         {
-            if (!ModelState.IsValid)
-                return BadRequest("Not a valid model");
-
             using (var ctx = new InventoryManagementEntities())
             {
                 ctx.IM_SUPPLIER.Add(new IM_SUPPLIER()
@@ -316,9 +313,6 @@ namespace InventoryManagement.Controllers.api
         [ActionName("DeleteSupplierData")]
         public IHttpActionResult DeleteSupplier(int id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest("Not a valid model");
-
             using (var ctx = new InventoryManagementEntities())
             {
 
@@ -376,30 +370,22 @@ namespace InventoryManagement.Controllers.api
         [ActionName("GetMasterDataBy")]
         public IHttpActionResult GetMasterData()
         {
-            List<MasterDataDTO> MasterBytypelist =new List<MasterDataDTO>();
-            List<IM_MasterData> imMaster = new List<IM_MasterData>();
-            using (InventoryManagementEntities hhh = new InventoryManagementEntities())
-            {
-                imMaster = hhh.IM_MasterData.ToList();
-                foreach (var item in imMaster)
-                {
-                    MasterDataDTO mst = new MasterDataDTO();
-                    mst.Id = item.Id;
-                    mst.MasterName = item.MasterName;
-                    mst.Description = item.Descrption;
-                    mst.Type = (MasterDataType)Enum.Parse(typeof(MasterDataType), item.Type);
-                    mst.Isactive = item.Isactive.Value;
-                    mst.ModifiedBy = item.ModifiedBy;
-                    mst.ModifiedOn = item.ModifiedOn;
-                    mst.CreatedBy = item.CreatedBy;
-                    mst.CreatedOn = item.CreatedOn;
-                    MasterBytypelist.Add(mst);
-                }
-            }
+            List<MasterDataDTO> MasterBytypelist = MaterDataList();
             if (MasterBytypelist.Count == 0)
                 return NotFound();
             return Ok(MasterBytypelist);
-        
+
+        }
+
+        [HttpGet]
+        [ActionName("GetMasterDataByID")]
+        public IHttpActionResult GetMasterData(long id)
+        {
+            List<MasterDataDTO> MasterBytypelist = MaterDataList(id);
+            if (MasterBytypelist.Count == 0)
+                return NotFound();
+            return Ok(MasterBytypelist);
+
         }
 
         [HttpPost]
@@ -448,9 +434,66 @@ namespace InventoryManagement.Controllers.api
             return Ok();
         }
 
+        [ActionName("DeleteMasterdata")]
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        public IHttpActionResult DeleteMasterdata(int id)
         {
+            using (var ctx = new InventoryManagementEntities())
+            {
+
+                var masterdata = ctx.IM_MasterData
+               .Where(s => s.Id == id)
+               .FirstOrDefault();
+
+                ctx.Entry(masterdata).State = System.Data.Entity.EntityState.Deleted;
+                ctx.SaveChanges();
+            }
+
+            return Ok();
+        }
+
+        List<MasterDataDTO> MaterDataList(long id = 0)
+        {
+            List<MasterDataDTO> MasterBytypelist = new List<MasterDataDTO>();
+            List<IM_MasterData> imMaster = new List<IM_MasterData>();
+            using (InventoryManagementEntities hhh = new InventoryManagementEntities())
+            {
+                imMaster = hhh.IM_MasterData.ToList();
+                if (imMaster != null && imMaster.Any())
+                {
+                    if (id == 0)
+                    {
+                        MasterBytypelist = imMaster.Select(item => new MasterDataDTO()
+                        {
+                            Id = item.Id,
+                            MasterName = item.MasterName,
+                            Description = item.Descrption,
+                            Type = (MasterDataType)Enum.Parse(typeof(MasterDataType), item.Type),
+                            Isactive = item.Isactive.Value,
+                            ModifiedBy = item.ModifiedBy,
+                            ModifiedOn = item.ModifiedOn,
+                            CreatedBy = item.CreatedBy,
+                            CreatedOn = item.CreatedOn
+                        }).ToList();
+                    }
+                    else
+                    {
+                        MasterBytypelist = imMaster.Where(c => c.Id == id)?.Select(item => new MasterDataDTO()
+                        {
+                            Id = item.Id,
+                            MasterName = item.MasterName,
+                            Description = item.Descrption,
+                            Type = (MasterDataType)Enum.Parse(typeof(MasterDataType), item.Type),
+                            Isactive = item.Isactive.Value,
+                            ModifiedBy = item.ModifiedBy,
+                            ModifiedOn = item.ModifiedOn,
+                            CreatedBy = item.CreatedBy,
+                            CreatedOn = item.CreatedOn
+                        }).ToList();
+                    }
+                }
+            }
+            return MasterBytypelist;
         }
     }
 }

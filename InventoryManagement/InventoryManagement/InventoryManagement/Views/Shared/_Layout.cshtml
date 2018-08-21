@@ -6,6 +6,17 @@
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .loader {
+            z-index: 9001;
+            position: relative;
+            top: calc(50% - 16px);
+            left: calc(50% - 16px);
+            height: 50px !important;
+            width: 50px !important;
+        }
+    </style>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -115,6 +126,9 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
+        <div id="loading" class="collapse loader">
+            <i class="fa fa-spinner fa-spin fa-3x" style="font-size:48px"></i>
+        </div>
         <footer>
             <p>&copy; @DateTime.Now.Year </p>
         </footer>

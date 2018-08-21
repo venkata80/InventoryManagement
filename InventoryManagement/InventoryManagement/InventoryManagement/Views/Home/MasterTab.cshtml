@@ -1,8 +1,8 @@
-﻿@using InventoryManagement.Models
+﻿@using InventoryManagement.Models;
+@using InventoryManagement.Util;
 
 @{
     ViewBag.Title = "MasterTab";
-    string DataType = TempData["MaterDataType"] != null ? (MasterDataDTO.GetDisplayName(((MasterDataType)TempData["MaterDataType"]))) : null;
 }
 
 <style>
@@ -26,14 +26,15 @@
                 {
                     <li class="lidatatype">
                         @Ajax.ActionLink(MasterDataDTO.GetDisplayName(item), "MasterDataView", "Home", new { Type = item },
-                                        new AjaxOptions { UpdateTargetId = "dvmasterdatacontent" },
-                                        new { id = "li" + MasterDataDTO.GetDisplayName(item), @onclick = "$('.lidatatype').removeClass('active'); $(this).parent().addClass('active');" })
+                                        new AjaxOptions { UpdateTargetId = "dvmasterdatacontent", LoadingElementId= "loading" },
+                                        new { id = "li" + item, @onclick = "$('.lidatatype').removeClass('active'); $(this).parent().addClass('active');" })
                     </li>
                 }
             }
         </ul>
         <!-- Tab panes -->
         <div class="tab-content in" style="padding-top: 20px">
+           
             <div role="tabpanel" class="tab-pane active" id="dvmasterdatacontent"></div>
         </div>
     </div>
@@ -41,12 +42,25 @@
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
-            if ('@DataType' == 'null' || '@DataType' == 'undefined' || '@DataType' == '') {
-                $('#liBrand').trigger('click');
-            } else {
-                $('@Html.Raw("#li"+ DataType)').trigger('click');
-            }
+            $('#liBrand').trigger('click');
         });
-
+        function OnSuccessMasterRecordInsert(result, datatype) {
+            if (result != undefined) {
+                if (result.Status == '@((int)AjaxResponse.Success)') {
+                    $('#li' + datatype).trigger('click');
+                } else if (result.Status == '@((int)AjaxResponse.ModelError)') {
+                    $('#tdmasterdata').html(result.Result);
+                }
+            }
+        }
+        function OnSuccessDeleteMasterData(result, datatype) {
+            if (result != undefined) {
+                if (result.Status == '@((int)AjaxResponse.Success)') {
+                    $('#li' + datatype).trigger('click');
+                } else if (result.Status == '@((int)AjaxResponse.Failed)') {
+                    
+                }
+            }
+        }
     </script>
 }

@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Models;
+using InventoryManagement.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,22 +61,25 @@ namespace InventoryManagement.Controllers
         [HttpPost]
         public ActionResult CreateEmployer(BaseEmployerDTO student)
         {
-            using (var client = new HttpClient())
+            ModelState.Remove("Id");
+            if (ModelState.IsValid)
             {
-                client.BaseAddress = new Uri(value);
-                var postTask = client.PostAsJsonAsync<BaseEmployerDTO>("InsertEmployerData", student);
-                postTask.Wait();
-
-                var result = postTask.Result;
-                if (result.IsSuccessStatusCode)
+                using (var client = new HttpClient())
                 {
-                    return RedirectToAction("ViewEmployer");
+                    client.BaseAddress = new Uri(value);
+                    var postTask = client.PostAsJsonAsync<BaseEmployerDTO>("InsertEmployerData", student);
+                    postTask.Wait();
+
+                    var result = postTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("ViewEmployer");
+                    }
+
+                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
                 }
-
-                ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                //List<BaseEmployerDTO> emplist = new List<BaseEmployerDTO>();
             }
-            //List<BaseEmployerDTO> emplist = new List<BaseEmployerDTO>();
-
             return View(student);
         }
 
@@ -202,22 +206,33 @@ namespace InventoryManagement.Controllers
         [HttpPost]
         public ActionResult CreateSupplier(SuppliersDTO student)
         {
-            using (var client = new HttpClient())
+            ModelState.Remove("Id");
+            ModelState.Remove("FirstName");
+            ModelState.Remove("LastName");
+            ModelState.Remove("Dateofbirth");
+            ModelState.Remove("ResPhone");
+            ModelState.Remove("JoinDate");
+            ModelState.Remove("Relieved");
+
+
+            if (ModelState.IsValid)
             {
-                client.BaseAddress = new Uri(value);
-                var postTask = client.PostAsJsonAsync<SuppliersDTO>("InsertSupplierData", student);
-                postTask.Wait();
-
-                var result = postTask.Result;
-                if (result.IsSuccessStatusCode)
+                using (var client = new HttpClient())
                 {
-                    return RedirectToAction("ViewSuppliers");
+                    client.BaseAddress = new Uri(value);
+                    var postTask = client.PostAsJsonAsync<SuppliersDTO>("InsertSupplierData", student);
+                    postTask.Wait();
+
+                    var result = postTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("ViewSuppliers");
+                    }
+
+                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
                 }
-
-                ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                //List<BaseEmployerDTO> emplist = new List<BaseEmployerDTO>();
             }
-            //List<BaseEmployerDTO> emplist = new List<BaseEmployerDTO>();
-
             return View(student);
         }
 
@@ -247,32 +262,42 @@ namespace InventoryManagement.Controllers
                     ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
                 }
             }
-            return View(emplist);
+            return View("CreateSupplier", emplist);
         }
         [HttpPost]
         public ActionResult EditSupplier(SuppliersDTO student)
         {
-            using (var client = new HttpClient())
+            ModelState.Remove("Id");
+            ModelState.Remove("FirstName");
+            ModelState.Remove("LastName");
+            ModelState.Remove("Dateofbirth");
+            ModelState.Remove("ResPhone");
+            ModelState.Remove("JoinDate");
+            ModelState.Remove("Relieved");
+
+            if (ModelState.IsValid)
             {
-                client.BaseAddress = new Uri(value);
-                var postTask = client.PutAsJsonAsync("UpdateSupplierData", student);
-                postTask.Wait();
-                var result = postTask.Result;
-                if (result.IsSuccessStatusCode)
+                using (var client = new HttpClient())
                 {
-                    return RedirectToAction("ViewSuppliers");
-                }
-                else //web api sent error response 
-                {
-                    //log response status here..
+                    client.BaseAddress = new Uri(value);
+                    var postTask = client.PutAsJsonAsync("UpdateSupplierData", student);
+                    postTask.Wait();
+                    var result = postTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("ViewSuppliers");
+                    }
+                    else //web api sent error response 
+                    {
+                        //log response status here..
 
-                    //  emplist =  IList.Empty<BaseEmployerDTO>();
+                        //  emplist =  IList.Empty<BaseEmployerDTO>();
 
-
-                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                    }
                 }
             }
-            return View();
+            return View("CreateSupplier", student);
         }
 
         public ActionResult DeleteSuppliers(int id)
@@ -324,7 +349,7 @@ namespace InventoryManagement.Controllers
                     var readTask = result.Content.ReadAsAsync<List<MasterDataDTO>>();
                     readTask.Wait();
 
-                    masterlist = readTask.Result.Where(s=>s.Type== type).ToList();
+                    masterlist = readTask.Result.Where(s => s.Type == type).ToList();
                     if (masterlist == null)
                         masterlist = new List<MasterDataDTO>();
                 }
@@ -343,28 +368,37 @@ namespace InventoryManagement.Controllers
             TempData["masterDataList"] = masterlist;
             return PartialView("_MasterDataList", masterlist);
         }
-        MasterDataDTO tt = null;
 
         [HttpGet]
         public ActionResult MasterDataView1(int id)
         {
-             tt = new MasterDataDTO();
-           List <MasterDataDTO> gg = new List<MasterDataDTO>();
-            gg = (List<MasterDataDTO>)TempData["masterDataList"];
-            if (gg !=null && gg.Count>0)
+            List<MasterDataDTO> gg = new List<MasterDataDTO>();
+            using (var client = new HttpClient())
             {
-                 tt= gg.Where(d => d.Id == id).SingleOrDefault();
-                TempData["masterData"] = tt;
-
+                client.BaseAddress = new Uri(value);
+                var responseTask1 = client.GetAsync("GetMasterDataByID/" + id);
+                responseTask1.Wait();
+                var result = responseTask1.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<MasterDataDTO>>();
+                    readTask.Wait();
+                    gg = readTask.Result.ToList();
+                }
+                else //web api sent error response 
+                {
+                    //log response status here..
+                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                }
             }
-            return RedirectToAction("MasterTab");
+            return PartialView("_MasterDataInsert", gg != null && gg.Any() ? gg.FirstOrDefault() : new MasterDataDTO());
 
         }
         public ActionResult MasterRecordInsert(MasterDataType Type)
         {
             MasterDataDTO gg6 = null;
             if (TempData["masterData"] == null)
-                gg6 = new MasterDataDTO { Type = Type,Isactive=true };
+                gg6 = new MasterDataDTO { Type = Type, Isactive = true };
             else
                 gg6 = (MasterDataDTO)TempData["masterData"];
             return PartialView("_MasterDataInsert", gg6);
@@ -373,37 +407,47 @@ namespace InventoryManagement.Controllers
         [HttpPost]
         public ActionResult MasterRecordInsert(MasterDataDTO model)
         {
-
-            if (!ModelState.IsValid)
+            ModelState.Remove("Id");
+            ModelState.Remove("Type");
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Student Name already exists.");
-                return RedirectToAction("MasterTab");
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(value);
+                    var postTask = client.PostAsJsonAsync<MasterDataDTO>("InsertMasterdata", model);
+                    postTask.Wait();
 
+                    var result = postTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        TempData["MaterDataType"] = model.Type;
+                        return Json(new Response { Status = AjaxResponse.Success });
+                    }
+
+                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                }
             }
+            return Json(new Response { Status = AjaxResponse.ModelError, Result = ModelUtil.RenderPartialToString("_MasterDataInsert", model, ControllerContext) });
+
+        }
+
+        public ActionResult DeleteMasterData(int id)
+        {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(value);
-                var postTask = client.PostAsJsonAsync<MasterDataDTO>("InsertMasterdata", model);
+                var postTask = client.DeleteAsync("DeleteMasterdata/" + id);
                 postTask.Wait();
 
                 var result = postTask.Result;
                 if (result.IsSuccessStatusCode)
                 {
-                    TempData["MaterDataType"] = model.Type;
-                    return RedirectToAction("MasterTab");
+                    return Json(new Response { Status = AjaxResponse.Success }, JsonRequestBehavior.AllowGet);
                 }
 
                 ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
             }
-            //List<BaseEmployerDTO> emplist = new List<BaseEmployerDTO>();
-
-            //return View(student);
-            //MasterDataDTO gg6 = new MasterDataDTO();
-            //return PartialView("_MasterDataInsert", gg6);
-            // return PartialViewResult("_InsertMasterData", gg6);
-           // model = new MasterDataDTO();
-            return View(model);
-
+            return Json(new Response { Status = AjaxResponse.Failed }, JsonRequestBehavior.AllowGet);
         }
     }
 }

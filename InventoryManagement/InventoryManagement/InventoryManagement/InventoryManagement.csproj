@@ -215,6 +215,8 @@
     <Compile Include="Models\StockModel.cs" />
     <Compile Include="Models\SuppliersDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\ModelUtil.cs" />
+    <Compile Include="Util\Response.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
