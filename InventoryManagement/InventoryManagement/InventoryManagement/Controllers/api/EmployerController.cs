@@ -22,7 +22,7 @@ namespace InventoryManagement.Controllers.api
         [ActionName("GetEmployee")]
         public IHttpActionResult GetEmployer()
         {
-            IList<BaseEmployerDTO> students = null;
+            IList<BaseEmployerDTO> students = new List<BaseEmployerDTO>();
 
             using (InventoryManagementEntities hhh = new InventoryManagementEntities())
             {
@@ -32,10 +32,11 @@ namespace InventoryManagement.Controllers.api
                     LastName = s.LastName,
                     FirstName = s.FirstName,
                     MiddleName = s.Middlename,
-                    //Fullname=(s.FirstName+ ' '+s.Middlename+' '+s.LastName),
+                    //Fullname=s.FirstName+ ' '+s.Middlename+' '+s.LastName,
                     Designation = s.Designation,
                     Dateofbirth = s.DOB,
                     gender = s.Gender,
+                    Email=s.Email,
                     ResPhone = s.ResPhone,
                     CellPhone = s.CellPhone,
                     Address = s.Address,

@@ -56,7 +56,8 @@ namespace InventoryManagement.Controllers
 
         public ActionResult CreateEmployer()
         {
-            return View();
+            BaseEmployerDTO model = new BaseEmployerDTO();
+            return View(model);
         }
         [HttpPost]
         public ActionResult CreateEmployer(BaseEmployerDTO student)
@@ -79,6 +80,13 @@ namespace InventoryManagement.Controllers
                     ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
                 }
                 //List<BaseEmployerDTO> emplist = new List<BaseEmployerDTO>();
+            }
+            else
+            {
+                
+                    ModelState.AddModelError(string.Empty, "");
+                    return View(student);
+                
             }
             return View(student);
         }
@@ -201,7 +209,8 @@ namespace InventoryManagement.Controllers
 
         public ActionResult CreateSupplier()
         {
-            return View();
+            SuppliersDTO model = new SuppliersDTO();
+            return View(model);
         }
         [HttpPost]
         public ActionResult CreateSupplier(SuppliersDTO student)
