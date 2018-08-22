@@ -200,6 +200,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\api\EmployerController.cs" />
     <Compile Include="Controllers\api\StockController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -285,21 +286,22 @@
     <Content Include="Views\Shared\DisplayTemplates\MetaRobotsHelperModel.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MenuHelperModel.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\CanonicalHelperModel.cshtml" />
-    <Content Include="Views\Home\MasterTab.cshtml" />
-    <Content Include="Views\Home\_MasterDataInsert.cshtml" />
-    <Content Include="Views\Home\_MasterDataList.cshtml" />
-    <Content Include="Views\Home\ViewEmployer.cshtml" />
-    <Content Include="Views\Home\CreateEmployer.cshtml" />
+    <Content Include="Views\Admin\MasterData\MasterTab.cshtml" />
+    <Content Include="Views\Admin\MasterData\_MasterDataInsert.cshtml" />
+    <Content Include="Views\Admin\MasterData\_MasterDataList.cshtml" />
+    <Content Include="Views\Admin\Employer\ViewEmployer.cshtml" />
+    <Content Include="Views\Admin\Employer\CreateEmployer.cshtml" />
     <Content Include="Views\Home\EditEmployer.cshtml" />
-    <Content Include="Views\Home\ViewSuppliers.cshtml" />
+    <Content Include="Views\Admin\Supplier\ViewSuppliers.cshtml" />
     <Content Include="Views\Home\EditSupplier.cshtml" />
-    <Content Include="Views\Home\CreateSupplier.cshtml" />
+    <Content Include="Views\Admin\Supplier\CreateSupplier.cshtml" />
     <Content Include="Views\Login\CreateLogin.cshtml" />
     <Content Include="Views\Login\UserLogin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\" />
+    <Folder Include="Views\Admin\Product\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
