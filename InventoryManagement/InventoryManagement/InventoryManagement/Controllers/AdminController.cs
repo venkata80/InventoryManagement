@@ -18,7 +18,7 @@ namespace InventoryManagement.Controllers
             return View();
         }
 
-        #region Employer
+        #region EMPLOYER
 
         public ActionResult ViewEmployer()
         {
@@ -49,13 +49,13 @@ namespace InventoryManagement.Controllers
                 }
             }
 
-            return View(emplist);
+            return View("Employer/ViewEmployer", emplist);
         }
 
         public ActionResult CreateEmployer()
         {
             BaseEmployerDTO model = new BaseEmployerDTO();
-            return View(model);
+            return View("Employer/CreateEmployer", model);
         }
         [HttpPost]
         public ActionResult CreateEmployer(BaseEmployerDTO student)
@@ -86,7 +86,7 @@ namespace InventoryManagement.Controllers
                 return View(student);
 
             }
-            return View(student);
+            return View("Employer/CreateEmployer", student);
         }
 
         public ActionResult EditEmployer(int id)
@@ -115,7 +115,7 @@ namespace InventoryManagement.Controllers
                     ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
                 }
             }
-            return View("CreateEmployer", emplist);
+            return View("Employer/CreateEmployer", emplist);
         }
         [HttpPost]
         public ActionResult EditEmployer(BaseEmployerDTO student)
@@ -140,7 +140,7 @@ namespace InventoryManagement.Controllers
                     ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
                 }
             }
-            return View();
+            return View("Employer/CreateEmployer", student);
         }
 
         public ActionResult DeleteEmployer(int id)
@@ -167,7 +167,7 @@ namespace InventoryManagement.Controllers
                     ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
                 }
             }
-            return View();
+            return RedirectToAction("ViewEmployer");
         }
         #endregion
 
