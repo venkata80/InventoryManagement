@@ -9,7 +9,7 @@ namespace InventoryManagement.Models
     public class MasterDataDTO
     {
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please enter name.")]
         public string MasterName { get; set; }
         public string Description { get; set; }
         //public string Type { get; set; }
@@ -19,6 +19,7 @@ namespace InventoryManagement.Models
         public DateTime? CreatedOn { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
+
 
         public static string GetDisplayName(Enum enumValue)
         {

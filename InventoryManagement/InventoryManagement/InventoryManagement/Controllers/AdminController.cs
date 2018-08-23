@@ -79,13 +79,6 @@ namespace InventoryManagement.Controllers
                 }
                 //List<BaseEmployerDTO> emplist = new List<BaseEmployerDTO>();
             }
-            else
-            {
-
-                ModelState.AddModelError(string.Empty, "");
-                return View(student);
-
-            }
             return View("Employer/CreateEmployer", student);
         }
 
