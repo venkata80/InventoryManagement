@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using System.Security.Principal;
+using System.Web.Security;
 namespace InventoryManagement.Controllers
 {
     public class LoginController : Controller
@@ -34,5 +35,7 @@ namespace InventoryManagement.Controllers
             LoginDTO newlogin = new LoginDTO();
             return View(newlogin);
         }
+
+
     }
 }
