@@ -6,19 +6,14 @@ using System.Web;
 
 namespace InventoryManagement.Models
 {
-    public class MasterDataDTO
+    public class MasterDataDTO : CommonBaseDTO
     {
-        public int Id { get; set; }
         [Required(ErrorMessage = "Please enter name.")]
         public string MasterName { get; set; }
         public string Description { get; set; }
         //public string Type { get; set; }
         public MasterDataType Type { get; set; }
         public bool Isactive { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? CreatedOn { get; set; }
-        public string ModifiedBy { get; set; }
-        public DateTime? ModifiedOn { get; set; }
 
 
         public static string GetDisplayName(Enum enumValue)
@@ -46,6 +41,8 @@ namespace InventoryManagement.Models
         [Display(Name = "Packing Type")]
         PackingType = 6,
         [Display(Name = "Grades")]
-        Grades = 7
+        Grades = 7,
+        [Display(Name = "Product Type")]
+        ProductType = 8
     }
 }

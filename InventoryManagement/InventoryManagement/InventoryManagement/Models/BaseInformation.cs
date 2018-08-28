@@ -3,26 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InventoryManagement.Models
 {
-    public abstract class BaseInformation
+    public abstract class BaseInformation: CommonBaseDTO
     {
-        //public int Id { get; set; }
-        //public string FirstName { get; set; }
-        //public string LastName { get; set; }
-        //public string MiddleName { get; set; }
-        //public string Fullname { get; set; }
-        //public int? Phonenumber { get; set; }
-        //public string Address { get; set; }
-        //public DateTime? JoinDate { get; set; }
-        //public DateTime? Relieved { get; set; }
-        //public bool? Isactive { get; set; }
-        //public string Dboperation { get; set; }
-        //public string CreatedBy { get; set; }
-        //public DateTime? Createddate { get; set; }
-        //public string ModifiedBy { get; set; }
-        //public DateTime? ModifiedDate { get; set; }
-        //public AddressDTO AddressDTO { get; set; }
-        public int Id { get; set; }
-
+        
         [Display(Name = "First Name*")]
         [Required(ErrorMessage = "Enter first name.")]
         public string FirstName { get; set; }
@@ -33,7 +16,7 @@ namespace InventoryManagement.Models
 
         [Display(Name = "Middle Name")]
         public string MiddleName { get; set; }
-        public string Fullname { get; set; }
+        public string Fullname { get { return string.Concat(FirstName, " ", LastName); } }
 
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Enter date of birth.")]
@@ -82,12 +65,5 @@ namespace InventoryManagement.Models
 
         [Display(Name = "Is Active")]
         public bool Isactive { get; set; }
-        public string CreatedBy { get; set; }
-        [DataType(DataType.Date)]
-        public DateTime? CreatedOn { get; set; }
-        public string ModifiedBy { get; set; }
-        [DataType(DataType.Date)]
-        public DateTime? ModifiedOn { get; set; }
-
     }
 }

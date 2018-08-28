@@ -36,7 +36,7 @@ namespace InventoryManagement.Controllers.api
                     Designation = s.Designation,
                     Dateofbirth = s.DOB,
                     gender = s.Gender,
-                    Email=s.Email,
+                    //Email=s.Email,
                     ResPhone = s.ResPhone,
                     CellPhone = s.CellPhone,
                     Address = s.Address,
@@ -215,7 +215,7 @@ namespace InventoryManagement.Controllers.api
                     CoreTypeId = s.CoreTypeId.Value,
                     Plantid = s.PlantId.Value,
                     SupplierBussinessName = s.BusinessName,
-                    Fullname = s.Name,
+                    //Fullname = s.Name,
                     Address = s.Address,
                     City = s.City,
                     State = s.State,
@@ -341,7 +341,7 @@ namespace InventoryManagement.Controllers.api
                     Supplier.CoreTypeId = s.CoreTypeId.Value;
                     Supplier.Plantid = s.PlantId.Value;
                     Supplier.SupplierBussinessName = s.BusinessName;
-                    Supplier.Fullname = s.Name;
+                    //Supplier.Fullname = s.Name;
                     Supplier.Address = s.Address;
                     Supplier.City = s.City;
                     Supplier.State = s.State;

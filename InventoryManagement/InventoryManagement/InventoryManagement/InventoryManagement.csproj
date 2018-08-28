@@ -211,6 +211,7 @@
     </Compile>
     <Compile Include="Models\BaseEmployerDTO.cs" />
     <Compile Include="Models\BaseInformation.cs" />
+    <Compile Include="Models\CommonBaseDTO.cs" />
     <Compile Include="Models\LoginDTO.cs" />
     <Compile Include="Models\MasterDataDTO.cs" />
     <Compile Include="Models\StockModel.cs" />

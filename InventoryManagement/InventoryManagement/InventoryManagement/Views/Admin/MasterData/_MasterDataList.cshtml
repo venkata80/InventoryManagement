@@ -42,9 +42,9 @@
                             @Html.DisplayFor(modelItem => item.Isactive)
                         </td>
                         <td>
-                            @Ajax.ActionLink("Edit", "MasterDataView1", "Home", new { id = item.Id },
+                            @Ajax.ActionLink("Edit", "MasterDataView1", "Admin", new { id = item.Id },
                                         new AjaxOptions { UpdateTargetId = "tdmasterdata", LoadingElementId = "loading" }) |
-                            @Ajax.ActionLink("Delete", "DeleteMasterData", "Home", new { id = item.Id },
+                            @Ajax.ActionLink("Delete", "DeleteMasterData", "Admin", new { id = item.Id },
                                        new AjaxOptions { OnSuccess=string.Format("OnSuccessDeleteMasterData(data,'{0}')", item.Type) })
                         </td>
                     </tr>
