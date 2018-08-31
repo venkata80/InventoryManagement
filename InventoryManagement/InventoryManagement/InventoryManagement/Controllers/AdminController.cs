@@ -1,4 +1,5 @@
-﻿using InventoryManagement.Models;
+﻿using InventoryManagement.Enums;
+using InventoryManagement.Models;
 using InventoryManagement.Util;
 using System;
 using System.Collections.Generic;
@@ -460,6 +461,30 @@ namespace InventoryManagement.Controllers
 
         #region PRODUCT
 
+        public ActionResult Products()
+        {
+            return View("Product/Products");
+        }
+
+        public ActionResult CreateProduct()
+        {
+            return View("Product/Product");
+        }
+
+        public ActionResult EditProduct(long id)
+        {
+            return View("Product/Product");
+        }
+
+        public ActionResult SaveProduct()
+        {
+            return View("Product/Product");
+        }
+
+        public ActionResult DeleteProduct(long id)
+        {
+            return View("Product/Products");
+        }
 
         #endregion
     }

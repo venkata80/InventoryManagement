@@ -206,14 +206,21 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Enums\MasterDataType.cs" />
+    <Compile Include="Enums\ProdcutTop.cs" />
+    <Compile Include="Enums\ProductPrint.cs" />
+    <Compile Include="Enums\ProductSoakedType.cs" />
+    <Compile Include="Enums\ProductType.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\BaseEmployerDTO.cs" />
     <Compile Include="Models\BaseInformation.cs" />
     <Compile Include="Models\CommonBaseDTO.cs" />
+    <Compile Include="Models\FileUploadDTO.cs" />
     <Compile Include="Models\LoginDTO.cs" />
     <Compile Include="Models\MasterDataDTO.cs" />
+    <Compile Include="Models\ProductDTO.cs" />
     <Compile Include="Models\StockModel.cs" />
     <Compile Include="Models\SuppliersDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -299,11 +306,11 @@
     <Content Include="Views\Admin\Supplier\CreateSupplier.cshtml" />
     <Content Include="Views\Login\CreateLogin.cshtml" />
     <Content Include="Views\Login\UserLogin.cshtml" />
+    <Content Include="Views\Admin\Product\Products.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\" />
-    <Folder Include="Views\Admin\Product\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

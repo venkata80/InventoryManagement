@@ -1,4 +1,5 @@
-﻿@using InventoryManagement.Models;
+﻿@using InventoryManagement.Enums;
+@using InventoryManagement.Models;
 @using InventoryManagement.Util;
 
 @{
@@ -34,7 +35,7 @@
         </ul>
         <!-- Tab panes -->
         <div class="tab-content in" style="padding-top: 20px">
-           
+
             <div role="tabpanel" class="tab-pane active" id="dvmasterdatacontent"></div>
         </div>
     </div>
@@ -58,7 +59,7 @@
                 if (result.Status == '@((int)AjaxResponse.Success)') {
                     $('#li' + datatype).trigger('click');
                 } else if (result.Status == '@((int)AjaxResponse.Failed)') {
-                    
+
                 }
             }
         }
