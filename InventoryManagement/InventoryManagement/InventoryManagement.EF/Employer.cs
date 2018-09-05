@@ -12,28 +12,25 @@ namespace InventoryManagement.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class IM_Employer
+    public partial class Employer
     {
-        public int EMPID { get; set; }
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
-        public string Middlename { get; set; }
+        public System.Guid ID { get; set; }
         public Nullable<System.DateTime> DOB { get; set; }
         public string Gender { get; set; }
         public Nullable<int> ResPhone { get; set; }
         public Nullable<int> CellPhone { get; set; }
-        public string Address { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public Nullable<int> Zipcode { get; set; }
         public string Designation { get; set; }
         public Nullable<System.DateTime> JoinDate { get; set; }
         public Nullable<System.DateTime> RelievedDate { get; set; }
-        public Nullable<bool> IsActive { get; set; }
-        public string CreateBy { get; set; }
+        public Nullable<System.Guid> AddressID { get; set; }
+        public System.Guid CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
-        public string ModifiedBy { get; set; }
+        public System.Guid ModifiedBy { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
-        public string Email { get; set; }
+    
+        public virtual Address Address { get; set; }
+        public virtual aspnet_Users aspnet_Users { get; set; }
+        public virtual aspnet_Users aspnet_Users1 { get; set; }
+        public virtual User User { get; set; }
     }
 }

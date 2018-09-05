@@ -12,16 +12,11 @@ namespace InventoryManagement.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class IM_MasterData
+    public partial class vw_aspnet_Applications
     {
-        public int Id { get; set; }
-        public string MasterName { get; set; }
-        public string Descrption { get; set; }
-        public string Type { get; set; }
-        public Nullable<bool> Isactive { get; set; }
-        public string CreatedBy { get; set; }
-        public Nullable<System.DateTime> CreatedOn { get; set; }
-        public string ModifiedBy { get; set; }
-        public Nullable<System.DateTime> ModifiedOn { get; set; }
+        public string ApplicationName { get; set; }
+        public string LoweredApplicationName { get; set; }
+        public System.Guid ApplicationId { get; set; }
+        public string Description { get; set; }
     }
 }

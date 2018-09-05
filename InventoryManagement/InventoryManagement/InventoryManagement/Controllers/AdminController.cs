@@ -16,7 +16,7 @@ namespace InventoryManagement.Controllers
         // GET: Admin
         public ActionResult Index()
         {
-            return View();
+            return View("Dashboard");
         }
 
         #region EMPLOYER
@@ -24,23 +24,23 @@ namespace InventoryManagement.Controllers
         public ActionResult ViewEmployer()
         {
             ViewBag.Title = "Home Page";
-            IList<BaseEmployerDTO> emplist = null;
+            IList<EmployerDTO> emplist = null;
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(value);
-                var responseTask = client.GetAsync("GetEmployee");
+                var responseTask = client.GetAsync("Employer/GetEmployee");
                 responseTask.Wait();
                 var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
                 {
-                    var readTask = result.Content.ReadAsAsync<IList<BaseEmployerDTO>>();
+                    var readTask = result.Content.ReadAsAsync<IList<EmployerDTO>>();
                     readTask.Wait();
 
                     emplist = readTask.Result;
                 }
                 else //web api sent error response 
                 {
-                    emplist = new List<BaseEmployerDTO>();
+                    emplist = new List<EmployerDTO>();
                     //log response status here..
 
                     //  emplist =  IList.Empty<BaseEmployerDTO>();
@@ -55,11 +55,10 @@ namespace InventoryManagement.Controllers
 
         public ActionResult CreateEmployer()
         {
-            BaseEmployerDTO model = new BaseEmployerDTO();
-            return View("Employer/CreateEmployer", model);
+            return View("Employer/CreateEmployer", new EmployerDTO());
         }
         [HttpPost]
-        public ActionResult CreateEmployer(BaseEmployerDTO student)
+        public ActionResult CreateEmployer(EmployerDTO student)
         {
             ModelState.Remove("Id");
             if (ModelState.IsValid)
@@ -67,7 +66,7 @@ namespace InventoryManagement.Controllers
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(value);
-                    var postTask = client.PostAsJsonAsync<BaseEmployerDTO>("InsertEmployerData", student);
+                    var postTask = client.PostAsJsonAsync<EmployerDTO>("Employer/SaveEmployer", student);
                     postTask.Wait();
 
                     var result = postTask.Result;
@@ -83,18 +82,18 @@ namespace InventoryManagement.Controllers
             return View("Employer/CreateEmployer", student);
         }
 
-        public ActionResult EditEmployer(int id)
+        public ActionResult EditEmployer(Guid id)
         {
-            BaseEmployerDTO emplist = null;
+            EmployerDTO emplist = null;
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(value);
-                var responseTask = client.GetAsync("GetEmployeeById/" + id);
+                var responseTask = client.GetAsync("Employer/GetEmployeeById/" + id);
                 responseTask.Wait();
                 var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
                 {
-                    var readTask = result.Content.ReadAsAsync<BaseEmployerDTO>();
+                    var readTask = result.Content.ReadAsAsync<EmployerDTO>();
                     readTask.Wait();
 
                     emplist = readTask.Result;
@@ -112,12 +111,12 @@ namespace InventoryManagement.Controllers
             return View("Employer/CreateEmployer", emplist);
         }
         [HttpPost]
-        public ActionResult EditEmployer(BaseEmployerDTO student)
+        public ActionResult EditEmployer(EmployerDTO student)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(value);
-                var postTask = client.PutAsJsonAsync("UpdateEmployerData", student);
+                var postTask = client.PutAsJsonAsync("Employer/SaveEmployer", student);
                 postTask.Wait();
                 var result = postTask.Result;
                 if (result.IsSuccessStatusCode)
@@ -137,12 +136,12 @@ namespace InventoryManagement.Controllers
             return View("Employer/CreateEmployer", student);
         }
 
-        public ActionResult DeleteEmployer(int id)
+        public ActionResult DeleteEmployer(Guid id)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(value);
-                var deleteTask = client.DeleteAsync("DeleteEmployerData/" + id);
+                var deleteTask = client.DeleteAsync("Employer/DeleteEmployer/" + id);
                 deleteTask.Wait();
 
                 var result = deleteTask.Result;
@@ -174,7 +173,7 @@ namespace InventoryManagement.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(value);
-                var responseTask = client.GetAsync("GetAllSuppliers");
+                var responseTask = client.GetAsync("Employer/GetAllSuppliers");
                 responseTask.Wait();
                 var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
@@ -223,7 +222,7 @@ namespace InventoryManagement.Controllers
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(value);
-                    var postTask = client.PostAsJsonAsync<SuppliersDTO>("InsertSupplierData", student);
+                    var postTask = client.PostAsJsonAsync<SuppliersDTO>("Employer/InsertSupplierData", student);
                     postTask.Wait();
 
                     var result = postTask.Result;
@@ -245,7 +244,7 @@ namespace InventoryManagement.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(value);
-                var responseTask = client.GetAsync("GetSupplierById/" + id);
+                var responseTask = client.GetAsync("Employer/GetSupplierById/" + id);
                 responseTask.Wait();
                 var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
@@ -283,7 +282,7 @@ namespace InventoryManagement.Controllers
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(value);
-                    var postTask = client.PutAsJsonAsync("UpdateSupplierData", student);
+                    var postTask = client.PutAsJsonAsync("Employer/UpdateSupplierData", student);
                     postTask.Wait();
                     var result = postTask.Result;
                     if (result.IsSuccessStatusCode)
@@ -308,7 +307,7 @@ namespace InventoryManagement.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(value);
-                var deleteTask = client.DeleteAsync("DeleteSupplierData/" + id);
+                var deleteTask = client.DeleteAsync("Employer/DeleteSupplierData/" + id);
                 deleteTask.Wait();
 
                 var result = deleteTask.Result;
@@ -348,7 +347,7 @@ namespace InventoryManagement.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(value);
-                var responseTask1 = client.GetAsync("GetMasterDataBy");
+                var responseTask1 = client.GetAsync("Employer/GetMasterDataBy");
                 responseTask1.Wait();
                 var result = responseTask1.Result;
                 if (result.IsSuccessStatusCode)
@@ -383,7 +382,7 @@ namespace InventoryManagement.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(value);
-                var responseTask1 = client.GetAsync("GetMasterDataByID/" + id);
+                var responseTask1 = client.GetAsync("Employer/GetMasterDataByID/" + id);
                 responseTask1.Wait();
                 var result = responseTask1.Result;
                 if (result.IsSuccessStatusCode)
@@ -421,7 +420,7 @@ namespace InventoryManagement.Controllers
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(value);
-                    var postTask = client.PostAsJsonAsync<MasterDataDTO>("InsertMasterdata", model);
+                    var postTask = client.PostAsJsonAsync<MasterDataDTO>("Employer/InsertMasterdata", model);
                     postTask.Wait();
 
                     var result = postTask.Result;

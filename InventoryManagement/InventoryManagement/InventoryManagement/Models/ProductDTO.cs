@@ -6,7 +6,7 @@ using System.Web;
 
 namespace InventoryManagement.Models
 {
-    public class ProductDTO : CommonBaseDTO
+    public class ProductDTO : CommonBaseDTO<Guid>
     {
         public int Brand { get; set; }
         public int ProductForm { get; set; }

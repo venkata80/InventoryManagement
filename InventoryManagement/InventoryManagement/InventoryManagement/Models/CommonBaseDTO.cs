@@ -7,10 +7,15 @@ namespace InventoryManagement.Models
 {
     public class CommonBaseDTO
     {
-        public int Id { get; set; }
-        public string CreatedBy { get; set; }
-        public string ModifiedBy { get; set; }
+        public Guid CreatedBy { get; set; }
+        public Guid ModifiedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
+    }
+
+    public class CommonBaseDTO<IDType> : CommonBaseDTO  where IDType : struct
+    {
+        public IDType Id { get; set; }
+       
     }
 }

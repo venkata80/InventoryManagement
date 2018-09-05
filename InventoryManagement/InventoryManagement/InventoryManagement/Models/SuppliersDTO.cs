@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using InventoryManagement.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace InventoryManagement.Models
 {
-    public class SuppliersDTO : BaseInformation
+    public class SuppliersDTO : UserDTO
     {
         [Display(Name = "Supplier Bussiness Name*")]
         [Required(ErrorMessage = "Enter supplier bussiness name")]
@@ -27,8 +28,12 @@ namespace InventoryManagement.Models
         [Display(Name = "GST Number*")]
         [Required(ErrorMessage = "Enter GST number")]
         public string GSTNumber { get; set; }
+
         public int Plantid { get; set; }
+
         public int CoreTypeId { get; set; }
+
+        public AddressDTO Address { get; set; }
 
     }
 }

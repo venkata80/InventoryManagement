@@ -7,7 +7,7 @@ using System.Web;
 
 namespace InventoryManagement.Models
 {
-    public class MasterDataDTO : CommonBaseDTO
+    public class MasterDataDTO : CommonBaseDTO<long>
     {
         [Required(ErrorMessage = "Please enter name.")]
         public string MasterName { get; set; }

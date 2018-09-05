@@ -12,17 +12,19 @@ namespace InventoryManagement.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class IM_Login
+    public partial class MasterData
     {
-        public int LoginId { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public Nullable<int> LoginAttempts { get; set; }
-        public Nullable<bool> ResetPassword { get; set; }
-        public Nullable<int> EmployerId { get; set; }
-        public string Role { get; set; }
+        public long Id { get; set; }
+        public string MasterName { get; set; }
+        public string Descrption { get; set; }
+        public string Type { get; set; }
         public Nullable<bool> Isactive { get; set; }
-        public string CreatedBy { get; set; }
-        public Nullable<System.DateTime> CreatedOn { get; set; }
+        public System.Guid CreatedBy { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public System.Guid ModifiedBy { get; set; }
+        public Nullable<System.DateTime> ModifiedDate { get; set; }
+    
+        public virtual aspnet_Users aspnet_Users { get; set; }
+        public virtual aspnet_Users aspnet_Users1 { get; set; }
     }
 }

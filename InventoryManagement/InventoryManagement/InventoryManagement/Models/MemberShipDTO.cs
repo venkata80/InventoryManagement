@@ -25,16 +25,16 @@ namespace InventoryManagement.Models
         public string LoweredRoleName { get; set; }
         public string RoleDesc { get; set; }
     }
-    public class UserDTO
-    {
-        public string ApplicationId { get; set; }
-        public string UserId { get; set; }
-        public string UserName { get; set; }
-        public string LoweredUserName { get; set; }
-        public string MobileAlias { get; set; }
-        public bool IsAnonymous { get; set; }       
-        public DateTime? LastActivityDate { get; set; }
-    }
+    //public class UserDTO
+    //{
+    //    public string ApplicationId { get; set; }
+    //    public string UserId { get; set; }
+    //    public string UserName { get; set; }
+    //    public string LoweredUserName { get; set; }
+    //    public string MobileAlias { get; set; }
+    //    public bool IsAnonymous { get; set; }       
+    //    public DateTime? LastActivityDate { get; set; }
+    //}
     public class MemberShipDTO
     {
         public string ApplicationId { get; set; }

@@ -9,7 +9,7 @@ namespace InventoryManagement.Models
     public class LoginDTO
     {
         public int LoginId { get; set; }
-        [DataType(DataType.Text)]
+        [DataType(DataType.EmailAddress, ErrorMessage ="Enter valid username.")]
         [Required]
         public string  UserName { get; set; }
         [DataType(DataType.Password)]

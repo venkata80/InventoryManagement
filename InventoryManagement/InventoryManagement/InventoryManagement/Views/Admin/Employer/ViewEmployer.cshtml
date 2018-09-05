@@ -1,4 +1,4 @@
-﻿@model IEnumerable<InventoryManagement.Models.BaseEmployerDTO>
+﻿@model IEnumerable<InventoryManagement.Models.EmployerDTO>
 
 @{
     ViewBag.Title = "ViewEmployer";
@@ -53,16 +53,16 @@
                             @Html.DisplayFor(modelItem => item.CellPhone)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Address)
+                            @Html.DisplayFor(modelItem => item.Address.Address)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.City)
+                            @Html.DisplayFor(modelItem => item.Address.City)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.State)
+                            @Html.DisplayFor(modelItem => item.Address.State)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Zipcode)
+                            @Html.DisplayFor(modelItem => item.Address.Zipcode)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.JoinDate)

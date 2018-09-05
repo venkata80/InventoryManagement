@@ -12,26 +12,26 @@ namespace InventoryManagement.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class IM_SUPPLIER
+    public partial class Supplier
     {
-        public int ID { get; set; }
+        public System.Guid ID { get; set; }
         public string BusinessName { get; set; }
         public string Name { get; set; }
         public Nullable<int> Phone { get; set; }
-        public string Address { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public Nullable<int> Zipcode { get; set; }
+        public Nullable<System.Guid> AddressID { get; set; }
         public Nullable<int> PlantId { get; set; }
         public Nullable<int> CoreTypeId { get; set; }
-        public string EmailId { get; set; }
         public string ExpectedDays { get; set; }
         public string GSTno { get; set; }
         public string SACcode { get; set; }
-        public Nullable<bool> IsActive { get; set; }
-        public string CreatedBy { get; set; }
-        public Nullable<System.DateTime> CreatedOn { get; set; }
-        public string ModifiedBy { get; set; }
+        public System.Guid CreatedBy { get; set; }
+        public System.DateTime CreatedOn { get; set; }
+        public System.Guid ModifiedBy { get; set; }
         public Nullable<System.DateTime> ModifiedOn { get; set; }
+    
+        public virtual Address Address { get; set; }
+        public virtual aspnet_Users aspnet_Users { get; set; }
+        public virtual aspnet_Users aspnet_Users1 { get; set; }
+        public virtual User User { get; set; }
     }
 }
