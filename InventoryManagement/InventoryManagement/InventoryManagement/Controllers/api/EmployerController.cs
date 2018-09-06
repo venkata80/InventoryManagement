@@ -88,10 +88,12 @@ namespace InventoryManagement.Controllers.api
                         var existinguser = ctx.Users.FirstOrDefault(c => c.ID == s.Id);
                         if(existinguser!=null)
                         {
+                            employerid = s.Id;
+                            //existinguser = s;                            
                             existinguser.FirstName = s.FirstName;
                             existinguser.LastName = s.LastName;
                             existinguser.MiddleName = s.MiddleName;
-                            existinguser.ModifiedBy = s.ModifiedBy;
+                            existinguser.ModifiedBy = s.Id;
                             existinguser.ModifiedDate = DateTime.UtcNow;
 
                             ctx.SaveChanges();

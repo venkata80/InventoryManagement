@@ -116,7 +116,7 @@ namespace InventoryManagement.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(value);
-                var postTask = client.PutAsJsonAsync("Employer/SaveEmployer", student);
+                var postTask = client.PostAsJsonAsync("Employer/SaveEmployer", student);
                 postTask.Wait();
                 var result = postTask.Result;
                 if (result.IsSuccessStatusCode)
