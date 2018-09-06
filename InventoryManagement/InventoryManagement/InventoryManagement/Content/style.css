@@ -6,7 +6,7 @@
     background-color: #2e353d;
     position: fixed;
     top: 0px;
-    width: 200px;
+    width:20%;
     height: 100%;
     color: #e1ffff;
 }
@@ -54,6 +54,7 @@
             padding-right: 10px;
             vertical-align: middle;
             float: right;
+            width:auto;
         }
 
         .nav-side-menu ul .active,
@@ -123,7 +124,7 @@
             transition: all 1s ease;
         }
 .body-content {
-    padding-left: 5%;
+    padding-left: 12%;
     padding-right: 5px;
 }
 input,
@@ -169,5 +170,5 @@ textarea {
 
 body {
     padding-top: 1%;
-    padding-bottom: 1%;
+    padding-bottom: 100%;
 }
