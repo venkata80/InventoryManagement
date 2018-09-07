@@ -27,9 +27,11 @@ namespace InventoryManagement.Models
         [Required(ErrorMessage = "Enter Join date.")]
         [Display(Name = "Joining Date*")]
         public DateTime? JoinDate { get; set; }
-
+        [DataType(DataType.Date)]
         [Display(Name = "Relieved Date")]
         public DateTime? Relieved { get; set; }
+        public Guid? AddressID { get; set; }
+        public string Dboperation { get; set; }
 
         public AddressDTO Address { get; set; }
 

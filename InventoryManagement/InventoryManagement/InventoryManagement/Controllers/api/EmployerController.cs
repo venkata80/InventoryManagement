@@ -42,8 +42,10 @@ namespace InventoryManagement.Controllers.api
                     Email = s.User.Email,
                     ResPhone = s.ResPhone,
                     CellPhone = s.CellPhone,
+                    AddressID= s.AddressID,
                     Address = new AddressDTO
                     {
+                        Id=s.Address.ID,
                         Address = s.Address.Address1,
                         City = s.Address.City,
                         State = s.Address.State,
@@ -81,6 +83,9 @@ namespace InventoryManagement.Controllers.api
                         if (addressid != Guid.Empty)
                         {
                             employerid = SaveEmployerDetails(s, user.Id, user.Id, addressid);
+                            SaveAddress(s, user.Id);
+                            SaveEmployerDetails(s, s.Id, s.Id, s.Address.Id);
+
                         }
                     }
                     else
@@ -93,14 +98,16 @@ namespace InventoryManagement.Controllers.api
                             existinguser.FirstName = s.FirstName;
                             existinguser.LastName = s.LastName;
                             existinguser.MiddleName = s.MiddleName;
+                            existinguser.ActiveFL = s.Isactive;
                             existinguser.ModifiedBy = s.Id;
                             existinguser.ModifiedDate = DateTime.UtcNow;
 
                             ctx.SaveChanges();
+                            SaveAddress(s, existinguser.ModifiedBy);
+                            SaveEmployerDetails(s, s.Id, s.ModifiedBy, s.Address.Id);
+
                         }
 
-                        SaveAddress(s, s.ModifiedBy);
-                        SaveEmployerDetails(s, s.Id, s.ModifiedBy, s.Address.Id);
                     }
                 }
                 catch (Exception ex)
@@ -112,46 +119,66 @@ namespace InventoryManagement.Controllers.api
                 }
             }
 
-            if (employerid == Guid.Empty)
-            {
-                DeleteUserDetails(s.Email);
-            }
+          //  if (employerid == Guid.Empty)
+          //  {
+          //      DeleteUserDetails(s.Email);
+          //  }
             return Ok();
         }
 
         Guid SaveAddress(EmployerDTO employerdto, Guid createdby)
         {
-            Guid addressid = employerdto.Id == Guid.Empty ? Guid.NewGuid() : employerdto.Id;
+            Guid? addressid = employerdto.Address.Id == Guid.Empty ? Guid.NewGuid() : employerdto.Address.Id;
             try
             {
+                Address address;
                 using (var addressctx = new InventoryManagementEntities())
                 {
-                    Address address = new Address();
-                    address.ID = addressid;
-                    address.Address1 = employerdto.Address.Address;
-                    address.City = employerdto.Address.City;
-                    address.State = employerdto.Address.State;
-                    address.Zipcode = employerdto.Address.Zipcode;
-                    if (employerdto.Id == Guid.Empty)
+                    if (addressid == Guid.Empty)
                     {
-                        address.CreatedBy = createdby;
-                        address.CreatedDate = DateTime.UtcNow;
+                         address = new Address();
+                        address.ID = addressid.Value;
+                        address.Address1 = employerdto.Address.Address;
+                        address.City = employerdto.Address.City;
+                        address.State = employerdto.Address.State;
+                        address.Zipcode = employerdto.Address.Zipcode;
+                        if (employerdto.Id == Guid.Empty)
+                        {
+                            address.CreatedBy = createdby;
+                            address.CreatedDate = DateTime.UtcNow;
+                        }
+                        address.ModifiedBy = createdby;
+                        if (employerdto.Id != Guid.Empty)
+                            address.ModifiedDate = DateTime.UtcNow;
+
+                        address.ActiveFL = employerdto.Isactive;
+                        addressctx.Addresses.Add(address);
+                        addressctx.SaveChanges();
+
                     }
-                    address.ModifiedBy = createdby;
-                    if (employerdto.Id != Guid.Empty)
-                        address.ModifiedDate = DateTime.UtcNow;
-
-                    address.ActiveFL = employerdto.Isactive;
-
-                    addressctx.Addresses.Add(address);
-                    addressctx.SaveChanges();
+                    else
+                    {
+                        address = addressctx.Addresses.Where(c => c.ID == addressid).SingleOrDefault();
+                        if(address!=null)
+                        {
+                            address.ID = employerdto.Address.Id;
+                            address.Address1 = employerdto.Address.Address;
+                            address.City = employerdto.Address.City;
+                            address.State = employerdto.Address.State;
+                            address.Zipcode = employerdto.Address.Zipcode;
+                            address.ModifiedBy = createdby;
+                            address.ModifiedDate = DateTime.UtcNow;
+                            address.ActiveFL = employerdto.Isactive;
+                            addressctx.SaveChanges();
+                        }
+                    }
                 }
             }
             catch(Exception ex)
             {
                 return Guid.Empty;
             }
-            return addressid;
+            return addressid.Value;
         }
 
         Guid SaveEmployerDetails(EmployerDTO employerdto, Guid userid, Guid createdby, Guid addressid)
@@ -160,28 +187,52 @@ namespace InventoryManagement.Controllers.api
             {
                 using (var employerctx = new InventoryManagementEntities())
                 {
-                    Employer emp = new Employer();
-                    emp.ID = userid;
-                    emp.Designation = employerdto.Designation;
-                    emp.DOB = employerdto.Dateofbirth;
-                    emp.Gender = employerdto.gender;
-                    emp.ResPhone = employerdto.ResPhone;
-                    emp.CellPhone = employerdto.CellPhone;
-                    emp.AddressID = addressid;
-                    emp.JoinDate = employerdto.JoinDate.HasValue ? employerdto.JoinDate.Value.Date : DateTime.MinValue;
-                    emp.RelievedDate = employerdto.Relieved.HasValue ? employerdto.Relieved.Value.Date : DateTime.MinValue;
-                    if (employerdto.Id == Guid.Empty)
+                    Employer emp;
+                    if (userid == Guid.Empty)
                     {
-                        emp.CreatedBy = createdby;
-                        emp.CreatedDate = DateTime.UtcNow;
+                        emp = new Employer();
+                        emp.ID = userid;
+                        emp.Designation = employerdto.Designation;
+                        emp.DOB = employerdto.Dateofbirth;
+                        emp.Gender = employerdto.gender;
+                        emp.ResPhone = employerdto.ResPhone;
+                        emp.CellPhone = employerdto.CellPhone;
+                        emp.AddressID = addressid;
+                        emp.JoinDate = employerdto.JoinDate.HasValue ? employerdto.JoinDate.Value.Date : DateTime.MinValue;
+                        emp.RelievedDate = employerdto.Relieved.HasValue ? employerdto.Relieved.Value.Date : DateTime.MinValue;
+                        if (employerdto.Id == Guid.Empty)
+                        {
+                            emp.CreatedBy = createdby;
+                            emp.CreatedDate = DateTime.UtcNow;
+                        }
+                        emp.ModifiedBy = createdby;
+
+                        if (employerdto.Id != Guid.Empty)
+                            emp.ModifiedDate = DateTime.UtcNow;
+
+                        employerctx.Employers.Add(emp);
+                        employerctx.SaveChanges();
                     }
-                    emp.ModifiedBy = createdby;
+                    else
+                    {
+                        emp = employerctx.Employers.Where(e => e.ID == userid).SingleOrDefault();
+                        if (emp != null)
+                        {
+                            emp.ID = userid;
+                            emp.Designation = employerdto.Designation;
+                            emp.DOB = employerdto.Dateofbirth;
+                            emp.Gender = employerdto.gender;
+                            emp.ResPhone = employerdto.ResPhone;
+                            emp.CellPhone = employerdto.CellPhone;
+                            emp.AddressID = addressid;
+                            emp.JoinDate = employerdto.JoinDate.HasValue ? employerdto.JoinDate.Value.Date : DateTime.MinValue;
+                            emp.RelievedDate = employerdto.Relieved.HasValue ? employerdto.Relieved.Value.Date : DateTime.MinValue;
+                          //  emp.ModifiedBy = createdby;
+                            emp.ModifiedDate = DateTime.UtcNow;
 
-                    if (employerdto.Id != Guid.Empty)
-                        emp.ModifiedDate = DateTime.UtcNow;
-
-                    employerctx.Employers.Add(emp);
-                    employerctx.SaveChanges();
+                            employerctx.SaveChanges();
+                        }
+                    }
                 }
             }
             catch (Exception ex)

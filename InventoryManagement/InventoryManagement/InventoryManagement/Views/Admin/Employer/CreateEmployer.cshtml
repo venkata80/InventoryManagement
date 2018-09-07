@@ -137,7 +137,7 @@
                     <div class="col-md-offset-2 col-md-10">
                         @Html.HiddenFor(model => model.Id, Model.Id)
                         @Html.HiddenFor(model => model.Role, Model.Role)
-                        @*@Html.HiddenFor(model => model.Address.Id, Model.Address.Id)*@
+                        @Html.HiddenFor(model => model.Address.Id, Model.Address.Id)
                         <input type="submit" value="@(Model.Id != Guid.Empty ? "Save" : "Create")" class="btn btn-default" />
                     </div>
                 </div>
