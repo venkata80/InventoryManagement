@@ -18,16 +18,15 @@ namespace InventoryManagement.Models
         [Display(Name = "Gender*")]
         public string gender { get; set; } = "Male";
 
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         [Required(ErrorMessage = "Enter date of birth.")]
         [Display(Name = "Date Of Birth*")]
         public DateTime? Dateofbirth { get; set; }
 
-        [DataType(DataType.Date)]
         [Required(ErrorMessage = "Enter Join date.")]
         [Display(Name = "Joining Date*")]
         public DateTime? JoinDate { get; set; }
-        [DataType(DataType.Date)]
+
         [Display(Name = "Relieved Date")]
         public DateTime? Relieved { get; set; }
         public Guid? AddressID { get; set; }

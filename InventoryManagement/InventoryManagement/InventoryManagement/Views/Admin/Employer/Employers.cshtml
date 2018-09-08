@@ -1,0 +1,53 @@
+﻿@model IEnumerable<InventoryManagement.Models.EmployerDTO>
+
+@{
+    ViewBag.Title = "Employers";
+}
+
+<h2>Employers</h2>
+<div class="padding-md">
+    <div class="main-header clearfix">
+        <div class="panel panel-default table-responsive">
+            <div class="panel-heading">
+                <span class="label label-info ">
+                    <span class="glyphicon glyphicon-plus-sign"></span>
+                    @Html.ActionLink("Create New", "CreateEmployer", "Admin")
+                </span>
+                <span class="label label-info pull-right" id="spnemployercount"></span>
+            </div>
+        </div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="liemployer">
+                @Ajax.ActionLink("Active Employers", "GetEmployers", "Admin", new { ActiveFL = true }, new AjaxOptions { UpdateTargetId = "dvemployercontent", OnSuccess= "OnSuccessetEmployers" }, new { @id = "anchrinactiveemployers", @onclick= "OnBeginGetEmployers(this)" })
+            </li>
+            <li class="liemployer">
+                @Ajax.ActionLink("InActive Employers", "GetEmployers", "Admin", new { ActiveFL = false }, new AjaxOptions { UpdateTargetId = "dvemployercontent", OnSuccess = "OnSuccessetEmployers" }, new { @id = "anchrinactiveemployers", @onclick = "OnBeginGetEmployers(this)" })
+            </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content in" style="padding-top: 20px">
+            <div role="tabpanel" class="tab-pane active" id="dvemployercontent"></div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#anchrinactiveemployers').trigger('click');
+        });
+        function OnBeginGetEmployers(ele) {
+            $('.liemployer').removeClass('active');
+            $(ele).parent().addClass('active');
+        }
+
+        function OnSuccessetEmployers(result) {
+            var tremployers = $('.tremployers');
+            if (tremployers != null && tremployers != undefined && tremployers.length > 0)
+                $('#spnemployercount').text(tremployers.length + " Employer(s)");
+            else
+                $('#spnemployercount').text('');
+        }
+    </script>
+}

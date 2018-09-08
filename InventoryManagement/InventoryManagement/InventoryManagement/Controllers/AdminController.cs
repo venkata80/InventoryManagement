@@ -21,14 +21,18 @@ namespace InventoryManagement.Controllers
 
         #region EMPLOYER
 
-        public ActionResult ViewEmployer()
+        public ActionResult Employers()
         {
-            ViewBag.Title = "Home Page";
+            return View("Employer/Employers");
+        }
+
+        public ActionResult GetEmployers(bool ActiveFL = true)
+        {
             IList<EmployerDTO> emplist = null;
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(value);
-                var responseTask = client.GetAsync("Employer/GetEmployee");
+                var responseTask = client.GetAsync("Employer/GetEmployers?ActiveFL=" + ActiveFL);
                 responseTask.Wait();
                 var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
@@ -38,24 +42,13 @@ namespace InventoryManagement.Controllers
 
                     emplist = readTask.Result;
                 }
-                else //web api sent error response 
-                {
-                    emplist = new List<EmployerDTO>();
-                    //log response status here..
-
-                    //  emplist =  IList.Empty<BaseEmployerDTO>();
-
-
-                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
-                }
             }
-
-            return View("Employer/ViewEmployer", emplist);
+            return PartialView("Employer/_Employers", emplist);
         }
 
         public ActionResult CreateEmployer()
         {
-            return View("Employer/CreateEmployer", new EmployerDTO());
+            return View("Employer/CreateEmployer", new EmployerDTO() { Address = new AddressDTO { } });
         }
         [HttpPost]
         public ActionResult CreateEmployer(EmployerDTO student)
@@ -116,6 +109,8 @@ namespace InventoryManagement.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(value);
+                student.CreatedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
+                student.ModifiedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
                 var postTask = client.PostAsJsonAsync("Employer/SaveEmployer", student);
                 postTask.Wait();
                 var result = postTask.Result;
@@ -157,6 +152,27 @@ namespace InventoryManagement.Controllers
                     //  emplist =  IList.Empty<BaseEmployerDTO>();
 
 
+                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                }
+            }
+            return RedirectToAction("ViewEmployer");
+        }
+
+        public ActionResult EnableEmployer(Guid id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(value);
+                var deleteTask = client.GetAsync("Employer/EnableEmployer/" + id);
+                deleteTask.Wait();
+
+                var result = deleteTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("ViewEmployer");
+                }
+                else //web api sent error response 
+                {
                     ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
                 }
             }
@@ -420,6 +436,8 @@ namespace InventoryManagement.Controllers
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(value);
+                    model.CreatedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
+                    model.ModifiedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
                     var postTask = client.PostAsJsonAsync<MasterDataDTO>("Employer/InsertMasterdata", model);
                     postTask.Wait();
 
@@ -434,7 +452,6 @@ namespace InventoryManagement.Controllers
                 }
             }
             return Json(new Response { Status = AjaxResponse.ModelError, Result = ModelUtil.RenderPartialToString("MasterData/_MasterDataInsert", model, ControllerContext) });
-
         }
 
         public ActionResult DeleteMasterData(int id)

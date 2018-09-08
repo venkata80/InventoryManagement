@@ -242,6 +242,8 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\jquery.datetimepicker.css" />
+    <Content Include="Content\jquery.datetimepicker.min.css" />
     <Content Include="Content\style.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -279,9 +281,13 @@
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
+    <Content Include="Scripts\jquery.datetimepicker.full.js" />
+    <Content Include="Scripts\jquery.datetimepicker.full.min.js" />
+    <Content Include="Scripts\jquery.datetimepicker.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -309,7 +315,7 @@
     <Content Include="Views\Admin\MasterData\MasterTab.cshtml" />
     <Content Include="Views\Admin\MasterData\_MasterDataInsert.cshtml" />
     <Content Include="Views\Admin\MasterData\_MasterDataList.cshtml" />
-    <Content Include="Views\Admin\Employer\ViewEmployer.cshtml" />
+    <Content Include="Views\Admin\Employer\Employers.cshtml" />
     <Content Include="Views\Admin\Employer\CreateEmployer.cshtml" />
     <Content Include="Views\Home\EditEmployer.cshtml" />
     <Content Include="Views\Admin\Supplier\ViewSuppliers.cshtml" />
@@ -319,6 +325,7 @@
     <Content Include="Views\Account\UserLogin.cshtml" />
     <Content Include="Views\Admin\Product\Products.cshtml" />
     <Content Include="Views\Admin\Dashboard.cshtml" />
+    <Content Include="Views\Admin\Employer\_Employers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

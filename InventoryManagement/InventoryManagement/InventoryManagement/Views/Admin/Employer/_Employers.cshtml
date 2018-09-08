@@ -1,0 +1,51 @@
+﻿@model IEnumerable<InventoryManagement.Models.EmployerDTO>
+
+
+<div class="padding-md clearfix">
+    <table class="table table-striped" id="dataTable">
+        <tr>
+            <th>Full Name </th>
+            <th>Date Of Birth</th>
+            <th>Gender</th>
+            <th>Residential Phone</th>
+            <th>Cell Phone</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip Code</th>
+            <th>Joining Date</th>
+            <th>Relieved Date</th>
+            <th></th>
+        </tr>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr class="tremployers">
+                    <td>@item.Fullname</td>
+                    <td>@(item.Dateofbirth != DateTime.MinValue ? item.Dateofbirth.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
+                    <td>@item.gender</td>
+                    <td>@item.ResPhone</td>
+                    <td>@item.CellPhone</td>
+                    <td>@item.Address.Address</td>
+                    <td>@item.Address.City</td>
+                    <td>@item.Address.State</td>
+                    <td>item.Address.Zipcode</td>
+                    <td>@(item.JoinDate != DateTime.MinValue ? item.JoinDate.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
+                    <td>@(item.Relieved != DateTime.MinValue ? item.Relieved.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
+                    <td>
+                        @if (item.Isactive)
+                        {
+                            @Html.ActionLink("Edit", "EditEmployer", new { id = item.Id }) @Html.Raw(" | ")
+                            @Html.ActionLink("Delete", "DeleteEmployer", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Enable", "EnableEmployer", new { id = item.Id })
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>

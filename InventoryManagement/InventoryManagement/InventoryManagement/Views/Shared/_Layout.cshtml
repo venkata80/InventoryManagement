@@ -7,6 +7,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="@Href("~/Content/jquery.datetimepicker.min.css")" />
     <style>
         .loader {
             z-index: 9001;
@@ -38,7 +39,7 @@
 
                             <ul class="sub-menu collapse" id="Employers">
                                 <li>
-                                    <p><span class="glyphicon glyphicon-user"></span>   @Html.ActionLink("Employers", "ViewEmployer", "Admin")</p>
+                                    <p><span class="glyphicon glyphicon-user"></span>   @Html.ActionLink("Employers", "Employers", "Admin")</p>
                                 </li>
                                 <li>
                                     <p><span class="glyphicon glyphicon-plus-sign"></span>   @Html.ActionLink("Add Employer", "CreateEmployer", "Admin")</p>
@@ -90,14 +91,14 @@
         </div>
 
     </div>
-    
+
     <div class="container body-content" style="margin-bottom: 5px">
         @RenderBody()
         <hr />
         <div id="loading" class="collapse loader">
             <i class="fa fa-spinner fa-spin fa-3x" style="font-size:48px"></i>
         </div>
-    @*Footer*@
+        @*Footer*@
         <footer>
             <p>&copy; @DateTime.Now.Year </p>
         </footer>
@@ -105,6 +106,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script src="@Href("~/Scripts/jquery.datetimepicker.full.js")"></script>
     <script src="@Href("~/Scripts/jquery.unobtrusive-ajax.js")"></script>
     @RenderSection("scripts", required: false)
 </body>

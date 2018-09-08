@@ -22,44 +22,22 @@ namespace InventoryManagement.Controllers.api
 
         // GET api/<controller>
         [HttpGet]
-        [ActionName("GetEmployee")]
-        public IHttpActionResult GetEmployer()
+        [ActionName("GetEmployers")]
+        public IHttpActionResult GetEmployer(bool? ActiveFL = null)
         {
             IList<EmployerDTO> employers = null;
 
             using (InventoryManagementEntities hhh = new InventoryManagementEntities())
             {
-                employers = hhh.Employers.Select(s => new EmployerDTO()
+                if (ActiveFL == null)
+                    employers = SetEmployerData(hhh.Employers.AsEnumerable());
+                else
                 {
-                    Id = s.ID,
-                    LastName = s.User.LastName,
-                    FirstName = s.User.FirstName,
-                    MiddleName = s.User.MiddleName,
-                    //Fullname=s.FirstName+ ' '+s.Middlename+' '+s.LastName,
-                    Designation = s.Designation,
-                    Dateofbirth = s.DOB,
-                    gender = s.Gender,
-                    Email = s.User.Email,
-                    ResPhone = s.ResPhone,
-                    CellPhone = s.CellPhone,
-                    AddressID= s.AddressID,
-                    Address = new AddressDTO
-                    {
-                        Id=s.Address.ID,
-                        Address = s.Address.Address1,
-                        City = s.Address.City,
-                        State = s.Address.State,
-                        Zipcode = s.Address.Zipcode,
-                    },
-                    JoinDate = s.JoinDate,
-                    Relieved = s.RelievedDate,
-                    Isactive = true
-                }).ToList<EmployerDTO>();
-                if (employers == null)
-                    employers = new List<EmployerDTO>();
+                    var filteredemployers = hhh.Employers.Where(c => c.User.ActiveFL == ActiveFL);
+                    if (filteredemployers != null && filteredemployers.Any())
+                        employers = SetEmployerData(filteredemployers.AsEnumerable());
+                }
             }
-            if (employers == null || !employers.Any())
-                return NotFound();
             return Ok(employers);
         }
 
@@ -81,17 +59,12 @@ namespace InventoryManagement.Controllers.api
                         Guid addressid = SaveAddress(s, user.Id);
 
                         if (addressid != Guid.Empty)
-                        {
                             employerid = SaveEmployerDetails(s, user.Id, user.Id, addressid);
-                            SaveAddress(s, user.Id);
-                            SaveEmployerDetails(s, s.Id, s.Id, s.Address.Id);
-
-                        }
                     }
                     else
                     {
                         var existinguser = ctx.Users.FirstOrDefault(c => c.ID == s.Id);
-                        if(existinguser!=null)
+                        if (existinguser != null)
                         {
                             employerid = s.Id;
                             //existinguser = s;                            
@@ -104,15 +77,13 @@ namespace InventoryManagement.Controllers.api
 
                             ctx.SaveChanges();
                             SaveAddress(s, existinguser.ModifiedBy);
-                            SaveEmployerDetails(s, s.Id, s.ModifiedBy, s.Address.Id);
-
+                            employerid = SaveEmployerDetails(s, s.Id, s.ModifiedBy, s.Address.Id);
                         }
-
                     }
                 }
                 catch (Exception ex)
                 {
-                    if (s.Id == Guid.Empty)
+                    if (employerid == Guid.Empty)
                     {
                         DeleteUserDetails(s.Email);
                     }
@@ -134,7 +105,7 @@ namespace InventoryManagement.Controllers.api
                 Address address;
                 using (var addressctx = new InventoryManagementEntities())
                 {
-                    if (addressid == Guid.Empty)
+                    if (employerdto.Address.Id == Guid.Empty)
                     {
                          address = new Address();
                         address.ID = addressid.Value;
@@ -158,7 +129,7 @@ namespace InventoryManagement.Controllers.api
                     }
                     else
                     {
-                        address = addressctx.Addresses.Where(c => c.ID == addressid).SingleOrDefault();
+                        address = addressctx.Addresses.Where(c => c.ID == addressid).FirstOrDefault();
                         if(address!=null)
                         {
                             address.ID = employerdto.Address.Id;
@@ -188,7 +159,7 @@ namespace InventoryManagement.Controllers.api
                 using (var employerctx = new InventoryManagementEntities())
                 {
                     Employer emp;
-                    if (userid == Guid.Empty)
+                    if (employerdto.Id == Guid.Empty)
                     {
                         emp = new Employer();
                         emp.ID = userid;
@@ -215,7 +186,7 @@ namespace InventoryManagement.Controllers.api
                     }
                     else
                     {
-                        emp = employerctx.Employers.Where(e => e.ID == userid).SingleOrDefault();
+                        emp = employerctx.Employers.Where(e => e.ID == userid).FirstOrDefault();
                         if (emp != null)
                         {
                             emp.ID = userid;
@@ -227,7 +198,7 @@ namespace InventoryManagement.Controllers.api
                             emp.AddressID = addressid;
                             emp.JoinDate = employerdto.JoinDate.HasValue ? employerdto.JoinDate.Value.Date : DateTime.MinValue;
                             emp.RelievedDate = employerdto.Relieved.HasValue ? employerdto.Relieved.Value.Date : DateTime.MinValue;
-                          //  emp.ModifiedBy = createdby;
+                            emp.ModifiedBy = createdby;
                             emp.ModifiedDate = DateTime.UtcNow;
 
                             employerctx.SaveChanges();
@@ -278,6 +249,35 @@ namespace InventoryManagement.Controllers.api
             {
                 
             }
+        }
+
+        IList<EmployerDTO> SetEmployerData(IEnumerable<Employer> employers)
+        {
+            return employers.Select(s => new EmployerDTO()
+            {
+                Id = s.ID,
+                LastName = s.User.LastName,
+                FirstName = s.User.FirstName,
+                MiddleName = s.User.MiddleName,
+                Designation = s.Designation,
+                Dateofbirth = s.DOB,
+                gender = s.Gender,
+                Email = s.User.Email,
+                ResPhone = s.ResPhone,
+                CellPhone = s.CellPhone,
+                AddressID = s.AddressID,
+                Address = new AddressDTO
+                {
+                    Id = s.Address.ID,
+                    Address = s.Address.Address1,
+                    City = s.Address.City,
+                    State = s.Address.State,
+                    Zipcode = s.Address.Zipcode,
+                },
+                JoinDate = s.JoinDate,
+                Relieved = s.RelievedDate,
+                Isactive = s.User.ActiveFL.Value
+            }).ToList();
         }
 
         //[HttpPut]
@@ -385,6 +385,23 @@ namespace InventoryManagement.Controllers.api
             return Ok(employer);
         }
 
+        [HttpGet]
+        public IHttpActionResult EnableEmployer(Guid id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("Not a valid model");
+
+            using (var ctx = new InventoryManagementEntities())
+            {
+                var user = ctx.Users.FirstOrDefault(c => c.ID == id);
+                if (user != null)
+                {
+                    user.ActiveFL = true;
+                    ctx.SaveChanges();
+                }
+            }
+            return Ok();
+        }
 
         #endregion
 
