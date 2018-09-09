@@ -74,7 +74,7 @@ namespace InventoryManagement.Controllers.api
                             existinguser.ActiveFL = s.Isactive;
                             existinguser.ModifiedBy = s.Id;
                             existinguser.ModifiedDate = DateTime.UtcNow;
-
+                            ctx.Entry(existinguser).State = System.Data.Entity.EntityState.Modified;
                             ctx.SaveChanges();
                             SaveAddress(s, existinguser.ModifiedBy);
                             employerid = SaveEmployerDetails(s, s.Id, s.ModifiedBy, s.Address.Id);
@@ -140,6 +140,7 @@ namespace InventoryManagement.Controllers.api
                             address.ModifiedBy = createdby;
                             address.ModifiedDate = DateTime.UtcNow;
                             address.ActiveFL = employerdto.Isactive;
+                            addressctx.Entry(address).State = System.Data.Entity.EntityState.Modified;
                             addressctx.SaveChanges();
                         }
                     }
@@ -174,13 +175,10 @@ namespace InventoryManagement.Controllers.api
                         if (employerdto.Id == Guid.Empty)
                         {
                             emp.CreatedBy = createdby;
+                            emp.ModifiedBy = createdby;
                             emp.CreatedDate = DateTime.UtcNow;
                         }
-                        emp.ModifiedBy = createdby;
-
-                        if (employerdto.Id != Guid.Empty)
-                            emp.ModifiedDate = DateTime.UtcNow;
-
+                        
                         employerctx.Employers.Add(emp);
                         employerctx.SaveChanges();
                     }
@@ -189,18 +187,17 @@ namespace InventoryManagement.Controllers.api
                         emp = employerctx.Employers.Where(e => e.ID == userid).FirstOrDefault();
                         if (emp != null)
                         {
-                            emp.ID = userid;
+                            //emp.ID = userid;
                             emp.Designation = employerdto.Designation;
                             emp.DOB = employerdto.Dateofbirth;
                             emp.Gender = employerdto.gender;
                             emp.ResPhone = employerdto.ResPhone;
                             emp.CellPhone = employerdto.CellPhone;
-                            emp.AddressID = addressid;
                             emp.JoinDate = employerdto.JoinDate.HasValue ? employerdto.JoinDate.Value.Date : DateTime.MinValue;
                             emp.RelievedDate = employerdto.Relieved.HasValue ? employerdto.Relieved.Value.Date : DateTime.MinValue;
                             emp.ModifiedBy = createdby;
                             emp.ModifiedDate = DateTime.UtcNow;
-
+                            employerctx.Entry(emp).State= System.Data.Entity.EntityState.Modified;
                             employerctx.SaveChanges();
                         }
                     }

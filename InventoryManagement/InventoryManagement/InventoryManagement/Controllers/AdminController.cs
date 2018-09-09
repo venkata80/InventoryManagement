@@ -65,7 +65,7 @@ namespace InventoryManagement.Controllers
                     var result = postTask.Result;
                     if (result.IsSuccessStatusCode)
                     {
-                        return RedirectToAction("ViewEmployer");
+                        return RedirectToAction("Employers");
                     }
 
                     ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
@@ -116,7 +116,7 @@ namespace InventoryManagement.Controllers
                 var result = postTask.Result;
                 if (result.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("ViewEmployer");
+                    return RedirectToAction("Employers");
                 }
                 else //web api sent error response 
                 {
