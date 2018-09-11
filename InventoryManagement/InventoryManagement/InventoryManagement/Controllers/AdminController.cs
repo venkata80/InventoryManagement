@@ -132,26 +132,29 @@ namespace InventoryManagement.Controllers
         {
             if (Session["CurrentUser"] != null)
             {
-                using (var client = new HttpClient())
+                if (ModelState.IsValid)
                 {
-                    client.BaseAddress = new Uri(value);
-                    student.CreatedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
-                    student.ModifiedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
-                    var postTask = client.PostAsJsonAsync("Employer/SaveEmployer", student);
-                    postTask.Wait();
-                    var result = postTask.Result;
-                    if (result.IsSuccessStatusCode)
+                    using (var client = new HttpClient())
                     {
-                        return RedirectToAction("Employers");
-                    }
-                    else //web api sent error response 
-                    {
-                        //log response status here..
+                        client.BaseAddress = new Uri(value);
+                        student.CreatedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
+                        student.ModifiedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
+                        var postTask = client.PostAsJsonAsync("Employer/SaveEmployer", student);
+                        postTask.Wait();
+                        var result = postTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            return RedirectToAction("Employers");
+                        }
+                        else //web api sent error response 
+                        {
+                            //log response status here..
 
-                        //  emplist =  IList.Empty<BaseEmployerDTO>();
+                            //  emplist =  IList.Empty<BaseEmployerDTO>();
 
 
-                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                            ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                        }
                     }
                 }
                 return View("Employer/CreateEmployer", student);

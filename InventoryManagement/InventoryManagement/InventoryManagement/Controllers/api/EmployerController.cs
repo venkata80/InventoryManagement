@@ -280,7 +280,7 @@ namespace InventoryManagement.Controllers.api
                 JoinDate = s.JoinDate,
                 Relieved = s.RelievedDate,
                 Isactive = s.User.ActiveFL.Value
-            }).ToList();
+            }).OrderBy(c => c.JoinDate).ToList();
         }
 
         //[HttpPut]

@@ -18,7 +18,6 @@ namespace InventoryManagement.Models
         [Display(Name = "Gender*")]
         public string gender { get; set; } = "Male";
 
-        [DisplayFormat(ApplyFormatInEditMode =true,DataFormatString = "{0:dd/MM/yyyy}")]
         //[DataType(DataType.Date)]
         [Required(ErrorMessage = "Enter date of birth.")]
         [Display(Name = "Date Of Birth*")]

@@ -45,7 +45,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Dateofbirth, htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-9">
-                    @Html.TextBox("Dateofbirth", Convert.ToDateTime(Model.Dateofbirth) != DateTime.MinValue ? Model.Dateofbirth.Value.ToString("dd/MM/yyyy") : string.Empty, new { @class = "form-control" })
+                    @Html.TextBox("Dateofbirth", Convert.ToDateTime(Model.Dateofbirth) != DateTime.MinValue ? Model.Dateofbirth.Value.ToString("MM/dd/yyyy") : string.Empty, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Dateofbirth, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -109,7 +109,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.JoinDate, htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-9">
-                    @Html.TextBox("JoinDate", Convert.ToDateTime(Model.JoinDate) != DateTime.MinValue ? Model.JoinDate.Value.ToString("dd/MM/yyyy") : string.Empty, new { @class = "form-control" })
+                    @Html.TextBox("JoinDate", Convert.ToDateTime(Model.JoinDate) != DateTime.MinValue ? Model.JoinDate.Value.ToString("MM/dd/yyyy") : string.Empty, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.JoinDate, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -117,7 +117,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Relieved, htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-9">
-                    @Html.TextBox("Relieved", Convert.ToDateTime(Model.Relieved) != DateTime.MinValue ? Model.Relieved.Value.ToString("dd/MM/yyyy") : string.Empty, new { @class = "form-control" })
+                    @Html.TextBox("Relieved", Convert.ToDateTime(Model.Relieved) != DateTime.MinValue ? Model.Relieved.Value.ToString("MM/dd/yyyy") : string.Empty, new { @class = "form-control" })
                 </div>
             </div>
             <div class="form-group"></div>
@@ -144,7 +144,7 @@
                 timepicker: false,
                 datepicker: true,
                 lang: 'en',
-                format: 'd/m/Y',
+                format: 'm/d/Y',
             });
         });
     </script>
