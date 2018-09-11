@@ -8,6 +8,7 @@ using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mail;
 using System.Web.Configuration;
 using System.Web.Http;
 using System.Web.Security;
@@ -221,5 +222,120 @@ namespace InventoryManagement.Controllers.api
             }
             return Ok(userdetails);
         }
+
+        [HttpGet]
+        public IHttpActionResult ChangePassword(string userName, string currentPassword, string newPassword, string confirmPassword)
+        {
+            bool status = false;
+
+            try
+            {
+                MembershipUser mUser = Membership.GetUser(userName, false);
+                if (newPassword != confirmPassword)
+                {
+                    throw new ApplicationException("New Password and Confirm Password dont match. Please try again");
+                }
+                if (mUser.ChangePassword(mUser.GetPassword(), newPassword))
+                {
+                    //new BLCommunication().SendChangePasswordEmail((int)mUser.ProviderUserKey);
+                    using (InventoryManagementEntities changepwdentity=new InventoryManagementEntities())
+                    {
+                        User user= changepwdentity.Users.FirstOrDefault(c => c.Email.ToLower() == userName.ToLower());
+                        if (user != null)
+                        {
+                            string RegistrationTemplate = Resources.Communication.MailTemplates.ChangePassword_Body;
+                            if (!string.IsNullOrWhiteSpace(RegistrationTemplate))
+                            {
+                                RegistrationTemplate = RegistrationTemplate.Replace("[[[Name]]]", string.Concat(user.FirstName, " ", user.LastName));
+                                MailMessage mailMessage = new MailMessage();
+                                mailMessage.To.Add(new MailAddress(user.Email));
+                                mailMessage.Subject = Resources.Communication.MailTemplates.ChangePassword_Subject;
+                                mailMessage.Body = RegistrationTemplate;
+                                mailMessage.From = new MailAddress(Resources.Communication.MailTemplates.SmtpClient_UserName);
+                                mailMessage.IsBodyHtml = true;
+
+                                SendMail(mailMessage);
+                            }
+                        }
+                    }
+                    
+                    status = true;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error changing password", e);
+            }
+            return Ok(status);
+        }
+
+        [HttpGet]
+        public IHttpActionResult ForgotPassword(string username)
+        {
+            //get user account:
+            MembershipUser mUser = Membership.GetUser(username);
+            if (mUser != null && mUser.IsApproved && !mUser.IsLockedOut)
+            {
+                //new BLCommunication().SendResetPasswordEmail((int)mUser.ProviderUserKey);
+                using (InventoryManagementEntities changepwdentity = new InventoryManagementEntities())
+                {
+                    User user = changepwdentity.Users.FirstOrDefault(c => c.Email.ToLower() == username.ToLower());
+                    if (user != null)
+                    {
+                        string RegistrationTemplate = Resources.Communication.MailTemplates.ForgotPassword_Body;
+                        if (!string.IsNullOrWhiteSpace(RegistrationTemplate))
+                        {
+                            RegistrationTemplate = RegistrationTemplate.Replace("[[[Name]]]", string.Concat(user.FirstName, " ", user.LastName));
+                            RegistrationTemplate = RegistrationTemplate.Replace("[[[Link]]]", string.Concat(Resources.Communication.MailTemplates.LoginLink, Resources.Communication.MailTemplates.ResetPasswordLink));
+                            RegistrationTemplate = RegistrationTemplate.Replace("[[[UserID]]]", user.ID.ToString());
+                            MailMessage mailMessage = new MailMessage();
+                            mailMessage.To.Add(new MailAddress(user.Email));
+                            mailMessage.Subject = Resources.Communication.MailTemplates.ForgotPassword_Subject;
+                            mailMessage.Body = RegistrationTemplate;
+                            mailMessage.From = new MailAddress(Resources.Communication.MailTemplates.SmtpClient_UserName);
+                            mailMessage.IsBodyHtml = true;
+
+                            SendMail(mailMessage);
+                        }
+                    }
+                }
+                return Ok(mUser.ProviderUserKey);
+            }
+
+            return Ok(Int32.MinValue);
+        }
+
+        [HttpGet]
+        public IHttpActionResult ResetPassword(Guid userid, string newPassword)
+        {
+            try
+            {
+                MembershipUser user = Membership.GetUser(userid);
+                if (user == null)
+                    return Ok(UserAccountStatus.AccountNotFound);
+
+                //change password:
+                if (user.ChangePassword(user.GetPassword(), newPassword))
+                    return Ok(UserAccountStatus.Success);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error resetting password", e);
+            }
+            return Ok(UserAccountStatus.Unsupported);
+        }
+
+        void SendMail(MailMessage Message)
+        {
+            SmtpClient client = new SmtpClient();
+            client.Host = Resources.Communication.MailTemplates.SmtpClient_Host;
+            client.Port = Convert.ToInt32(Resources.Communication.MailTemplates.SmtpClient_Port);
+            client.UseDefaultCredentials = false;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.EnableSsl = true;
+            client.Credentials = new NetworkCredential(Resources.Communication.MailTemplates.SmtpClient_UserName, Resources.Communication.MailTemplates.SmtpClient_Password);
+            client.Send(Message);
+        }
+
     }
 }

@@ -219,6 +219,7 @@
     </Compile>
     <Compile Include="Models\AddressDTO.cs" />
     <Compile Include="Models\EmployerDTO.cs" />
+    <Compile Include="Models\ForgotPasswordModel.cs" />
     <Compile Include="Models\UserDTO.cs" />
     <Compile Include="Models\CommonBaseDTO.cs" />
     <Compile Include="Models\FileUploadDTO.cs" />
@@ -230,6 +231,11 @@
     <Compile Include="Models\SuppliersDTO.cs" />
     <Compile Include="Models\UserSecurityToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Communication\MailTemplates.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MailTemplates.resx</DependentUpon>
+    </Compile>
     <Compile Include="Security\EFMembershipProvider.cs" />
     <Compile Include="Security\EFRoleProvider.cs" />
     <Compile Include="Util\ModelUtil.cs" />
@@ -326,6 +332,9 @@
     <Content Include="Views\Admin\Product\Products.cshtml" />
     <Content Include="Views\Admin\Dashboard.cshtml" />
     <Content Include="Views\Admin\Employer\_Employers.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -359,6 +368,12 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Communication\MailTemplates.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MailTemplates.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

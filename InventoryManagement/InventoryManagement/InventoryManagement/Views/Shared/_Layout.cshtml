@@ -31,7 +31,7 @@
                     <ul id="menu-content" class="menu-content collapse out">
                         <li class="active">
                             <a href="#">
-                                <i class="fa fa-dashboard fa-lg"></i>  @Html.ActionLink("Dashboard", "Dashboard", "Admin")
+                                <i class="fa fa-dashboard fa-lg"></i>  @Html.ActionLink("Dashboard", "Index", "Admin")
                             </a>
                         </li>
                         <li data-toggle="collapse" data-target="#Employers" class="collapsed">
@@ -69,6 +69,11 @@
                                     <p><span class="glyphicon glyphicon-plus-sign"></span>   @Html.ActionLink("Product", "CreateSupplier", "Admin")</p>
                                 </li>
                             </ul>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-dashboard fa-lg"></i> @Html.ActionLink("ChangePassword", "ChangePassword", "Account")
+                            </a>
                         </li>
                         <li>
                             <a href="#">

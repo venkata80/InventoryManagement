@@ -23,7 +23,7 @@
             {
                 <tr class="tremployers">
                     <td>@item.Fullname</td>
-                    <td>@(item.Dateofbirth != DateTime.MinValue ? item.Dateofbirth.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
+                    <td>@(Convert.ToDateTime(item.Dateofbirth) != DateTime.MinValue ? item.Dateofbirth.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
                     <td>@item.gender</td>
                     <td>@item.ResPhone</td>
                     <td>@item.CellPhone</td>

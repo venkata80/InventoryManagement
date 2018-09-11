@@ -105,5 +105,202 @@ namespace InventoryManagement.Controllers
             return RedirectToAction("UserLogin");
         }
 
+        public ActionResult ChangePassword()
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                ForgotPasswordModel password = new ForgotPasswordModel();
+                return View(password);
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+
+        [HttpPost]
+        public ActionResult ChangePassword(ForgotPasswordModel password)
+        {
+            try
+            {
+                if (Session["CurrentUser"] != null)
+                {
+                    UserSecurityToken currentUser = (UserSecurityToken)Session["CurrentUser"];
+                    password.UserName = currentUser.Email;
+
+
+                    if (ModelState.ContainsKey("UserName"))
+                        ModelState.Remove("UserName");
+
+                    if (ModelState.ContainsKey("Password"))
+                        ModelState.Remove("Password");
+
+                    if (ModelState.ContainsKey("UserID"))
+                        ModelState.Remove("UserID");
+
+                    if (ModelState.IsValid)
+                    {
+                        bool success = false;
+                        using (var client = new HttpClient())
+                        {
+                            client.BaseAddress = new Uri(value);
+                            var responseTask1 = client.GetAsync(string.Format("User/ChangePassword?userName={0}&currentPassword={1}&newPassword={2}&confirmPassword={3}", password.UserName, password.OldPassword, password.NewPassword, password.NewPasswordConfirm));
+                            responseTask1.Wait();
+                            var result = responseTask1.Result;
+
+                            if (result.IsSuccessStatusCode)
+                            {
+                                var changepasswordTask = result.Content.ReadAsAsync<bool>();
+                                changepasswordTask.Wait();
+
+                                success = changepasswordTask.Result;
+                                if (success)
+                                {
+                                    switch (currentUser.Role.Name)
+                                    {
+                                        case "Admin":
+                                            return RedirectToAction("Index", "Admin");
+
+                                    }
+                                }
+                            }
+                            ModelState.AddModelError("NewPassword", "Password was not changed. Please try again.");
+                            return View(password);
+                        }
+                    }
+                    return View(password);
+                }
+                return RedirectToAction("UserLogin", "Account");
+            }
+            catch
+            {
+                ModelState.AddModelError("NewPassword", "New password must be at least 8 characters long. Please try again.");
+                return View(password);
+            }
+        }
+
+        public ActionResult ForgotPassword()
+        {
+            return View(new ForgotPasswordModel());
+        }
+
+        [HttpPost]
+        public ActionResult ForgotPassword(ForgotPasswordModel forgotPassword)
+        {
+            UserDTO user = null;
+            try
+            {
+                if (ModelState.ContainsKey("UserID"))
+                    ModelState.Remove("UserID");
+
+                if (ModelState.ContainsKey("Password"))
+                    ModelState.Remove("Password");
+
+                if (ModelState.ContainsKey("NewPassword"))
+                    ModelState.Remove("NewPassword");
+
+                if (ModelState.ContainsKey("NewPasswordConfirm"))
+                    ModelState.Remove("NewPasswordConfirm");
+
+                if (!string.IsNullOrWhiteSpace(forgotPassword.UserName))
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(value);
+                        var chekcusernameexists = client.GetAsync("User/GetUserByEmail?email=" + forgotPassword.UserName);
+                        chekcusernameexists.Wait();
+                        var result = chekcusernameexists.Result;
+
+                        if (result.IsSuccessStatusCode)
+                        {
+                            var readUserDTOTask = result.Content.ReadAsAsync<UserDTO>();
+                            readUserDTOTask.Wait();
+
+                            user = readUserDTOTask.Result;
+                            if (user != null)
+                            {
+                                var forgotpasswordrequest = client.GetAsync("User/ForgotPassword?username=" + forgotPassword.UserName);
+                                forgotpasswordrequest.Wait();
+                                var forgotpasswordresult = forgotpasswordrequest.Result;
+
+                                if (forgotpasswordresult.IsSuccessStatusCode)
+                                {
+                                    var readforgotpasswordresultTask = result.Content.ReadAsAsync<int>();
+                                    readforgotpasswordresultTask.Wait();
+
+                                    int taskresult = readforgotpasswordresultTask.Result;
+                                    if (taskresult != Int32.MinValue)
+                                    {
+                                        return RedirectToAction("UserLogin", "Account");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            ModelState.AddModelError("UserName", "Please check the email address entered and try again.");
+            return View(forgotPassword);
+        }
+
+        public ViewResult ResetPassword(string userid)
+        {
+            Guid.TryParse(Convert.ToString(userid), out Guid resultid);
+            return View(new ForgotPasswordModel() { UserID = resultid });
+        }
+
+        [HttpPost]
+        public ActionResult ResetPassword(ForgotPasswordModel resetpassword)
+        {
+            try
+            {
+                if (ModelState.ContainsKey("Password"))
+                    ModelState.Remove("Password");
+
+                if (ModelState.ContainsKey("UserName"))
+                    ModelState.Remove("UserName");
+
+                if (ModelState.IsValid)
+                {
+                    UserAccountStatus status = UserAccountStatus.NotSet;
+
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(value);
+                        var resetpasswordrequest = client.GetAsync(string.Format("User/ResetPassword?userid={0}&newPassword={1}", resetpassword.UserID, resetpassword.NewPassword));
+                        resetpasswordrequest.Wait();
+                        var resetpasswordresult = resetpasswordrequest.Result;
+
+                        if (resetpasswordresult.IsSuccessStatusCode)
+                        {
+                            var resetpasswordtask = resetpasswordresult.Content.ReadAsAsync<UserAccountStatus>();
+                            resetpasswordtask.Wait();
+
+                            status = resetpasswordtask.Result;
+                            switch (status)
+                            {
+                                case UserAccountStatus.AccountNotFound:
+                                    ModelState.AddModelError("UserName", "No matching account could be found. Please try again.");
+                                    resetpassword.NewPassword = string.Empty;
+                                    resetpassword.NewPasswordConfirm = string.Empty;
+                                    return View(resetpassword);
+                                case UserAccountStatus.UsernameMismatch:
+                                    ModelState.AddModelError("UserName", "User Name is incorrect. Please try again.");
+                                    resetpassword.NewPassword = string.Empty;
+                                    resetpassword.NewPasswordConfirm = string.Empty;
+                                    return View(resetpassword);
+                                case UserAccountStatus.Success:
+                                    return RedirectToAction("UserLogin", "Account");
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                ModelState.AddModelError("EmailAddress", "Password has not been reset. Please check the email address entered and try again.");
+            }
+            return View(resetpassword);
+        }
     }
 }

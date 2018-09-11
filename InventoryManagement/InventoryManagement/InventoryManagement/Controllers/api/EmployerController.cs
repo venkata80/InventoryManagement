@@ -1,14 +1,17 @@
 ﻿using InventoryManagement.EF;
 using InventoryManagement.Enums;
 using InventoryManagement.Models;
+using InventoryManagement.Security;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mail;
 using System.Web.Configuration;
 using System.Web.Http;
 using System.Web.Security;
@@ -60,6 +63,9 @@ namespace InventoryManagement.Controllers.api
 
                         if (addressid != Guid.Empty)
                             employerid = SaveEmployerDetails(s, user.Id, user.Id, addressid);
+
+                        if (employerid != Guid.Empty)
+                            SendRegistrationMail(s);
                     }
                     else
                     {
@@ -400,6 +406,34 @@ namespace InventoryManagement.Controllers.api
             return Ok();
         }
 
+        void SendRegistrationMail(EmployerDTO employer)
+        {
+            string RegistrationTemplate = Resources.Communication.MailTemplates.NewRegistration_Body;
+            if (!string.IsNullOrWhiteSpace(RegistrationTemplate))
+            {
+                RegistrationTemplate = RegistrationTemplate.Replace("[[[Name]]]", employer.Fullname);
+                RegistrationTemplate = RegistrationTemplate.Replace("[[[UserName]]]", employer.Email);
+
+                EFMembershipProvider membershipprovider = new EFMembershipProvider();
+                membershipprovider.Initialize("SqlProvider", new NameValueCollection());
+
+                string password = membershipprovider.GetPassword(employer.Email, "bye");
+
+                RegistrationTemplate = RegistrationTemplate.Replace("[[[Password]]]", password);
+                RegistrationTemplate = RegistrationTemplate.Replace("[[[Link]]]", Resources.Communication.MailTemplates.LoginLink);
+
+
+                MailMessage mailMessage = new MailMessage();
+                mailMessage.To.Add(new MailAddress(employer.Email));
+                mailMessage.Subject = Resources.Communication.MailTemplates.NewRegistration_Subject;
+                mailMessage.Body = RegistrationTemplate;
+                mailMessage.From = new MailAddress(Resources.Communication.MailTemplates.SmtpClient_UserName);
+                mailMessage.IsBodyHtml = true;
+
+                SendMail(mailMessage);
+            }
+        }
+
         #endregion
 
         #region Suppliers
@@ -696,6 +730,18 @@ namespace InventoryManagement.Controllers.api
                 }
             }
             return MasterBytypelist;
+        }
+
+        void SendMail(MailMessage Message)
+        {
+            SmtpClient client = new SmtpClient();
+            client.Host = Resources.Communication.MailTemplates.SmtpClient_Host;
+            client.Port = Convert.ToInt32(Resources.Communication.MailTemplates.SmtpClient_Port);
+            client.UseDefaultCredentials = false;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.EnableSsl = true;
+            client.Credentials = new NetworkCredential(Resources.Communication.MailTemplates.SmtpClient_UserName, Resources.Communication.MailTemplates.SmtpClient_Password);
+            client.Send(Message);
         }
     }
 }
