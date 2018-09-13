@@ -10,7 +10,7 @@
             <div class="panel-heading">
                 <span class="label label-info ">
                     <span class="glyphicon glyphicon-plus-sign"></span>
-                    @Html.ActionLink("Create New", "CreateSupplier", "Home")
+                    @Html.ActionLink("Create New", "CreateSupplier", "Admin")
                 </span>
                 <span class="label label-info pull-right">  @Model.Count() Suppliers</span>
             </div>
@@ -25,7 +25,7 @@
                         @Html.DisplayNameFor(model => model.PlantName)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.CoretYpeName)
+                        @Html.DisplayNameFor(model => model.CoretypeName)
                     </th>
                   
                     <th>
@@ -39,13 +39,13 @@
                         @Html.DisplayNameFor(model => model.Address)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.City)
+                        @Html.DisplayNameFor(model => model.Address.City)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.State)
+                        @Html.DisplayNameFor(model => model.Address.State)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Zipcode)
+                        @Html.DisplayNameFor(model => model.Address.Zipcode)
                     </th>   
                     <th>
                         @Html.DisplayNameFor(model => model.ExpertedDays)
@@ -69,7 +69,7 @@
                         @Html.DisplayFor(modelItem => item.PlantName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CoretYpeName)
+                        @Html.DisplayFor(modelItem => item.CoretypeName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Fullname)
@@ -81,13 +81,13 @@
                         @Html.DisplayFor(modelItem => item.Address)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.City)
+                        @Html.DisplayFor(modelItem => item.Address.City)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.State)
+                        @Html.DisplayFor(modelItem => item.Address.State)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Zipcode)
+                        @Html.DisplayFor(modelItem => item.Address.Zipcode)
                     </td>                    
                     <td>
                         @Html.DisplayFor(modelItem => item.ExpertedDays)

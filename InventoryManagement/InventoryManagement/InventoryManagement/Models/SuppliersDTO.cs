@@ -13,9 +13,9 @@ namespace InventoryManagement.Models
         [Required(ErrorMessage = "Enter plant name")]
         public string PlantName { get; set; }
 
-        [Display(Name = "Plant CoretYpeName*")]
-        [Required(ErrorMessage = "Enter coretYpe name")]
-        public string CoretYpeName { get; set; }
+        [Display(Name = "Plant CoretypeName*")]
+        [Required(ErrorMessage = "Enter coretype name")]
+        public string CoretypeName { get; set; }
 
         [Display(Name = "Experted Days*")]
         [Required(ErrorMessage = "Enter experted days")]

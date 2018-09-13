@@ -23,10 +23,17 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.CoretYpeName, htmlAttributes: new { @class = "control-label col-md-3" })
+                    @Html.LabelFor(model => model.SupplierBussinessName, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-9">
-                        @Html.EditorFor(model => model.CoretYpeName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.CoretYpeName, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.SupplierBussinessName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SupplierBussinessName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CoretypeName, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.CoretypeName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CoretypeName, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
@@ -56,48 +63,36 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-3" })
+                    @Html.LabelFor(model => model.Address.Address, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-9">
-                        @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.Address.Address, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Address.Address, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-3" })
+                    @Html.LabelFor(model => model.Address.City, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-9">
-                        @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.Address.City, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Address.City, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label col-md-3" })
+                    @Html.LabelFor(model => model.Address.State, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-9">
-                        @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.Address.State, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Address.State, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Zipcode, htmlAttributes: new { @class = "control-label col-md-3" })
+                    @Html.LabelFor(model => model.Address.Zipcode, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-9">
-                        @Html.EditorFor(model => model.Zipcode, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Zipcode, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.Address.Zipcode, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Address.Zipcode, "", new { @class = "text-danger" })
                     </div>
                 </div>
-
-
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.SupplierBussinessName, htmlAttributes: new { @class = "control-label col-md-3" })
-                    <div class="col-md-9">
-                        @Html.EditorFor(model => model.SupplierBussinessName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.SupplierBussinessName, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-
                 <div class="form-group">
                     @Html.LabelFor(model => model.ExpertedDays, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-9">
@@ -132,7 +127,7 @@
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         @Html.HiddenFor(model => model.Id, Model.Id)
-                        <input type="submit" value="@(Model.Id > 0 ? "Save" : "Create")" class="btn btn-default" />
+                        <input type="submit" value="@(Model.Id != Guid.Empty ? "Save" : "Create")" class="btn btn-default" />
                     </div>
                 </div>
             </div>
