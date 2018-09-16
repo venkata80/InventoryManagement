@@ -34,5 +34,8 @@ namespace InventoryManagement.Models
 
         public AddressDTO Address { get; set; }
 
+        [Display(Name = "Send Mail")]
+        public bool SendMailFL { get; set; }
+
     }
 }

@@ -64,7 +64,7 @@ namespace InventoryManagement.Controllers.api
                         if (addressid != Guid.Empty)
                             employerid = SaveEmployerDetails(s, user.Id, user.Id, addressid);
 
-                        if (employerid != Guid.Empty)
+                        if (employerid != Guid.Empty && s.SendMailFL)
                             SendRegistrationMail(s);
                     }
                     else
@@ -835,10 +835,7 @@ namespace InventoryManagement.Controllers.api
                         Masterdata.Isactive = s.Isactive;
                         Masterdata.ModifiedBy = s.ModifiedBy;
                         Masterdata.ModifiedDate = DateTime.Now;
-                        //ctx.SaveChanges();
                     }
-
-
                 }
                 else
                 {
@@ -851,6 +848,7 @@ namespace InventoryManagement.Controllers.api
                         Isactive = s.Isactive,
                         CreatedBy = s.CreatedBy,
                         CreatedDate = DateTime.Now,
+                        ModifiedBy = s.ModifiedBy,
                     });
                 }
                 ctx.SaveChanges();
