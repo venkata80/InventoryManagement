@@ -19,7 +19,6 @@ namespace InventoryManagement.EF
         {
             this.EmployerUsers = new HashSet<EmployerUser>();
             this.EmployerUserPermissions = new HashSet<EmployerUserPermission>();
-            this.Suppliers = new HashSet<Supplier>();
         }
     
         public System.Guid ID { get; set; }
@@ -41,7 +40,6 @@ namespace InventoryManagement.EF
         public virtual ICollection<EmployerUser> EmployerUsers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EmployerUserPermission> EmployerUserPermissions { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Supplier> Suppliers { get; set; }
+        public virtual Supplier Supplier { get; set; }
     }
 }

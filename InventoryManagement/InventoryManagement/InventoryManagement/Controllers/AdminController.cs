@@ -262,7 +262,7 @@ namespace InventoryManagement.Controllers
         {
             if (Session["CurrentUser"] != null)
             {
-                SuppliersDTO model = new SuppliersDTO();
+                SuppliersDTO model = new SuppliersDTO() { Isactive = true, Address = new AddressDTO() };
                 return View("Supplier/CreateSupplier", model);
             }
             return RedirectToAction("UserLogin", "Account");
@@ -305,7 +305,7 @@ namespace InventoryManagement.Controllers
             return RedirectToAction("UserLogin", "Account");
         }
 
-        public ActionResult EditSupplier(int id)
+        public ActionResult EditSupplier(Guid id)
         {
             if (Session["CurrentUser"] != null)
             {
@@ -355,8 +355,11 @@ namespace InventoryManagement.Controllers
                 {
                     using (var client = new HttpClient())
                     {
+
+                        student.CreatedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
+                        student.ModifiedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
                         client.BaseAddress = new Uri(value);
-                        var postTask = client.PutAsJsonAsync("Employer/UpdateSupplierData", student);
+                        var postTask = client.PostAsJsonAsync<SuppliersDTO>("Employer/InsertSupplierData", student);
                         postTask.Wait();
                         var result = postTask.Result;
                         if (result.IsSuccessStatusCode)

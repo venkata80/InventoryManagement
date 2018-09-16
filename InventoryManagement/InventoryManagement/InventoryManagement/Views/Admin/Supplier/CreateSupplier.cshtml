@@ -15,10 +15,13 @@
             <div class="panel-body">
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.PlantName, htmlAttributes: new { @class = "control-label col-md-3" })
+                    @Html.LabelFor(model => model.Plantid, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-9">
-                        @Html.EditorFor(model => model.PlantName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.PlantName, "", new { @class = "text-danger" })
+                        <select id="Plantid" name="Plantid" class="form-control">
+                            <option value="1">SEPLVSP</option>
+                            <option value="2">SEPLBVM</option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.Plantid, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
@@ -30,10 +33,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(model => model.CoretypeName, htmlAttributes: new { @class = "control-label col-md-3" })
+                    @Html.LabelFor(model => model.CoreTypeId, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-9">
-                        @Html.EditorFor(model => model.CoretypeName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.CoretypeName, "", new { @class = "text-danger" })
+                        <select id="CoreTypeId" name="CoreTypeId" class="form-control">
+                            <option value="1">Core item</option>
+                            <option value="2">Non Core item</option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.CoreTypeId, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
@@ -43,8 +49,6 @@
                         @Html.ValidationMessageFor(model => model.Fullname, "", new { @class = "text-danger" })
                     </div>
                 </div>
-
-
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.CellPhone, htmlAttributes: new { @class = "control-label col-md-3" })
@@ -117,27 +121,18 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Isactive, htmlAttributes: new { @class = "control-label col-md-3" })
-                    <div class="col-md-9">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(model => model.Isactive, new { @style = "margin-left : 0px;" })
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         @Html.HiddenFor(model => model.Id, Model.Id)
+                        @Html.HiddenFor(model => model.Isactive, Model.Isactive)
+                        @Html.HiddenFor(model => model.Address.Id, Model.Address.Id)
                         <input type="submit" value="@(Model.Id != Guid.Empty ? "Save" : "Create")" class="btn btn-default" />
+                        <input type="button" value="Cancel" class="btn" />
                     </div>
                 </div>
             </div>
         </form>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "ViewSuppliers", "Admin")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

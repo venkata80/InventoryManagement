@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="23cc209420454df2adee404e5cac2d98" Name="Diagram1">
+      <Diagram DiagramId="53319543d92645ff96b94a077ff47bac" Name="Diagram1">
         <EntityTypeShape EntityType="InventoryManagementModel.Address" Width="1.5" PointX="10.5" PointY="19.25" IsExpanded="true" />
         <EntityTypeShape EntityType="InventoryManagementModel.aspnet_Applications" Width="1.5" PointX="0.75" PointY="22" IsExpanded="true" />
         <EntityTypeShape EntityType="InventoryManagementModel.aspnet_Membership" Width="1.5" PointX="6" PointY="23.5" IsExpanded="true" />
@@ -20,8 +20,8 @@
         <EntityTypeShape EntityType="InventoryManagementModel.EmployerUser" Width="1.5" PointX="12.75" PointY="33.875" IsExpanded="true" />
         <EntityTypeShape EntityType="InventoryManagementModel.EmployerUserPermission" Width="1.5" PointX="15.75" PointY="33.75" IsExpanded="true" />
         <EntityTypeShape EntityType="InventoryManagementModel.MasterData" Width="1.5" PointX="10.5" PointY="34.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="InventoryManagementModel.User" Width="1.5" PointX="10.5" PointY="38.25" IsExpanded="true" />
         <EntityTypeShape EntityType="InventoryManagementModel.Supplier" Width="1.5" PointX="15.75" PointY="27.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="InventoryManagementModel.User" Width="1.5" PointX="10.5" PointY="38.25" IsExpanded="true" />
         <EntityTypeShape EntityType="InventoryManagementModel.vw_aspnet_Applications" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="InventoryManagementModel.vw_aspnet_MembershipUsers" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="InventoryManagementModel.vw_aspnet_Profiles" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
@@ -35,15 +35,15 @@
         <AssociationConnector Association="InventoryManagementModel.FK_Address_aspnet_Users1" ManuallyRouted="false" />
         <AssociationConnector Association="InventoryManagementModel.FK_Employer_Address" ManuallyRouted="false" />
         <AssociationConnector Association="InventoryManagementModel.FK_Supplier_Address" ManuallyRouted="false" />
-        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Me__Appli__2DE6D218" ManuallyRouted="false" />
-        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Pa__Appli__29221CFB" ManuallyRouted="false" />
-        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Ro__Appli__2A164134" ManuallyRouted="false" />
-        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Us__Appli__282DF8C2" ManuallyRouted="false" />
-        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Me__UserI__2EDAF651" ManuallyRouted="false" />
-        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Pe__PathI__2B0A656D" ManuallyRouted="false" />
-        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Pe__PathI__2FCF1A8A" ManuallyRouted="false" />
-        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Pe__UserI__2BFE89A6" ManuallyRouted="false" />
-        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Pr__UserI__2CF2ADDF" ManuallyRouted="false" />
+        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Me__Appli__7B5B524B" ManuallyRouted="false" />
+        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Pa__Appli__7D439ABD" ManuallyRouted="false" />
+        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Ro__Appli__02084FDA" ManuallyRouted="false" />
+        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Us__Appli__02FC7413" ManuallyRouted="false" />
+        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Me__UserI__7C4F7684" ManuallyRouted="false" />
+        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Pe__PathI__7E37BEF6" ManuallyRouted="false" />
+        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Pe__PathI__7F2BE32F" ManuallyRouted="false" />
+        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Pe__UserI__00200768" ManuallyRouted="false" />
+        <AssociationConnector Association="InventoryManagementModel.FK__aspnet_Pr__UserI__01142BA1" ManuallyRouted="false" />
         <AssociationConnector Association="InventoryManagementModel.FK_Employer_aspnet_Users" ManuallyRouted="false" />
         <AssociationConnector Association="InventoryManagementModel.FK_Employer_aspnet_Users1" ManuallyRouted="false" />
         <AssociationConnector Association="InventoryManagementModel.FK_EmployerUser_aspnet_Users" ManuallyRouted="false" />

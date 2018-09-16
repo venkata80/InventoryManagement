@@ -59,7 +59,7 @@ namespace InventoryManagement.Controllers.api
                     {
                         UserDTO user = new UserController().CreateUser(new UserDTO { Id = s.Id, Email = s.Email, FirstName = s.FirstName, LastName = s.LastName, MiddleName = s.MiddleName, Role = s.Role, Isactive = true });
 
-                        Guid addressid = SaveAddress(s, user.Id);
+                        Guid addressid = SaveAddress(s.Address, user.Id);
 
                         if (addressid != Guid.Empty)
                             employerid = SaveEmployerDetails(s, user.Id, user.Id, addressid);
@@ -82,7 +82,7 @@ namespace InventoryManagement.Controllers.api
                             existinguser.ModifiedDate = DateTime.UtcNow;
                             ctx.Entry(existinguser).State = System.Data.Entity.EntityState.Modified;
                             ctx.SaveChanges();
-                            SaveAddress(s, existinguser.ModifiedBy);
+                            SaveAddress(s.Address, existinguser.ModifiedBy);
                             employerid = SaveEmployerDetails(s, s.Id, s.ModifiedBy, s.Address.Id);
                         }
                     }
@@ -103,32 +103,32 @@ namespace InventoryManagement.Controllers.api
             return Ok();
         }
 
-        Guid SaveAddress(EmployerDTO employerdto, Guid createdby)
+        Guid SaveAddress(AddressDTO addressDTO, Guid createdby)
         {
-            Guid? addressid = employerdto.Address.Id == Guid.Empty ? Guid.NewGuid() : employerdto.Address.Id;
+            Guid? addressid = addressDTO.Id == Guid.Empty ? Guid.NewGuid() : addressDTO.Id;
             try
             {
                 Address address;
                 using (var addressctx = new InventoryManagementEntities())
                 {
-                    if (employerdto.Address.Id == Guid.Empty)
+                    if (addressDTO.Id == Guid.Empty)
                     {
                          address = new Address();
                         address.ID = addressid.Value;
-                        address.Address1 = employerdto.Address.Address;
-                        address.City = employerdto.Address.City;
-                        address.State = employerdto.Address.State;
-                        address.Zipcode = employerdto.Address.Zipcode;
-                        if (employerdto.Id == Guid.Empty)
+                        address.Address1 = addressDTO.Address;
+                        address.City = addressDTO.City;
+                        address.State = addressDTO.State;
+                        address.Zipcode = addressDTO.Zipcode;
+                        if (addressDTO.Id == Guid.Empty)
                         {
                             address.CreatedBy = createdby;
                             address.CreatedDate = DateTime.UtcNow;
                         }
                         address.ModifiedBy = createdby;
-                        if (employerdto.Id != Guid.Empty)
+                        if (addressDTO.Id != Guid.Empty)
                             address.ModifiedDate = DateTime.UtcNow;
 
-                        address.ActiveFL = employerdto.Isactive;
+                        address.ActiveFL = true;
                         addressctx.Addresses.Add(address);
                         addressctx.SaveChanges();
 
@@ -138,14 +138,14 @@ namespace InventoryManagement.Controllers.api
                         address = addressctx.Addresses.Where(c => c.ID == addressid).FirstOrDefault();
                         if(address!=null)
                         {
-                            address.ID = employerdto.Address.Id;
-                            address.Address1 = employerdto.Address.Address;
-                            address.City = employerdto.Address.City;
-                            address.State = employerdto.Address.State;
-                            address.Zipcode = employerdto.Address.Zipcode;
+                            address.ID = addressDTO.Id;
+                            address.Address1 = addressDTO.Address;
+                            address.City = addressDTO.City;
+                            address.State = addressDTO.State;
+                            address.Zipcode = addressDTO.Zipcode;
                             address.ModifiedBy = createdby;
                             address.ModifiedDate = DateTime.UtcNow;
-                            address.ActiveFL = employerdto.Isactive;
+                            address.ActiveFL = true;
                             addressctx.Entry(address).State = System.Data.Entity.EntityState.Modified;
                             addressctx.SaveChanges();
                         }
@@ -461,9 +461,9 @@ namespace InventoryManagement.Controllers.api
                 Id = s.ID,
                 Email = s.User.Email,
                 SupplierBussinessName = s.BusinessName,
-                FirstName=s.Name,
-                Plantid = s.PlantId.Value,
-                CoreTypeId =s.CoreTypeId.Value,
+                FirstName = s.Name,
+                Plantid = s.PlantId.HasValue ? s.PlantId.Value : int.MinValue,
+                CoreTypeId = s.CoreTypeId.HasValue ? s.CoreTypeId.Value : int.MinValue,
                 ExpertedDays = s.ExpectedDays,
                 SACCode = s.SACcode,
                 GSTNumber = s.GSTno,
@@ -495,11 +495,9 @@ namespace InventoryManagement.Controllers.api
         [ActionName("InsertSupplierData")]
         public IHttpActionResult PostNewSuppliers([FromBody]SuppliersDTO s)
         {
-            s.MiddleName = s.SupplierBussinessName;
-            s.FirstName = s.PlantName;
-            s.LastName = s.PlantName;
-            if (!ModelState.IsValid)
-                return BadRequest("Not a valid model");
+            //if (!ModelState.IsValid)
+            //    return BadRequest("Not a valid model");
+
             Guid employerid = Guid.Empty;
             using (var ctx = new InventoryManagementEntities())
             {
@@ -509,7 +507,7 @@ namespace InventoryManagement.Controllers.api
                     {
                         UserDTO user = new UserController().CreateUser(new UserDTO { Id = s.Id, Email = s.Email, FirstName = s.FirstName, LastName = s.LastName, MiddleName = s.MiddleName, Role = s.Role, Isactive = true });
 
-                        Guid addressid = SavesupplierAddress(s.Address, user.Id,user.Isactive, user.Id);
+                        Guid addressid = SaveAddress(s.Address, user.Id);
 
                         if (addressid != Guid.Empty)
                             employerid = SaveSupplierDetails(s, user.Id, user.Id, addressid);
@@ -523,17 +521,12 @@ namespace InventoryManagement.Controllers.api
                         if (existinguser != null)
                         {
                             employerid = s.Id;
-                            //existinguser = s;                            
-                            existinguser.FirstName = s.FirstName;
-                            existinguser.LastName = s.LastName;
-                            existinguser.MiddleName = s.MiddleName;
                             existinguser.ActiveFL = s.Isactive;
                             existinguser.ModifiedBy = s.Id;
                             existinguser.ModifiedDate = DateTime.UtcNow;
                             ctx.Entry(existinguser).State = System.Data.Entity.EntityState.Modified;
                             ctx.SaveChanges();
-                            //SaveAddress(s, existinguser.ModifiedBy);
-                            SavesupplierAddress(s.Address, s.Id, s.Isactive, s.Id);
+                            SaveAddress(s.Address, existinguser.ModifiedBy);
                             employerid = SaveSupplierDetails(s, s.Id, s.ModifiedBy, s.Address.Id);
                         }
                     }
@@ -544,96 +537,11 @@ namespace InventoryManagement.Controllers.api
                 }
             }
 
-            //  if (employerid == Guid.Empty)
-            //  {
-            //      DeleteUserDetails(s.Email);
-            //  }
+            if (employerid == Guid.Empty)
+            {
+                DeleteUserDetails(s.Email);
+            }
             return Ok();
-            //using (var ctx = new InventoryManagementEntities())
-            //{
-            //    ctx.IM_SUPPLIER.Add(new IM_SUPPLIER()
-            //    {
-            //        ID = s.Id,
-            //        CoreTypeId = s.CoreTypeId,
-            //        PlantId = s.Plantid,
-            //        BusinessName = s.SupplierBussinessName,
-            //        Name = s.Fullname,
-            //        Address = s.Address,
-            //        City = s.City,
-            //        State = s.State,
-            //        Zipcode = s.Zipcode,
-            //        ExpectedDays = s.ExpertedDays,
-            //        EmailId = s.Email,
-            //        Phone = s.CellPhone,
-            //        SACcode = s.SACCode,
-            //        GSTno = s.GSTNumber,
-            //        IsActive = s.Isactive,
-            //        CreatedBy = s.CreatedBy,
-            //        CreatedOn = DateTime.Now,
-
-            //    });
-
-            //    ctx.SaveChanges();
-            //}
-
-            //return Ok();
-        }
-
-
-        Guid SavesupplierAddress(AddressDTO addressdt,Guid addressidmaster,bool isactive, Guid createdby)
-        {
-            Guid? addressid = addressidmaster == Guid.Empty ? Guid.NewGuid() : addressidmaster;
-            try
-            {
-                Address address;
-                using (var addressctx = new InventoryManagementEntities())
-                {
-                    if (addressdt.Id == Guid.Empty)
-                    {
-                        address = new Address();
-                        address.ID = addressid.Value;
-                        address.Address1 = addressdt.Address;
-                        address.City = addressdt.City;
-                        address.State = addressdt.State;
-                        address.Zipcode = addressdt.Zipcode;
-                        if (addressidmaster == Guid.Empty)
-                        {
-                            address.CreatedBy = createdby;
-                            address.CreatedDate = DateTime.UtcNow;
-                        }
-                        address.ModifiedBy = createdby;
-                        if (addressidmaster != Guid.Empty)
-                            address.ModifiedDate = DateTime.UtcNow;
-
-                        address.ActiveFL = isactive;
-                        addressctx.Addresses.Add(address);
-                        addressctx.SaveChanges();
-
-                    }
-                    else
-                    {
-                        address = addressctx.Addresses.Where(c => c.ID == addressid).FirstOrDefault();
-                        if (address != null)
-                        {
-                            address.ID = addressdt.Id;
-                            address.Address1 = addressdt.Address;
-                            address.City = addressdt.City;
-                            address.State = addressdt.State;
-                            address.Zipcode = addressdt.Zipcode;
-                            address.ModifiedBy = createdby;
-                            address.ModifiedDate = DateTime.UtcNow;
-                            address.ActiveFL = isactive;
-                            addressctx.Entry(address).State = System.Data.Entity.EntityState.Modified;
-                            addressctx.SaveChanges();
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                return Guid.Empty;
-            }
-            return addressid.Value;
         }
 
         Guid SaveSupplierDetails(SuppliersDTO supplierdt, Guid userid, Guid createdby, Guid addressid)
@@ -647,14 +555,14 @@ namespace InventoryManagement.Controllers.api
                     {
                         emp = new Supplier();
                         emp.ID = userid;
-                        //emp.Designation = employerdto.Designation;
-                        //emp.DOB = employerdto.Dateofbirth;
-                        //emp.Gender = employerdto.gender;
-                        emp.Phone = supplierdt.ResPhone;
-                        //emp.c = supplierdt.CellPhone;
+                        emp.BusinessName = supplierdt.SupplierBussinessName;
+                        emp.PlantId = supplierdt.Plantid;
+                        emp.CoreTypeId = supplierdt.CoreTypeId;
+                        emp.ExpectedDays = supplierdt.ExpertedDays;
+                        emp.Phone = supplierdt.CellPhone;
+                        emp.GSTno = supplierdt.GSTNumber;
                         emp.AddressID = addressid;
-                        //emp.JoinDate = employerdto.JoinDate.HasValue ? employerdto.JoinDate.Value.Date : DateTime.MinValue;
-                        //emp.RelievedDate = employerdto.Relieved.HasValue ? employerdto.Relieved.Value.Date : DateTime.MinValue;
+                        emp.SACcode = supplierdt.SACCode;
                         if (supplierdt.Id == Guid.Empty)
                         {
                             emp.CreatedBy = createdby;
@@ -670,14 +578,13 @@ namespace InventoryManagement.Controllers.api
                         emp = supplierctx.Suppliers.Where(e => e.ID == userid).FirstOrDefault();
                         if (emp != null)
                         {
-                            //emp.ID = userid;
-                            //emp.Designation = employerdto.Designation;
-                            //emp.DOB = employerdto.Dateofbirth;
-                            //emp.Gender = employerdto.gender;
-                            emp.Phone = supplierdt.ResPhone;
-                           // emp.CellPhone = employerdto.CellPhone;
-                            //emp.JoinDate = employerdto.JoinDate.HasValue ? employerdto.JoinDate.Value.Date : DateTime.MinValue;
-                            //emp.RelievedDate = employerdto.Relieved.HasValue ? employerdto.Relieved.Value.Date : DateTime.MinValue;
+                            emp.BusinessName = supplierdt.SupplierBussinessName;
+                            emp.PlantId = supplierdt.Plantid;
+                            emp.CoreTypeId = supplierdt.CoreTypeId;
+                            emp.ExpectedDays = supplierdt.ExpertedDays;
+                            emp.Phone = supplierdt.CellPhone;
+                            emp.GSTno = supplierdt.GSTNumber;
+                            emp.SACcode = supplierdt.SACCode;
                             emp.ModifiedBy = createdby;
                             emp.ModifiedOn = DateTime.UtcNow;
                             supplierctx.Entry(emp).State = System.Data.Entity.EntityState.Modified;
@@ -754,35 +661,37 @@ namespace InventoryManagement.Controllers.api
         }
         [HttpGet]
         [ActionName("GetSupplierById")]
-        public IHttpActionResult GetSupplierBy(int id)
+        public IHttpActionResult GetSupplierBy(Guid id)
         {
             SuppliersDTO Supplier = new SuppliersDTO();
             using (InventoryManagementEntities hhh = new InventoryManagementEntities())
             {
-            //    IM_SUPPLIER s = hhh.IM_SUPPLIER.Where(s1 => s1.ID == id).FirstOrDefault();
-            //    if (s != null)
-            //    {
-            //        Supplier.Id = s.ID;
-            //        Supplier.CoreTypeId = s.CoreTypeId.Value;
-            //        Supplier.Plantid = s.PlantId.Value;
-            //        Supplier.SupplierBussinessName = s.BusinessName;
-            //        //Supplier.Fullname = s.Name;
-            //        Supplier.Address = s.Address;
-            //        Supplier.City = s.City;
-            //        Supplier.State = s.State;
-            //        Supplier.Zipcode = s.Zipcode;
-            //        Supplier.ExpertedDays = s.ExpectedDays;
-            //        Supplier.Email = s.EmailId;
-            //        Supplier.CellPhone = s.Phone;
-            //        Supplier.SACCode = s.SACcode;
-            //        Supplier.GSTNumber = s.GSTno;
-            //        Supplier.Isactive = s.IsActive.Value;
-            //        Supplier.ModifiedBy = s.ModifiedBy;
-            //        Supplier.ModifiedOn = DateTime.Now;
-            //    }
+                Supplier s = hhh.Suppliers.Where(s1 => s1.ID == id).FirstOrDefault();
+                if (s != null)
+                {
+                    Supplier.Id = s.ID;
+                    Supplier.CoreTypeId = s.CoreTypeId.HasValue ? s.CoreTypeId.Value : int.MinValue;
+                    Supplier.Plantid = s.PlantId.HasValue ? s.PlantId.Value : int.MinValue;
+                    Supplier.SupplierBussinessName = s.BusinessName;
+                    //Supplier.Fullname = s.Name;
+                    Supplier.Address = new AddressDTO
+                    {
+                        Address = s.Address.Address1,
+                        City = s.Address.City,
+                        State = s.Address.State,
+                        Zipcode = s.Address.Zipcode,
+                        Id = s.Address.ID
+                    };
+                    Supplier.ExpertedDays = s.ExpectedDays;
+                    Supplier.Email = s.User.Email;
+                    Supplier.CellPhone = s.Phone;
+                    Supplier.SACCode = s.SACcode;
+                    Supplier.GSTNumber = s.GSTno;
+                    Supplier.Isactive = Convert.ToBoolean(s.User.ActiveFL);
+                }
             }
-            //if (Supplier.Id == 0)
-            //    return NotFound();
+            if (Supplier.Id == Guid.Empty)
+                return NotFound();
             return Ok(Supplier);
         }
         // PUT api/<controller>/5

@@ -22,10 +22,10 @@
                         @Html.DisplayNameFor(model => model.SupplierBussinessName)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.PlantName)
+                        @Html.DisplayNameFor(model => model.Plantid)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.CoretypeName)
+                        @Html.DisplayNameFor(model => model.CoreTypeId)
                     </th>
                   
                     <th>
@@ -36,7 +36,7 @@
                         @Html.DisplayNameFor(model => model.CellPhone)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Address)
+                        @Html.DisplayNameFor(model => model.Address.Address)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Address.City)
@@ -66,10 +66,10 @@
                         @Html.DisplayFor(modelItem => item.SupplierBussinessName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PlantName)
+                        @Html.DisplayFor(modelItem => item.Plantid)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CoretypeName)
+                        @Html.DisplayFor(modelItem => item.CoreTypeId)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Fullname)
@@ -78,7 +78,7 @@
                         @Html.DisplayFor(modelItem => item.CellPhone)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Address)
+                        @Html.DisplayFor(modelItem => item.Address.Address)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Address.City)
@@ -100,7 +100,6 @@
                     </td>                   
                     <td>
                         @Html.ActionLink("Edit", "EditSupplier", new { id = item.Id }) |
-                        @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
                         @Html.ActionLink("Delete", "DeleteSuppliers", new { id = item.Id })
                     </td>
                 </tr>

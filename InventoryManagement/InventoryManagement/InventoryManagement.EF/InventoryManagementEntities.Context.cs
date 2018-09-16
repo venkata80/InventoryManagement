@@ -42,8 +42,8 @@ namespace InventoryManagement.EF
         public virtual DbSet<EmployerUser> EmployerUsers { get; set; }
         public virtual DbSet<EmployerUserPermission> EmployerUserPermissions { get; set; }
         public virtual DbSet<MasterData> MasterDatas { get; set; }
-        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<vw_aspnet_Applications> vw_aspnet_Applications { get; set; }
         public virtual DbSet<vw_aspnet_MembershipUsers> vw_aspnet_MembershipUsers { get; set; }
         public virtual DbSet<vw_aspnet_Profiles> vw_aspnet_Profiles { get; set; }
