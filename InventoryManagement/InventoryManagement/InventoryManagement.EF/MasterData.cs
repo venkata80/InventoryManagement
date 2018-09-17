@@ -23,7 +23,7 @@ namespace InventoryManagement.EF
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public System.Guid ModifiedBy { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
-        public string Units { get; set; }
+        public Nullable<long> UnitsID { get; set; }
     
         public virtual aspnet_Users aspnet_Users { get; set; }
         public virtual aspnet_Users aspnet_Users1 { get; set; }
