@@ -208,7 +208,7 @@
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="ModifiedBy" Type="uniqueidentifier" Nullable="false" />
           <Property Name="ModifiedDate" Type="datetime" />
-          <Property Name="Units" Type="nvarchar" MaxLength="50" />
+          <Property Name="UnitsID" Type="bigint" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
@@ -1590,7 +1590,7 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="aspnet_Users" Relationship="Self.FK_MasterData_aspnet_Users" FromRole="MasterData" ToRole="aspnet_Users" />
           <NavigationProperty Name="aspnet_Users1" Relationship="Self.FK_MasterData_aspnet_Users1" FromRole="MasterData" ToRole="aspnet_Users" />
-          <Property Name="Units" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UnitsID" Type="Int64" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
@@ -2861,7 +2861,7 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <EntitySetMapping Name="MasterDatas">
             <EntityTypeMapping TypeName="InventoryManagementModel.MasterData">
               <MappingFragment StoreEntitySet="MasterData">
-                <ScalarProperty Name="Units" ColumnName="Units" />
+                <ScalarProperty Name="UnitsID" ColumnName="UnitsID" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="MasterName" ColumnName="MasterName" />
                 <ScalarProperty Name="Descrption" ColumnName="Descrption" />
@@ -3153,9 +3153,9 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <EntitySetMapping Name="Units">
             <EntityTypeMapping TypeName="InventoryManagementModel.Unit">
               <MappingFragment StoreEntitySet="Units">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Descrption" ColumnName="Descrption" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
