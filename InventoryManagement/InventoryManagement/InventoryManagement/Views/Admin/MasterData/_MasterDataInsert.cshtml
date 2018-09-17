@@ -1,6 +1,6 @@
 ﻿@model InventoryManagement.Models.MasterDataDTO
-
-
+@using InventoryManagement.Enums;
+@using InventoryManagement.Models;
 @using (Ajax.BeginForm("MasterRecordInsert", "Admin", new AjaxOptions { OnSuccess = string.Format("OnSuccessMasterRecordInsert(data,'{0}')", Model.Type) }))
 {
     @Html.AntiForgeryToken()
@@ -14,7 +14,15 @@
                 @Html.ValidationMessageFor(model => model.MasterName, null, new { @class = "text-danger" })
             </div>
         </div>
-
+        @if (MasterDataDTO.GetDisplayName((MasterDataType)(Model.Type)).ToString() == "Packing Type")
+        {
+            <div class="form-group">
+                @Html.Label("Unites", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.TypeUnits, new { @class = "form-control", @cols = "40", @rows = "2" })
+                </div>
+            </div>
+        }
         <div class="form-group">
             @Html.Label("Descrption", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">

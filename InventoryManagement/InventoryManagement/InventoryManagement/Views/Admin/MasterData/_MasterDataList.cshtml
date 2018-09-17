@@ -24,6 +24,12 @@
                     <th>
                         @Html.DisplayName("Descrption")
                     </th>
+                    @if (MasterDataDTO.GetDisplayName((MasterDataType)ViewBag.MaterDataType).ToString() == "Packing Type")
+                    {
+                    <th>
+                        @Html.DisplayName("Units")
+                    </th>
+                    }
                     <th>
                         @Html.DisplayName("Isactive")
                     </th>
@@ -39,6 +45,12 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Description)
                         </td>
+                        @if (MasterDataDTO.GetDisplayName((MasterDataType)ViewBag.MaterDataType).ToString() == "Packing Type")
+                        {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        }
                         <td>
                             @Html.DisplayFor(modelItem => item.Isactive)
                         </td>
@@ -46,7 +58,7 @@
                             @Ajax.ActionLink("Edit", "MasterDataView1", "Admin", new { id = item.Id },
                                         new AjaxOptions { UpdateTargetId = "tdmasterdata", LoadingElementId = "loading" }) |
                             @Ajax.ActionLink("Delete", "DeleteMasterData", "Admin", new { id = item.Id },
-                                       new AjaxOptions { OnSuccess=string.Format("OnSuccessDeleteMasterData(data,'{0}')", item.Type) })
+                                       new AjaxOptions { OnSuccess = string.Format("OnSuccessDeleteMasterData(data,'{0}')", item.Type) })
                         </td>
                     </tr>
                 }
@@ -58,5 +70,4 @@
         </td>
     </tr>
 </table>
-
 

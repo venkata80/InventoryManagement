@@ -12,7 +12,7 @@ namespace InventoryManagement.Models
         [Required(ErrorMessage = "Please enter name.")]
         public string MasterName { get; set; }
         public string Description { get; set; }
-        //public string Type { get; set; }
+        public string TypeUnits { get; set; }
         public MasterDataType Type { get; set; }
         public bool Isactive { get; set; }
 
