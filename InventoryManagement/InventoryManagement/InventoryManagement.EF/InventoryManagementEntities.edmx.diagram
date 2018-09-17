@@ -61,6 +61,7 @@
         <AssociationConnector Association="InventoryManagementModel.FK_EmployerUserPermission_User" ManuallyRouted="false" />
         <AssociationConnector Association="InventoryManagementModel.FK_Supplier_User" ManuallyRouted="false" />
         <AssociationConnector Association="InventoryManagementModel.aspnet_UsersInRoles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="InventoryManagementModel.Unit" Width="1.5" PointX="9.375" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

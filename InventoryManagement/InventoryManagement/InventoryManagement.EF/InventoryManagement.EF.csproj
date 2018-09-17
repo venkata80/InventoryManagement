@@ -131,6 +131,9 @@
     <Compile Include="Supplier.cs">
       <DependentUpon>InventoryManagementEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Unit.cs">
+      <DependentUpon>InventoryManagementEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="User.cs">
       <DependentUpon>InventoryManagementEntities.tt</DependentUpon>
     </Compile>
