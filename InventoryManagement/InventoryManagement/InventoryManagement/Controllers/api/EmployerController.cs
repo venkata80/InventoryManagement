@@ -701,6 +701,8 @@ namespace InventoryManagement.Controllers.api
 
         #endregion
 
+        #region Master Data
+
         [HttpGet]
         [ActionName("GetMasterDataBy")]
         public IHttpActionResult GetMasterData()
@@ -927,6 +929,38 @@ namespace InventoryManagement.Controllers.api
             }
             return MasterBytypelist;
         }
+
+        #endregion
+
+        #region Products
+
+        public IHttpActionResult GetProducts(int? CoreItemFL=null)
+        {
+            IList<ProductDTO> productDTO = null;
+
+            using (InventoryManagementEntities hhh = new InventoryManagementEntities())
+            {
+                if (CoreItemFL == null)
+                    productDTO = SetProductData(hhh.Products.AsEnumerable());
+                else
+                {
+                    var filteredemployers = hhh.Products.Where(c => c.Type == CoreItemFL && c.Isactive == true);
+                    if (filteredemployers != null && filteredemployers.Any())
+                        productDTO = SetProductData(filteredemployers.AsEnumerable());
+                }
+            }
+            return Ok(productDTO);
+        }
+
+        IList<ProductDTO> SetProductData(IEnumerable<Product> products)
+        {
+            return products.Select(c => new ProductDTO
+            {
+
+            }).ToList();
+        }
+
+        #endregion
 
         void SendMail(MailMessage Message)
         {

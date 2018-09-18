@@ -13,6 +13,22 @@ namespace InventoryManagement.Controllers
     public class AdminController : Controller
     {
         string value = System.Configuration.ConfigurationManager.AppSettings["urlname"];
+
+        public List<MasterDataDTO> MasterDataDetails
+        {
+            get
+            {
+                if (Session["MasterData"] != null)
+                    return (List<MasterDataDTO>)Session["MasterData"];
+                else
+                    return null;
+            }
+            set
+            {
+                Session["MasterData"] = value;
+            }
+        }
+
         // GET: Admin
         public ActionResult Index()
         {
@@ -430,38 +446,8 @@ namespace InventoryManagement.Controllers
         {
             if (Session["CurrentUser"] != null)
             {
-                List<MasterDataDTO> masterlist = new List<MasterDataDTO>();
-                //MasterDataType foo = (MasterDataType)Enum.Parse(typeof(MasterDataType), type);
-
+                List<MasterDataDTO> masterlist = ReadMasterData(type);
                 ViewBag.MaterDataType = type;
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(value);
-                    var responseTask1 = client.GetAsync("Employer/GetMasterDataBy");
-                    responseTask1.Wait();
-                    var result = responseTask1.Result;
-                    if (result.IsSuccessStatusCode)
-                    {
-                        var readTask = result.Content.ReadAsAsync<List<MasterDataDTO>>();
-                        readTask.Wait();
-
-                        masterlist = readTask.Result.Where(s => s.Type == type).ToList();
-                        if (masterlist == null)
-                            masterlist = new List<MasterDataDTO>();
-                    }
-                    else //web api sent error response 
-                    {
-                        //log response status here..
-
-                        if (masterlist == null)
-                            masterlist = new List<MasterDataDTO>();
-
-
-                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
-                    }
-                }
-
-                TempData["masterDataList"] = masterlist;
                 return PartialView("MasterData/_MasterDataList", masterlist);
             }
             return RedirectToAction("UserLogin", "Account");
@@ -614,6 +600,28 @@ namespace InventoryManagement.Controllers
             return Json(new Response { Status = AjaxResponse.SessionExpired }, JsonRequestBehavior.AllowGet);
         }
 
+        List<MasterDataDTO> ReadMasterData(MasterDataType type)
+        {
+            List<MasterDataDTO> masterlist = new List<MasterDataDTO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(value);
+                var responseTask1 = client.GetAsync("Employer/GetMasterDataBy");
+                responseTask1.Wait();
+                var result = responseTask1.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<MasterDataDTO>>();
+                    readTask.Wait();
+
+                    masterlist = readTask.Result.Where(s => s.Type == type).ToList();
+                    if (masterlist == null)
+                        masterlist = new List<MasterDataDTO>();
+                }
+            }
+            return masterlist;
+        }
+
         #endregion
 
         #region PRODUCT
@@ -627,11 +635,38 @@ namespace InventoryManagement.Controllers
             return RedirectToAction("UserLogin", "Account");
         }
 
+        public ActionResult GetProducts(int CoreItemFL = 1)
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                IList<EmployerDTO> emplist = null;
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(value);
+                    var responseTask = client.GetAsync("Employer/GetProducts?CoreItemFL=" + CoreItemFL);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<IList<EmployerDTO>>();
+                        readTask.Wait();
+
+                        emplist = readTask.Result;
+                    }
+                }
+                return PartialView("Employer/_Employers", emplist);
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+
         public ActionResult CreateProduct()
         {
             if (Session["CurrentUser"] != null)
             {
-                return View("Product/Product");
+                if (MasterDataDetails == null)
+                    MasterDataDetails = ReadMasterData(MasterDataType.None);
+
+                return View("Product/CreateProduct", new ProductDTO());
             }
             return RedirectToAction("UserLogin", "Account");
         }
@@ -640,7 +675,7 @@ namespace InventoryManagement.Controllers
         {
             if (Session["CurrentUser"] != null)
             {
-                return View("Product/Product");
+                return View("Product/CreateProduct");
             }
             return RedirectToAction("UserLogin", "Account");
         }
@@ -649,7 +684,7 @@ namespace InventoryManagement.Controllers
         {
             if (Session["CurrentUser"] != null)
             {
-                return View("Product/Product");
+                return View("Product/Products");
             }
             return RedirectToAction("UserLogin", "Account");
         }
