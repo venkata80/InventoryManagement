@@ -578,6 +578,30 @@ namespace InventoryManagement.Controllers
             return RedirectToAction("UserLogin", "Account");
         }
 
+        public ActionResult GetProducts(bool CoreItemFL = true)
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                IList<EmployerDTO> emplist = null;
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(value);
+                    var responseTask = client.GetAsync("Employer/GetEmployers?CoreItemFL=" + CoreItemFL);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<IList<EmployerDTO>>();
+                        readTask.Wait();
+
+                        emplist = readTask.Result;
+                    }
+                }
+                return PartialView("Employer/_Employers", emplist);
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+
         public ActionResult CreateProduct()
         {
             if (Session["CurrentUser"] != null)
