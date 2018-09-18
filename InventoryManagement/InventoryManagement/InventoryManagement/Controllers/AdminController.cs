@@ -484,6 +484,19 @@ namespace InventoryManagement.Controllers
                         var readTask = result.Content.ReadAsAsync<List<MasterDataDTO>>();
                         readTask.Wait();
                         gg = readTask.Result.ToList();
+                        if (gg.FirstOrDefault().Type.ToString().CompareTo("Packing Type") == 1)
+                        {
+                            var responseTask2 = client.GetAsync("Employer/GetUnitsData");
+                            responseTask2.Wait();
+                            var resultl = responseTask2.Result;
+                            if (resultl.IsSuccessStatusCode)
+                            {
+                                var readTask2 = resultl.Content.ReadAsAsync<List<UnitsData>>();
+                                readTask2.Wait();
+                                Session["UnitData"] = readTask2.Result;
+                                gg.FirstOrDefault().UnitLists = (List<UnitsData>)Session["UnitData"];
+                            }
+                        }
                     }
                     else //web api sent error response 
                     {
@@ -500,11 +513,39 @@ namespace InventoryManagement.Controllers
         {
             if (Session["CurrentUser"] != null)
             {
+                List<UnitsData> Ulist = new List<UnitsData>();
                 MasterDataDTO gg6 = null;
+
+                gg6 = new MasterDataDTO();
+                gg6.UnitLists = new List<UnitsData>();
+                if (Type.ToString().CompareTo("Packing Type") == 1)
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(value);
+                        var responseTask2 = client.GetAsync("Employer/GetUnitsData");
+                        responseTask2.Wait();
+                        var resultl = responseTask2.Result;
+                        if (resultl.IsSuccessStatusCode)
+                        {
+                            var readTask2 = resultl.Content.ReadAsAsync<List<UnitsData>>();
+                            readTask2.Wait();
+                            Session["UnitData"] = readTask2.Result;
+                        }
+                    }
+                }
                 if (TempData["masterData"] == null)
+                {
                     gg6 = new MasterDataDTO { Type = Type, Isactive = true };
+                    gg6.SelectedUnit = new UnitsData();
+                    gg6.UnitLists = (List<UnitsData>)Session["UnitData"];
+                }
                 else
+                {
                     gg6 = (MasterDataDTO)TempData["masterData"];
+                    gg6.SelectedUnit = new UnitsData();
+                    gg6.UnitLists = (List<UnitsData>)Session["UnitData"];
+                }
                 return PartialView("MasterData/_MasterDataInsert", gg6);
             }
             return RedirectToAction("UserLogin", "Account");
@@ -517,6 +558,7 @@ namespace InventoryManagement.Controllers
             {
                 ModelState.Remove("Id");
                 ModelState.Remove("Type");
+                ModelState.Remove("UnitLists");
                 if (ModelState.IsValid)
                 {
                     using (var client = new HttpClient())
@@ -526,10 +568,17 @@ namespace InventoryManagement.Controllers
                         model.ModifiedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
                         var postTask = client.PostAsJsonAsync<MasterDataDTO>("Employer/InsertMasterdata", model);
                         postTask.Wait();
-
                         var result = postTask.Result;
+
                         if (result.IsSuccessStatusCode)
                         {
+                            if (TempData["UnitData"] != null)
+                            {
+                                if( ((List<UnitsData>)TempData["UnitData"]).Where(c => c.UnitId == model.UnitId).SingleOrDefault() !=null)
+                                {
+                                    model.Unitname = ((List<UnitsData>)TempData["UnitData"]).Where(c => c.UnitId == model.UnitId).SingleOrDefault().Unitname;
+                                }
+                            }
                             TempData["MaterDataType"] = model.Type;
                             return Json(new Response { Status = AjaxResponse.Success });
                         }

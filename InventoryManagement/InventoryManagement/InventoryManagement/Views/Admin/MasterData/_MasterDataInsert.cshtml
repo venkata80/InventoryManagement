@@ -19,7 +19,8 @@
             <div class="form-group">
                 @Html.Label("Unites", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.TextAreaFor(model => model.TypeUnits, new { @class = "form-control", @cols = "40", @rows = "2" })
+                    @Html.DropDownListFor(model => model.UnitId, new SelectList(Model.UnitLists, "UnitId", "Unitname"), new { htmlAttributes = new { @class = "form-control" } })
+                    @*@Html.TextAreaFor(model => model.TypeUnits, new { @class = "form-control", @cols = "40", @rows = "2" })*@
                 </div>
             </div>
         }
@@ -43,6 +44,7 @@
             <div class="col-md-offset-2 col-md-10">
                 @Html.HiddenFor(model => model.Type, Model.Type)
                 @Html.HiddenFor(model => model.Id, Model.Id)
+                @Html.HiddenFor(model => model.UnitLists, Model.UnitLists)
                 <input name="btnSave" type="submit" value="@(Model.Id > 0 ? "Save" : "Create")" class="btn btn-default" />
             </div>
         </div>

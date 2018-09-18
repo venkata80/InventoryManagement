@@ -96,10 +96,10 @@ namespace InventoryManagement.Controllers.api
                 }
             }
 
-          //  if (employerid == Guid.Empty)
-          //  {
-          //      DeleteUserDetails(s.Email);
-          //  }
+            //  if (employerid == Guid.Empty)
+            //  {
+            //      DeleteUserDetails(s.Email);
+            //  }
             return Ok();
         }
 
@@ -113,7 +113,7 @@ namespace InventoryManagement.Controllers.api
                 {
                     if (addressDTO.Id == Guid.Empty)
                     {
-                         address = new Address();
+                        address = new Address();
                         address.ID = addressid.Value;
                         address.Address1 = addressDTO.Address;
                         address.City = addressDTO.City;
@@ -136,7 +136,7 @@ namespace InventoryManagement.Controllers.api
                     else
                     {
                         address = addressctx.Addresses.Where(c => c.ID == addressid).FirstOrDefault();
-                        if(address!=null)
+                        if (address != null)
                         {
                             address.ID = addressDTO.Id;
                             address.Address1 = addressDTO.Address;
@@ -152,7 +152,7 @@ namespace InventoryManagement.Controllers.api
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Guid.Empty;
             }
@@ -184,7 +184,7 @@ namespace InventoryManagement.Controllers.api
                             emp.ModifiedBy = createdby;
                             emp.CreatedDate = DateTime.UtcNow;
                         }
-                        
+
                         employerctx.Employers.Add(emp);
                         employerctx.SaveChanges();
                     }
@@ -203,7 +203,7 @@ namespace InventoryManagement.Controllers.api
                             emp.RelievedDate = employerdto.Relieved.HasValue ? employerdto.Relieved.Value.Date : DateTime.MinValue;
                             emp.ModifiedBy = createdby;
                             emp.ModifiedDate = DateTime.UtcNow;
-                            employerctx.Entry(emp).State= System.Data.Entity.EntityState.Modified;
+                            employerctx.Entry(emp).State = System.Data.Entity.EntityState.Modified;
                             employerctx.SaveChanges();
                         }
                     }
@@ -227,7 +227,7 @@ namespace InventoryManagement.Controllers.api
                     {
                         Membership.DeleteUser(email);
                         var user = deleteuserctx.Users.FirstOrDefault(c => c.ID == member.UserId);
-                        if(user!=null)
+                        if (user != null)
                         {
                             var employer = deleteuserctx.Employers.FirstOrDefault(c => c.ID == member.UserId);
                             if (employer != null)
@@ -250,7 +250,7 @@ namespace InventoryManagement.Controllers.api
             }
             catch (Exception ex)
             {
-                
+
             }
         }
 
@@ -337,12 +337,12 @@ namespace InventoryManagement.Controllers.api
             using (var ctx = new InventoryManagementEntities())
             {
                 var user = ctx.Users.FirstOrDefault(c => c.ID == id);
-                if(user!=null)
+                if (user != null)
                 {
                     user.ActiveFL = false;
                     ctx.SaveChanges();
                 }
-                
+
             }
 
             return Ok();
@@ -533,7 +533,7 @@ namespace InventoryManagement.Controllers.api
                 }
                 catch (Exception ex)
                 {
-                   
+
                 }
             }
 
@@ -649,12 +649,12 @@ namespace InventoryManagement.Controllers.api
             using (var ctx = new InventoryManagementEntities())
             {
 
-               // var student = ctx.IM_SUPPLIER
-               //.Where(s => s.ID == id)
-               //.FirstOrDefault();
+                // var student = ctx.IM_SUPPLIER
+                //.Where(s => s.ID == id)
+                //.FirstOrDefault();
 
-               // ctx.Entry(student).State = System.Data.Entity.EntityState.Deleted;
-               // ctx.SaveChanges();
+                // ctx.Entry(student).State = System.Data.Entity.EntityState.Deleted;
+                // ctx.SaveChanges();
             }
 
             return Ok();
@@ -741,6 +741,7 @@ namespace InventoryManagement.Controllers.api
                         Masterdata.Id = s.Id;
                         Masterdata.MasterName = s.MasterName;
                         Masterdata.Descrption = s.Description;
+                        Masterdata.UnitsID = s.UnitId;
                         Masterdata.Isactive = s.Isactive;
                         Masterdata.ModifiedBy = s.ModifiedBy;
                         Masterdata.ModifiedDate = DateTime.Now;
@@ -753,6 +754,7 @@ namespace InventoryManagement.Controllers.api
                         Id = s.Id,
                         MasterName = s.MasterName,
                         Descrption = s.Description,
+                        UnitsID = s.UnitId,
                         Type = s.Type.ToString(),
                         Isactive = s.Isactive,
                         CreatedBy = s.CreatedBy,
@@ -784,44 +786,142 @@ namespace InventoryManagement.Controllers.api
             return Ok();
         }
 
+        //UnitsList
+        [HttpGet]
+        [ActionName("GetUnitsData")]
+        public IHttpActionResult GetUnitslist()
+        {
+            List<UnitsData> Masterunitlist = new List<UnitsData>();
+            using (InventoryManagementEntities hhh = new InventoryManagementEntities())
+            {
+
+                Masterunitlist = hhh.Units.Select(item => new UnitsData()
+                {
+                    UnitId = item.Id,
+                    Unitname = item.Name,
+                    UnitDesc = item.Descrption,
+
+                }).ToList();
+
+
+            }
+            return Ok(Masterunitlist);
+
+        }
+
         List<MasterDataDTO> MaterDataList(long id = 0)
         {
             List<MasterDataDTO> MasterBytypelist = new List<MasterDataDTO>();
             List<MasterData> imMaster = new List<MasterData>();
+            List<Unit> imUnitdata = new List<Unit>();
             using (InventoryManagementEntities hhh = new InventoryManagementEntities())
             {
                 imMaster = hhh.MasterDatas.ToList();
+                imUnitdata = hhh.Units.ToList();
                 if (imMaster != null && imMaster.Any())
                 {
                     if (id == 0)
                     {
-                        MasterBytypelist = imMaster.Select(item => new MasterDataDTO()
+
+                        var ff = from MasterData in imMaster 
+                                 join Unit in imUnitdata on MasterData.UnitsID equals Unit.Id  into gj
+                                 from master1 in gj.DefaultIfEmpty()
+                                 select new
+                                 {
+                                     Id = MasterData.Id,
+                                     MasterName = MasterData.MasterName,
+                                     Description = MasterData.Descrption,
+                                     Type = MasterData.Type,
+                                     Isactive = MasterData.Isactive.Value,
+                                     UnitId = (MasterData.UnitsID == null ? 0 : MasterData.UnitsID.Value),
+                                     ModifiedBy = MasterData.ModifiedBy,
+                                     ModifiedOn = MasterData.ModifiedDate,
+                                     CreatedBy = MasterData.CreatedBy,
+                                     CreatedOn = MasterData.CreatedDate,
+                                     Unitname =( master1 ==null?"": master1.Name),
+                                 };
+                        foreach (var item in ff)
                         {
-                            Id = item.Id,
-                            MasterName = item.MasterName,
-                            Description = item.Descrption,
-                            Type = (MasterDataType)Enum.Parse(typeof(MasterDataType), item.Type),
-                            Isactive = item.Isactive.Value,
-                            ModifiedBy = item.ModifiedBy,
-                            ModifiedOn = item.ModifiedDate,
-                            CreatedBy = item.CreatedBy,
-                            CreatedOn = item.CreatedDate
-                        }).ToList();
+                            MasterDataDTO mdto = new MasterDataDTO();
+                            mdto.Id = item.Id;
+                            mdto.MasterName = item.MasterName;
+                            mdto.Description = item.Description;
+                            mdto.Type = (MasterDataType)Enum.Parse(typeof(MasterDataType), item.Type);
+                            mdto.Isactive = item.Isactive;
+                            mdto.UnitId = item.UnitId;
+                            mdto.ModifiedBy = item.ModifiedBy;
+                            mdto.ModifiedOn = item.ModifiedOn;
+                            mdto.CreatedBy = item.CreatedBy;
+                            mdto.CreatedOn = item.CreatedOn;
+                            mdto.Unitname = item.Unitname;
+                            MasterBytypelist.Add(mdto);
+                        }
+                       // MasterBytypelist = (List<MasterDataDTO>)ff;
+                        //MasterBytypelist = imMaster.Select(item => new MasterDataDTO()
+                        //{
+                        //    Id = item.Id,
+                        //    MasterName = item.MasterName,
+                        //    Description = item.Descrption,
+                        //    Type = (MasterDataType)Enum.Parse(typeof(MasterDataType), item.Type),
+                        //    Isactive = item.Isactive.Value,
+                        //    UnitId=(item.UnitsID == null ? 0 : item.UnitsID.Value),
+                        //    ModifiedBy = item.ModifiedBy,
+                        //    ModifiedOn = item.ModifiedDate,
+                        //    CreatedBy = item.CreatedBy,
+                        //    CreatedOn = item.CreatedDate
+                        //}).ToList();
                     }
                     else
                     {
-                        MasterBytypelist = imMaster.Where(c => c.Id == id)?.Select(item => new MasterDataDTO()
+                        //MasterBytypelist = imMaster.Where(c => c.Id == id)?.Select(item => new MasterDataDTO()
+                        //{
+                        //    Id = item.Id,
+                        //    MasterName = item.MasterName,
+                        //    Description = item.Descrption,
+                        //    Type = (MasterDataType)Enum.Parse(typeof(MasterDataType), item.Type),
+                        //    Isactive = item.Isactive.Value,
+                        //    UnitId = (item.UnitsID == null ? 0 : item.UnitsID.Value),
+                        //    ModifiedBy = item.ModifiedBy,
+                        //    ModifiedOn = item.ModifiedDate,
+                        //    CreatedBy = item.CreatedBy,
+                        //    CreatedOn = item.CreatedDate
+                        //}).ToList();
+                        var ff = from MasterData in imMaster
+                                 join Unit in imUnitdata on MasterData.UnitsID equals Unit.Id into gj
+                                 from master1 in gj.DefaultIfEmpty()
+                                 select new
+                                 {
+                                     Id = MasterData.Id,
+                                     MasterName = MasterData.MasterName,
+                                     Description = MasterData.Descrption,
+                                     Type = MasterData.Type,
+                                     Isactive = MasterData.Isactive.Value,
+                                     UnitId = (MasterData.UnitsID == null ? 0 : MasterData.UnitsID.Value),
+                                     ModifiedBy = MasterData.ModifiedBy,
+                                     ModifiedOn = MasterData.ModifiedDate,
+                                     CreatedBy = MasterData.CreatedBy,
+                                     CreatedOn = MasterData.CreatedDate,
+                                     Unitname = (master1 == null ? "" : master1.Name),
+                                 };
+                        foreach (var item in ff)
                         {
-                            Id = item.Id,
-                            MasterName = item.MasterName,
-                            Description = item.Descrption,
-                            Type = (MasterDataType)Enum.Parse(typeof(MasterDataType), item.Type),
-                            Isactive = item.Isactive.Value,
-                            ModifiedBy = item.ModifiedBy,
-                            ModifiedOn = item.ModifiedDate,
-                            CreatedBy = item.CreatedBy,
-                            CreatedOn = item.CreatedDate
-                        }).ToList();
+                            MasterDataDTO mdto = new MasterDataDTO();
+                            if (item.Id == id)
+                            {
+                                mdto.Id = item.Id;
+                                mdto.MasterName = item.MasterName;
+                                mdto.Description = item.Description;
+                                mdto.Type = (MasterDataType)Enum.Parse(typeof(MasterDataType), item.Type);
+                                mdto.Isactive = item.Isactive;
+                                mdto.UnitId = item.UnitId;
+                                mdto.ModifiedBy = item.ModifiedBy;
+                                mdto.ModifiedOn = item.ModifiedOn;
+                                mdto.CreatedBy = item.CreatedBy;
+                                mdto.CreatedOn = item.CreatedOn;
+                                mdto.Unitname = item.Unitname;
+                                MasterBytypelist.Add(mdto);
+                            }
+                        }
                     }
                 }
             }
