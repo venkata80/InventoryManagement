@@ -15,6 +15,10 @@ namespace InventoryManagement.Models
         public string TypeUnits { get; set; }
         public MasterDataType Type { get; set; }
         public bool Isactive { get; set; }
+        public long UnitId { get; set; }
+        public string Unitname { get; set; }
+        public List<UnitsData> UnitLists { get; set; }
+        public UnitsData SelectedUnit { get; set; }
 
 
         public static string GetDisplayName(Enum enumValue)
@@ -26,5 +30,10 @@ namespace InventoryManagement.Models
         }
     }
 
-
+    public class UnitsData
+    {
+        public long UnitId { get; set; }
+        public string Unitname { get; set; }
+        public string UnitDesc { get; set; }
+    }
 }
