@@ -493,10 +493,9 @@ namespace InventoryManagement.Controllers
                             {
                                 var readTask2 = resultl.Content.ReadAsAsync<List<UnitsData>>();
                                 readTask2.Wait();
-                                TempData["UnitData"] = readTask2.Result;
-                                gg.FirstOrDefault().UnitLists = (List<UnitsData>)TempData["UnitData"];
+                                Session["UnitData"] = readTask2.Result;
+                                gg.FirstOrDefault().UnitLists = (List<UnitsData>)Session["UnitData"];
                             }
-
                         }
                     }
                     else //web api sent error response 
@@ -531,7 +530,7 @@ namespace InventoryManagement.Controllers
                         {
                             var readTask2 = resultl.Content.ReadAsAsync<List<UnitsData>>();
                             readTask2.Wait();
-                            TempData["UnitData"] = readTask2.Result;
+                            Session["UnitData"] = readTask2.Result;
                         }
                     }
                 }
@@ -539,13 +538,13 @@ namespace InventoryManagement.Controllers
                 {
                     gg6 = new MasterDataDTO { Type = Type, Isactive = true };
                     gg6.SelectedUnit = new UnitsData();
-                    gg6.UnitLists = (List<UnitsData>)TempData["UnitData"];
+                    gg6.UnitLists = (List<UnitsData>)Session["UnitData"];
                 }
                 else
                 {
                     gg6 = (MasterDataDTO)TempData["masterData"];
                     gg6.SelectedUnit = new UnitsData();
-                    gg6.UnitLists = (List<UnitsData>)TempData["UnitData"];
+                    gg6.UnitLists = (List<UnitsData>)Session["UnitData"];
                 }
                 return PartialView("MasterData/_MasterDataInsert", gg6);
             }

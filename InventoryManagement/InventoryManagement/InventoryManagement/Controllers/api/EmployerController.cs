@@ -823,22 +823,22 @@ namespace InventoryManagement.Controllers.api
                     if (id == 0)
                     {
 
-                        var ff = from Unit in imUnitdata
-                                 join MasterData in imMaster on Unit.Id equals MasterData.Id into gj
+                        var ff = from MasterData in imMaster 
+                                 join Unit in imUnitdata on MasterData.UnitsID equals Unit.Id  into gj
                                  from master1 in gj.DefaultIfEmpty()
                                  select new
                                  {
-                                     Id = master1.Id,
-                                     MasterName = master1.MasterName,
-                                     Description = master1.Descrption,
-                                     Type = master1.Type,
-                                     Isactive = master1.Isactive.Value,
-                                     UnitId = (master1.UnitsID == null ? 0 : master1.UnitsID.Value),
-                                     ModifiedBy = master1.ModifiedBy,
-                                     ModifiedOn = master1.ModifiedDate,
-                                     CreatedBy = master1.CreatedBy,
-                                     CreatedOn = master1.CreatedDate,
-                                     Unitname = Unit.Name,
+                                     Id = MasterData.Id,
+                                     MasterName = MasterData.MasterName,
+                                     Description = MasterData.Descrption,
+                                     Type = MasterData.Type,
+                                     Isactive = MasterData.Isactive.Value,
+                                     UnitId = (MasterData.UnitsID == null ? 0 : MasterData.UnitsID.Value),
+                                     ModifiedBy = MasterData.ModifiedBy,
+                                     ModifiedOn = MasterData.ModifiedDate,
+                                     CreatedBy = MasterData.CreatedBy,
+                                     CreatedOn = MasterData.CreatedDate,
+                                     Unitname =( master1 ==null?"": master1.Name),
                                  };
                         foreach (var item in ff)
                         {
@@ -886,22 +886,22 @@ namespace InventoryManagement.Controllers.api
                         //    CreatedBy = item.CreatedBy,
                         //    CreatedOn = item.CreatedDate
                         //}).ToList();
-                        var ff = from Unit in imUnitdata
-                                 join MasterData in imMaster on Unit.Id equals MasterData.Id into gj
+                        var ff = from MasterData in imMaster
+                                 join Unit in imUnitdata on MasterData.UnitsID equals Unit.Id into gj
                                  from master1 in gj.DefaultIfEmpty()
                                  select new
                                  {
-                                     Id = master1.Id,
-                                     MasterName = master1.MasterName,
-                                     Description = master1.Descrption,
-                                     Type = master1.Type,
-                                     Isactive = master1.Isactive.Value,
-                                     UnitId = (master1.UnitsID == null ? 0 : master1.UnitsID.Value),
-                                     ModifiedBy = master1.ModifiedBy,
-                                     ModifiedOn = master1.ModifiedDate,
-                                     CreatedBy = master1.CreatedBy,
-                                     CreatedOn = master1.CreatedDate,
-                                     Unitname = Unit.Name,
+                                     Id = MasterData.Id,
+                                     MasterName = MasterData.MasterName,
+                                     Description = MasterData.Descrption,
+                                     Type = MasterData.Type,
+                                     Isactive = MasterData.Isactive.Value,
+                                     UnitId = (MasterData.UnitsID == null ? 0 : MasterData.UnitsID.Value),
+                                     ModifiedBy = MasterData.ModifiedBy,
+                                     ModifiedOn = MasterData.ModifiedDate,
+                                     CreatedBy = MasterData.CreatedBy,
+                                     CreatedOn = MasterData.CreatedDate,
+                                     Unitname = (master1 == null ? "" : master1.Name),
                                  };
                         foreach (var item in ff)
                         {
