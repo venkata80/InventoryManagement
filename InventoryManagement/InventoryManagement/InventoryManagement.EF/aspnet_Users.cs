@@ -33,6 +33,8 @@ namespace InventoryManagement.EF
             this.Users = new HashSet<User>();
             this.Users1 = new HashSet<User>();
             this.aspnet_Roles = new HashSet<aspnet_Roles>();
+            this.Products = new HashSet<Product>();
+            this.Products1 = new HashSet<Product>();
         }
     
         public System.Guid ApplicationId { get; set; }
@@ -78,5 +80,9 @@ namespace InventoryManagement.EF
         public virtual ICollection<User> Users1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<aspnet_Roles> aspnet_Roles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Product> Products { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Product> Products1 { get; set; }
     }
 }

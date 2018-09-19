@@ -210,6 +210,36 @@
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="UnitsID" Type="bigint" />
         </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Type" Type="bigint" />
+          <Property Name="ShortCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Brand" Type="bigint" />
+          <Property Name="ProductForm" Type="bigint" />
+          <Property Name="Variety" Type="bigint" />
+          <Property Name="Specie" Type="bigint" />
+          <Property Name="FreezingType" Type="bigint" />
+          <Property Name="PackingType" Type="bigint" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="PackingStyle" Type="bigint" />
+          <Property Name="Grade" Type="bigint" />
+          <Property Name="SoakedFL" Type="bit" />
+          <Property Name="Ply" Type="int" />
+          <Property Name="PrintType" Type="int" />
+          <Property Name="TopType" Type="int" />
+          <Property Name="Dimensions" Type="nvarchar" MaxLength="100" />
+          <Property Name="ThresholdLimit" Type="int" />
+          <Property Name="Isactive" Type="bit" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="Supplier">
           <Key>
             <PropertyRef Name="ID" />
@@ -702,6 +732,138 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Product_aspnet_Users">
+          <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnet_Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_aspnet_Users1">
+          <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnet_Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="ModifiedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_Brand">
+          <End Role="MasterData" Type="Self.MasterData" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Brand" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_FreezingType">
+          <End Role="MasterData" Type="Self.MasterData" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="FreezingType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_Grade">
+          <End Role="MasterData" Type="Self.MasterData" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Grade" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_PackingStyle">
+          <End Role="MasterData" Type="Self.MasterData" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="PackingStyle" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_PackingType">
+          <End Role="MasterData" Type="Self.MasterData" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="PackingType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_ProductFrom">
+          <End Role="MasterData" Type="Self.MasterData" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="ProductForm" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_Specie">
+          <End Role="MasterData" Type="Self.MasterData" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Specie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_Type">
+          <End Role="MasterData" Type="Self.MasterData" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_Variety">
+          <End Role="MasterData" Type="Self.MasterData" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Variety" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Supplier_Address">
           <End Role="Address" Type="Self.Address" Multiplicity="0..1" />
           <End Role="Supplier" Type="Self.Supplier" Multiplicity="*" />
@@ -1122,6 +1284,7 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <EntitySet Name="EmployerUser" EntityType="Self.EmployerUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployerUserPermission" EntityType="Self.EmployerUserPermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MasterData" EntityType="Self.MasterData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Units" EntityType="Self.Units" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
@@ -1316,6 +1479,50 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
             <End Role="aspnet_Users" EntitySet="aspnet_Users" />
             <End Role="MasterData" EntitySet="MasterData" />
           </AssociationSet>
+          <AssociationSet Name="FK_Product_aspnet_Users" Association="Self.FK_Product_aspnet_Users">
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_aspnet_Users1" Association="Self.FK_Product_aspnet_Users1">
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_Brand" Association="Self.FK_Product_MasterData_Brand">
+            <End Role="MasterData" EntitySet="MasterData" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_FreezingType" Association="Self.FK_Product_MasterData_FreezingType">
+            <End Role="MasterData" EntitySet="MasterData" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_Grade" Association="Self.FK_Product_MasterData_Grade">
+            <End Role="MasterData" EntitySet="MasterData" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_PackingStyle" Association="Self.FK_Product_MasterData_PackingStyle">
+            <End Role="MasterData" EntitySet="MasterData" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_PackingType" Association="Self.FK_Product_MasterData_PackingType">
+            <End Role="MasterData" EntitySet="MasterData" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_ProductFrom" Association="Self.FK_Product_MasterData_ProductFrom">
+            <End Role="MasterData" EntitySet="MasterData" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_Specie" Association="Self.FK_Product_MasterData_Specie">
+            <End Role="MasterData" EntitySet="MasterData" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_Type" Association="Self.FK_Product_MasterData_Type">
+            <End Role="MasterData" EntitySet="MasterData" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_Variety" Association="Self.FK_Product_MasterData_Variety">
+            <End Role="MasterData" EntitySet="MasterData" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
           <AssociationSet Name="FK_Supplier_Address" Association="Self.FK_Supplier_Address">
             <End Role="Address" EntitySet="Address" />
             <End Role="Supplier" EntitySet="Supplier" />
@@ -1501,6 +1708,8 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <NavigationProperty Name="Users" Relationship="Self.FK_User_aspnet_Users" FromRole="aspnet_Users" ToRole="User" />
           <NavigationProperty Name="Users1" Relationship="Self.FK_User_aspnet_Users1" FromRole="aspnet_Users" ToRole="User" />
           <NavigationProperty Name="aspnet_Roles" Relationship="Self.aspnet_UsersInRoles" FromRole="aspnet_Users" ToRole="aspnet_Roles" />
+          <NavigationProperty Name="Products" Relationship="InventoryManagementModel.FK_Product_aspnet_Users" FromRole="aspnet_Users" ToRole="Product" />
+          <NavigationProperty Name="Products1" Relationship="InventoryManagementModel.FK_Product_aspnet_Users1" FromRole="aspnet_Users" ToRole="Product" />
         </EntityType>
         <EntityType Name="aspnet_WebEvent_Events">
           <Key>
@@ -1591,6 +1800,15 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <NavigationProperty Name="aspnet_Users" Relationship="Self.FK_MasterData_aspnet_Users" FromRole="MasterData" ToRole="aspnet_Users" />
           <NavigationProperty Name="aspnet_Users1" Relationship="Self.FK_MasterData_aspnet_Users1" FromRole="MasterData" ToRole="aspnet_Users" />
           <Property Name="UnitsID" Type="Int64" />
+          <NavigationProperty Name="Products" Relationship="InventoryManagementModel.FK_Product_MasterData_Brand" FromRole="MasterData" ToRole="Product" />
+          <NavigationProperty Name="Products1" Relationship="InventoryManagementModel.FK_Product_MasterData_FreezingType" FromRole="MasterData" ToRole="Product" />
+          <NavigationProperty Name="Products2" Relationship="InventoryManagementModel.FK_Product_MasterData_Grade" FromRole="MasterData" ToRole="Product" />
+          <NavigationProperty Name="Products3" Relationship="InventoryManagementModel.FK_Product_MasterData_PackingStyle" FromRole="MasterData" ToRole="Product" />
+          <NavigationProperty Name="Products4" Relationship="InventoryManagementModel.FK_Product_MasterData_PackingType" FromRole="MasterData" ToRole="Product" />
+          <NavigationProperty Name="Products5" Relationship="InventoryManagementModel.FK_Product_MasterData_ProductFrom" FromRole="MasterData" ToRole="Product" />
+          <NavigationProperty Name="Products6" Relationship="InventoryManagementModel.FK_Product_MasterData_Specie" FromRole="MasterData" ToRole="Product" />
+          <NavigationProperty Name="Products7" Relationship="InventoryManagementModel.FK_Product_MasterData_Type" FromRole="MasterData" ToRole="Product" />
+          <NavigationProperty Name="Products8" Relationship="InventoryManagementModel.FK_Product_MasterData_Variety" FromRole="MasterData" ToRole="Product" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
@@ -2599,6 +2817,51 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
             <Parameter Name="Details" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="Units" EntityType="InventoryManagementModel.Unit" />
+          <EntitySet Name="Products" EntityType="InventoryManagementModel.Product" />
+          <AssociationSet Name="FK_Product_aspnet_Users" Association="InventoryManagementModel.FK_Product_aspnet_Users">
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_aspnet_Users1" Association="InventoryManagementModel.FK_Product_aspnet_Users1">
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_Brand" Association="InventoryManagementModel.FK_Product_MasterData_Brand">
+            <End Role="MasterData" EntitySet="MasterDatas" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_FreezingType" Association="InventoryManagementModel.FK_Product_MasterData_FreezingType">
+            <End Role="MasterData" EntitySet="MasterDatas" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_Grade" Association="InventoryManagementModel.FK_Product_MasterData_Grade">
+            <End Role="MasterData" EntitySet="MasterDatas" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_PackingStyle" Association="InventoryManagementModel.FK_Product_MasterData_PackingStyle">
+            <End Role="MasterData" EntitySet="MasterDatas" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_PackingType" Association="InventoryManagementModel.FK_Product_MasterData_PackingType">
+            <End Role="MasterData" EntitySet="MasterDatas" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_ProductFrom" Association="InventoryManagementModel.FK_Product_MasterData_ProductFrom">
+            <End Role="MasterData" EntitySet="MasterDatas" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_Specie" Association="InventoryManagementModel.FK_Product_MasterData_Specie">
+            <End Role="MasterData" EntitySet="MasterDatas" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_Type" Association="InventoryManagementModel.FK_Product_MasterData_Type">
+            <End Role="MasterData" EntitySet="MasterDatas" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_Variety" Association="InventoryManagementModel.FK_Product_MasterData_Variety">
+            <End Role="MasterData" EntitySet="MasterDatas" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="aspnet_Membership_GetPassword_Result">
           <Property Type="String" Name="Column1" Nullable="true" MaxLength="128" />
@@ -2657,6 +2920,179 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Descrption" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Int64" />
+          <Property Name="ShortCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Brand" Type="Int64" />
+          <Property Name="ProductForm" Type="Int64" />
+          <Property Name="Variety" Type="Int64" />
+          <Property Name="Specie" Type="Int64" />
+          <Property Name="FreezingType" Type="Int64" />
+          <Property Name="PackingType" Type="Int64" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="PackingStyle" Type="Int64" />
+          <Property Name="Grade" Type="Int64" />
+          <Property Name="SoakedFL" Type="Boolean" />
+          <Property Name="Ply" Type="Int32" />
+          <Property Name="PrintType" Type="Int32" />
+          <Property Name="TopType" Type="Int32" />
+          <Property Name="Dimensions" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ThresholdLimit" Type="Int32" />
+          <Property Name="Isactive" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Guid" Nullable="false" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="aspnet_Users" Relationship="InventoryManagementModel.FK_Product_aspnet_Users" FromRole="Product" ToRole="aspnet_Users" />
+          <NavigationProperty Name="aspnet_Users1" Relationship="InventoryManagementModel.FK_Product_aspnet_Users1" FromRole="Product" ToRole="aspnet_Users" />
+          <NavigationProperty Name="MasterData" Relationship="InventoryManagementModel.FK_Product_MasterData_Brand" FromRole="Product" ToRole="MasterData" />
+          <NavigationProperty Name="MasterData1" Relationship="InventoryManagementModel.FK_Product_MasterData_FreezingType" FromRole="Product" ToRole="MasterData" />
+          <NavigationProperty Name="MasterData2" Relationship="InventoryManagementModel.FK_Product_MasterData_Grade" FromRole="Product" ToRole="MasterData" />
+          <NavigationProperty Name="MasterData3" Relationship="InventoryManagementModel.FK_Product_MasterData_PackingStyle" FromRole="Product" ToRole="MasterData" />
+          <NavigationProperty Name="MasterData4" Relationship="InventoryManagementModel.FK_Product_MasterData_PackingType" FromRole="Product" ToRole="MasterData" />
+          <NavigationProperty Name="MasterData5" Relationship="InventoryManagementModel.FK_Product_MasterData_ProductFrom" FromRole="Product" ToRole="MasterData" />
+          <NavigationProperty Name="MasterData6" Relationship="InventoryManagementModel.FK_Product_MasterData_Specie" FromRole="Product" ToRole="MasterData" />
+          <NavigationProperty Name="MasterData7" Relationship="InventoryManagementModel.FK_Product_MasterData_Type" FromRole="Product" ToRole="MasterData" />
+          <NavigationProperty Name="MasterData8" Relationship="InventoryManagementModel.FK_Product_MasterData_Variety" FromRole="Product" ToRole="MasterData" />
+        </EntityType>
+        <Association Name="FK_Product_aspnet_Users">
+          <End Type="InventoryManagementModel.aspnet_Users" Role="aspnet_Users" Multiplicity="1" />
+          <End Type="InventoryManagementModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnet_Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_aspnet_Users1">
+          <End Type="InventoryManagementModel.aspnet_Users" Role="aspnet_Users" Multiplicity="1" />
+          <End Type="InventoryManagementModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnet_Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="ModifiedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_Brand">
+          <End Type="InventoryManagementModel.MasterData" Role="MasterData" Multiplicity="0..1" />
+          <End Type="InventoryManagementModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Brand" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_FreezingType">
+          <End Type="InventoryManagementModel.MasterData" Role="MasterData" Multiplicity="0..1" />
+          <End Type="InventoryManagementModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="FreezingType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_Grade">
+          <End Type="InventoryManagementModel.MasterData" Role="MasterData" Multiplicity="0..1" />
+          <End Type="InventoryManagementModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Grade" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_PackingStyle">
+          <End Type="InventoryManagementModel.MasterData" Role="MasterData" Multiplicity="0..1" />
+          <End Type="InventoryManagementModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="PackingStyle" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_PackingType">
+          <End Type="InventoryManagementModel.MasterData" Role="MasterData" Multiplicity="0..1" />
+          <End Type="InventoryManagementModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="PackingType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_ProductFrom">
+          <End Type="InventoryManagementModel.MasterData" Role="MasterData" Multiplicity="0..1" />
+          <End Type="InventoryManagementModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="ProductForm" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_Specie">
+          <End Type="InventoryManagementModel.MasterData" Role="MasterData" Multiplicity="0..1" />
+          <End Type="InventoryManagementModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Specie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_Type">
+          <End Type="InventoryManagementModel.MasterData" Role="MasterData" Multiplicity="0..1" />
+          <End Type="InventoryManagementModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MasterData_Variety">
+          <End Type="InventoryManagementModel.MasterData" Role="MasterData" Multiplicity="0..1" />
+          <End Type="InventoryManagementModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Variety" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3156,6 +3592,37 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Descrption" ColumnName="Descrption" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="InventoryManagementModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Isactive" ColumnName="Isactive" />
+                <ScalarProperty Name="ThresholdLimit" ColumnName="ThresholdLimit" />
+                <ScalarProperty Name="Dimensions" ColumnName="Dimensions" />
+                <ScalarProperty Name="TopType" ColumnName="TopType" />
+                <ScalarProperty Name="PrintType" ColumnName="PrintType" />
+                <ScalarProperty Name="Ply" ColumnName="Ply" />
+                <ScalarProperty Name="SoakedFL" ColumnName="SoakedFL" />
+                <ScalarProperty Name="Grade" ColumnName="Grade" />
+                <ScalarProperty Name="PackingStyle" ColumnName="PackingStyle" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="PackingType" ColumnName="PackingType" />
+                <ScalarProperty Name="FreezingType" ColumnName="FreezingType" />
+                <ScalarProperty Name="Specie" ColumnName="Specie" />
+                <ScalarProperty Name="Variety" ColumnName="Variety" />
+                <ScalarProperty Name="ProductForm" ColumnName="ProductForm" />
+                <ScalarProperty Name="Brand" ColumnName="Brand" />
+                <ScalarProperty Name="ShortCode" ColumnName="ShortCode" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

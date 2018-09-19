@@ -62,6 +62,18 @@
         <AssociationConnector Association="InventoryManagementModel.FK_Supplier_User" ManuallyRouted="false" />
         <AssociationConnector Association="InventoryManagementModel.aspnet_UsersInRoles" ManuallyRouted="false" />
         <EntityTypeShape EntityType="InventoryManagementModel.Unit" Width="1.5" PointX="9.375" PointY="6.75" />
+        <EntityTypeShape EntityType="InventoryManagementModel.Product" Width="1.5" PointX="18.75" PointY="27.75" />
+        <AssociationConnector Association="InventoryManagementModel.FK_Product_aspnet_Users" />
+        <AssociationConnector Association="InventoryManagementModel.FK_Product_aspnet_Users1" />
+        <AssociationConnector Association="InventoryManagementModel.FK_Product_MasterData_Brand" />
+        <AssociationConnector Association="InventoryManagementModel.FK_Product_MasterData_FreezingType" />
+        <AssociationConnector Association="InventoryManagementModel.FK_Product_MasterData_Grade" />
+        <AssociationConnector Association="InventoryManagementModel.FK_Product_MasterData_PackingStyle" />
+        <AssociationConnector Association="InventoryManagementModel.FK_Product_MasterData_PackingType" />
+        <AssociationConnector Association="InventoryManagementModel.FK_Product_MasterData_ProductFrom" />
+        <AssociationConnector Association="InventoryManagementModel.FK_Product_MasterData_Specie" />
+        <AssociationConnector Association="InventoryManagementModel.FK_Product_MasterData_Type" />
+        <AssociationConnector Association="InventoryManagementModel.FK_Product_MasterData_Variety" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
