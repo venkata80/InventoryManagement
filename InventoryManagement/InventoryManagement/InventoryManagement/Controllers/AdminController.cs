@@ -632,7 +632,11 @@ namespace InventoryManagement.Controllers
                     var readTask = result.Content.ReadAsAsync<List<MasterDataDTO>>();
                     readTask.Wait();
 
-                    masterlist = readTask.Result.Where(s => s.Type == type).ToList();
+                    if (type != MasterDataType.None)
+                        masterlist = readTask.Result.Where(s => s.Type == type).ToList();
+                    else
+                        masterlist = readTask.Result;
+
                     if (masterlist == null)
                         masterlist = new List<MasterDataDTO>();
                 }
