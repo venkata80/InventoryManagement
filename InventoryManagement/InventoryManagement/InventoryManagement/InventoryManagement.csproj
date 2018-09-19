@@ -220,6 +220,7 @@
     <Compile Include="Models\AddressDTO.cs" />
     <Compile Include="Models\EmployerDTO.cs" />
     <Compile Include="Models\ForgotPasswordModel.cs" />
+    <Compile Include="Models\SupplierPriceListDTO.cs" />
     <Compile Include="Models\UserDTO.cs" />
     <Compile Include="Models\CommonBaseDTO.cs" />
     <Compile Include="Models\FileUploadDTO.cs" />
@@ -336,6 +337,7 @@
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Admin\Product\CreateProduct.cshtml" />
+    <Content Include="Views\Admin\Supplier\CreateSupplierPriceList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

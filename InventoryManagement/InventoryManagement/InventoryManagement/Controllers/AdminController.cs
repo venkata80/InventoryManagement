@@ -429,6 +429,24 @@ namespace InventoryManagement.Controllers
         }
 
         #endregion
+        public ActionResult ProductsPriceList()
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                return View("Product/Products");
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+        public ActionResult CreateSupplierPriceList()
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                if (MasterDataDetails == null)
+                    MasterDataDetails = ReadMasterData(MasterDataType.None);
+                return View("Supplier/CreateSupplierPriceList", new SupplierPriceListDTO());
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
 
         #region MASTER DATA
 
@@ -663,8 +681,8 @@ namespace InventoryManagement.Controllers
         {
             if (Session["CurrentUser"] != null)
             {
-                if (MasterDataDetails == null)
-                    MasterDataDetails = ReadMasterData(MasterDataType.None);
+                    if (MasterDataDetails == null)
+                        MasterDataDetails = ReadMasterData(MasterDataType.None);
 
                 return View("Product/CreateProduct", new ProductDTO());
             }
