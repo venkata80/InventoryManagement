@@ -8,7 +8,8 @@ namespace InventoryManagement.Models
 {
     public class SupplierPriceListDTO : CommonBaseDTO<Guid>
     {
-        public string SupplierId { get; set; }
+        public Guid SupplierId { get; set; }
+        public List<SuppliersDTO> SupplierList { get; set; }
         public int Brand { get; set; }
         public int FreezingType { get; set; }
         public int Variety { get; set; }

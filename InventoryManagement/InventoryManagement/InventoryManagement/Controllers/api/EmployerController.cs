@@ -32,13 +32,24 @@ namespace InventoryManagement.Controllers.api
 
             using (InventoryManagementEntities hhh = new InventoryManagementEntities())
             {
-                if (ActiveFL == null)
-                    employers = SetEmployerData(hhh.Employers.AsEnumerable());
-                else
+                using (var transaction = hhh.Database.BeginTransaction())
                 {
-                    var filteredemployers = hhh.Employers.Where(c => c.User.ActiveFL == ActiveFL);
-                    if (filteredemployers != null && filteredemployers.Any())
-                        employers = SetEmployerData(filteredemployers.AsEnumerable());
+                    try
+                    {
+                        if (ActiveFL == null)
+                            employers = SetEmployerData(hhh.Employers.AsEnumerable());
+                        else
+                        {
+                            var filteredemployers = hhh.Employers.Where(c => c.User.ActiveFL == ActiveFL);
+                            if (filteredemployers != null && filteredemployers.Any())
+                                employers = SetEmployerData(filteredemployers.AsEnumerable());
+                        }
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                    }
                 }
             }
             return Ok(employers);
@@ -53,45 +64,50 @@ namespace InventoryManagement.Controllers.api
             Guid employerid = Guid.Empty;
             using (var ctx = new InventoryManagementEntities())
             {
-                try
+                using (var transaction = ctx.Database.BeginTransaction())
                 {
-                    if (s.Id == Guid.Empty)
+                    try
                     {
-                        UserDTO user = new UserController().CreateUser(new UserDTO { Id = s.Id, Email = s.Email, FirstName = s.FirstName, LastName = s.LastName, MiddleName = s.MiddleName, Role = s.Role, Isactive = true });
-
-                        Guid addressid = SaveAddress(s.Address, user.Id);
-
-                        if (addressid != Guid.Empty)
-                            employerid = SaveEmployerDetails(s, user.Id, user.Id, addressid);
-
-                        if (employerid != Guid.Empty && s.SendMailFL)
-                            SendRegistrationMail(s);
-                    }
-                    else
-                    {
-                        var existinguser = ctx.Users.FirstOrDefault(c => c.ID == s.Id);
-                        if (existinguser != null)
+                        if (s.Id == Guid.Empty)
                         {
-                            employerid = s.Id;
-                            //existinguser = s;                            
-                            existinguser.FirstName = s.FirstName;
-                            existinguser.LastName = s.LastName;
-                            existinguser.MiddleName = s.MiddleName;
-                            existinguser.ActiveFL = s.Isactive;
-                            existinguser.ModifiedBy = s.Id;
-                            existinguser.ModifiedDate = DateTime.UtcNow;
-                            ctx.Entry(existinguser).State = System.Data.Entity.EntityState.Modified;
-                            ctx.SaveChanges();
-                            SaveAddress(s.Address, existinguser.ModifiedBy);
-                            employerid = SaveEmployerDetails(s, s.Id, s.ModifiedBy, s.Address.Id);
+                            UserDTO user = new UserController().CreateUser(new UserDTO { Id = s.Id, Email = s.Email, FirstName = s.FirstName, LastName = s.LastName, MiddleName = s.MiddleName, Role = s.Role, Isactive = true });
+
+                            Guid addressid = SaveAddress(s.Address, user.Id);
+
+                            if (addressid != Guid.Empty)
+                                employerid = SaveEmployerDetails(s, user.Id, user.Id, addressid);
+
+                            if (employerid != Guid.Empty && s.SendMailFL)
+                                SendRegistrationMail(s);
                         }
+                        else
+                        {
+                            var existinguser = ctx.Users.FirstOrDefault(c => c.ID == s.Id);
+                            if (existinguser != null)
+                            {
+                                employerid = s.Id;
+                                //existinguser = s;                            
+                                existinguser.FirstName = s.FirstName;
+                                existinguser.LastName = s.LastName;
+                                existinguser.MiddleName = s.MiddleName;
+                                existinguser.ActiveFL = s.Isactive;
+                                existinguser.ModifiedBy = s.Id;
+                                existinguser.ModifiedDate = DateTime.UtcNow;
+                                ctx.Entry(existinguser).State = System.Data.Entity.EntityState.Modified;
+                                ctx.SaveChanges();
+                                SaveAddress(s.Address, existinguser.ModifiedBy);
+                                employerid = SaveEmployerDetails(s, s.Id, s.ModifiedBy, s.Address.Id);
+                            }
+                        }
+                        transaction.Commit();
                     }
-                }
-                catch (Exception ex)
-                {
-                    if (employerid == Guid.Empty)
+                    catch (Exception ex)
                     {
-                        DeleteUserDetails(s.Email);
+                        transaction.Rollback();
+                        if (employerid == Guid.Empty)
+                        {
+                            DeleteUserDetails(s.Email);
+                        }
                     }
                 }
             }
@@ -825,8 +841,8 @@ namespace InventoryManagement.Controllers.api
                     if (id == 0)
                     {
 
-                        var ff = from MasterData in imMaster 
-                                 join Unit in imUnitdata on MasterData.UnitsID equals Unit.Id  into gj
+                        var ff = from MasterData in imMaster
+                                 join Unit in imUnitdata on MasterData.UnitsID equals Unit.Id into gj
                                  from master1 in gj.DefaultIfEmpty()
                                  select new
                                  {
@@ -840,7 +856,7 @@ namespace InventoryManagement.Controllers.api
                                      ModifiedOn = MasterData.ModifiedDate,
                                      CreatedBy = MasterData.CreatedBy,
                                      CreatedOn = MasterData.CreatedDate,
-                                     Unitname =( master1 ==null?"": master1.Name),
+                                     Unitname = (master1 == null ? "" : master1.Name),
                                  };
                         foreach (var item in ff)
                         {
@@ -858,7 +874,7 @@ namespace InventoryManagement.Controllers.api
                             mdto.Unitname = item.Unitname;
                             MasterBytypelist.Add(mdto);
                         }
-                       // MasterBytypelist = (List<MasterDataDTO>)ff;
+                        // MasterBytypelist = (List<MasterDataDTO>)ff;
                         //MasterBytypelist = imMaster.Select(item => new MasterDataDTO()
                         //{
                         //    Id = item.Id,
@@ -934,7 +950,7 @@ namespace InventoryManagement.Controllers.api
 
         #region Products
 
-        public IHttpActionResult GetProducts(int? CoreItemFL=null)
+        public IHttpActionResult GetProducts(int? CoreItemFL = null)
         {
             IList<ProductDTO> productDTO = null;
 

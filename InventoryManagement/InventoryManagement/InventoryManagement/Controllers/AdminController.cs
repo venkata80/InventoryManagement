@@ -243,35 +243,68 @@ namespace InventoryManagement.Controllers
             {
                 ViewBag.Title = "Home Page";
                 IList<SuppliersDTO> emplist = null;
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(value);
-                    var responseTask = client.GetAsync("Employer/GetAllSuppliers");
-                    responseTask.Wait();
-                    var result = responseTask.Result;
-                    if (result.IsSuccessStatusCode)
-                    {
-                        var readTask = result.Content.ReadAsAsync<IList<SuppliersDTO>>();
-                        readTask.Wait();
+                emplist = GetSupplierList();
+                //using (var client = new HttpClient())
+                //{
+                //    client.BaseAddress = new Uri(value);
+                //    var responseTask = client.GetAsync("Employer/GetAllSuppliers");
+                //    responseTask.Wait();
+                //    var result = responseTask.Result;
+                //    if (result.IsSuccessStatusCode)
+                //    {
+                //        var readTask = result.Content.ReadAsAsync<IList<SuppliersDTO>>();
+                //        readTask.Wait();
 
-                        emplist = readTask.Result;
-                        if (emplist == null)
-                            emplist = new List<SuppliersDTO>();
-                    }
-                    else //web api sent error response 
-                    {
-                        //log response status here..
+                //        emplist = readTask.Result;
+                //        if (emplist == null)
+                //            emplist = new List<SuppliersDTO>();
+                //    }
+                //    else //web api sent error response 
+                //    {
+                //        //log response status here..
 
-                        if (emplist == null)
-                            emplist = new List<SuppliersDTO>();
+                //        if (emplist == null)
+                //            emplist = new List<SuppliersDTO>();
 
 
-                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
-                    }
-                }
+                //        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                //    }
+                //}
                 return View("Supplier/ViewSuppliers", emplist);
             }
             return RedirectToAction("UserLogin", "Account");
+        }
+
+        public List<SuppliersDTO> GetSupplierList()
+        {
+            List<SuppliersDTO> suppleirli = new List<SuppliersDTO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(value);
+                var responseTask = client.GetAsync("Employer/GetAllSuppliers");
+                responseTask.Wait();
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<SuppliersDTO>>();
+                    readTask.Wait();
+
+                    suppleirli = readTask.Result;
+                    if (suppleirli == null)
+                        suppleirli = new List<SuppliersDTO>();
+                }
+                else //web api sent error response 
+                {
+                    //log response status here..
+
+                    if (suppleirli == null)
+                        suppleirli = new List<SuppliersDTO>();
+
+
+                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                }
+            }
+            return suppleirli;
         }
 
         public ActionResult CreateSupplier()
@@ -441,9 +474,11 @@ namespace InventoryManagement.Controllers
         {
             if (Session["CurrentUser"] != null)
             {
+                SupplierPriceListDTO supplierl = new SupplierPriceListDTO();
                 if (MasterDataDetails == null)
-                    MasterDataDetails = ReadMasterData(MasterDataType.None);
-                return View("Supplier/CreateSupplierPriceList", new SupplierPriceListDTO());
+                    MasterDataDetails = ReadMasterData(MasterDataType.None);               
+                supplierl.SupplierList = GetSupplierList();
+                return View("Supplier/CreateSupplierPriceList", supplierl);
             }
             return RedirectToAction("UserLogin", "Account");
         }
@@ -578,7 +613,7 @@ namespace InventoryManagement.Controllers
                         {
                             if (TempData["UnitData"] != null)
                             {
-                                if( ((List<UnitsData>)TempData["UnitData"]).Where(c => c.UnitId == model.UnitId).SingleOrDefault() !=null)
+                                if (((List<UnitsData>)TempData["UnitData"]).Where(c => c.UnitId == model.UnitId).SingleOrDefault() != null)
                                 {
                                     model.Unitname = ((List<UnitsData>)TempData["UnitData"]).Where(c => c.UnitId == model.UnitId).SingleOrDefault().Unitname;
                                 }
@@ -631,11 +666,10 @@ namespace InventoryManagement.Controllers
                 {
                     var readTask = result.Content.ReadAsAsync<List<MasterDataDTO>>();
                     readTask.Wait();
-
                     if (type != MasterDataType.None)
                         masterlist = readTask.Result.Where(s => s.Type == type).ToList();
                     else
-                        masterlist = readTask.Result;
+                        masterlist = readTask.Result.ToList();
 
                     if (masterlist == null)
                         masterlist = new List<MasterDataDTO>();
@@ -685,8 +719,8 @@ namespace InventoryManagement.Controllers
         {
             if (Session["CurrentUser"] != null)
             {
-                    if (MasterDataDetails == null)
-                        MasterDataDetails = ReadMasterData(MasterDataType.None);
+                if (MasterDataDetails == null)
+                    MasterDataDetails = ReadMasterData(MasterDataType.None);
 
                 return View("Product/CreateProduct", new ProductDTO());
             }

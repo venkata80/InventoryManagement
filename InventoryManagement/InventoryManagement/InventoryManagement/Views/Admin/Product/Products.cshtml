@@ -37,15 +37,15 @@
         $(document).ready(function () {
             $('#anchrcoreitemproducts').trigger('click');
         });
-        function OnBeginGetEmployers(ele) {
+        function OnBeginGetProducts(ele) {
             $('.liproduct').removeClass('active');
             $(ele).parent().addClass('active');
         }
 
-        function OnSuccessetEmployers(result) {
+        function OnSuccessetProducts(result) {
             var trproducts = $('.trproducts');
             if (trproducts != null && trproducts != undefined && trproducts.length > 0)
-                $('#spnproductcount').text(trproducts.length + " Employer(s)");
+                $('#spnproductcount').text(trproducts.length + " Products(s)");
             else
                 $('#spnproductcount').text('');
         }
