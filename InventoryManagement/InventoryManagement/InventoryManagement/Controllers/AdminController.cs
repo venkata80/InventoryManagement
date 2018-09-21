@@ -475,7 +475,7 @@ namespace InventoryManagement.Controllers
             if (Session["CurrentUser"] != null)
             {
                 SupplierPriceListDTO supplierl = new SupplierPriceListDTO();
-                if (MasterDataDetails == null)
+             //   if (MasterDataDetails == null)
                     MasterDataDetails = ReadMasterData(MasterDataType.None);               
                 supplierl.SupplierList = GetSupplierList();
                 return View("Supplier/CreateSupplierPriceList", supplierl);
