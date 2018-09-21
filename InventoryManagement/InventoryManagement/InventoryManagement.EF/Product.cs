@@ -28,7 +28,6 @@ namespace InventoryManagement.EF
         public Nullable<int> Quantity { get; set; }
         public Nullable<long> PackingStyle { get; set; }
         public Nullable<long> Grade { get; set; }
-        public Nullable<bool> SoakedFL { get; set; }
         public Nullable<int> Ply { get; set; }
         public Nullable<int> PrintType { get; set; }
         public Nullable<int> TopType { get; set; }
@@ -39,6 +38,7 @@ namespace InventoryManagement.EF
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public System.Guid ModifiedBy { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
+        public Nullable<int> Soaked { get; set; }
     
         public virtual aspnet_Users aspnet_Users { get; set; }
         public virtual aspnet_Users aspnet_Users1 { get; set; }

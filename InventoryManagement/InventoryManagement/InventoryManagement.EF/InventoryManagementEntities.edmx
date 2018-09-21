@@ -228,7 +228,7 @@
           <Property Name="Quantity" Type="int" />
           <Property Name="PackingStyle" Type="bigint" />
           <Property Name="Grade" Type="bigint" />
-          <Property Name="SoakedFL" Type="bit" />
+          <Property Name="Soaked" Type="int" />
           <Property Name="Ply" Type="int" />
           <Property Name="PrintType" Type="int" />
           <Property Name="TopType" Type="int" />
@@ -2938,7 +2938,6 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <Property Name="Quantity" Type="Int32" />
           <Property Name="PackingStyle" Type="Int64" />
           <Property Name="Grade" Type="Int64" />
-          <Property Name="SoakedFL" Type="Boolean" />
           <Property Name="Ply" Type="Int32" />
           <Property Name="PrintType" Type="Int32" />
           <Property Name="TopType" Type="Int32" />
@@ -2960,6 +2959,7 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <NavigationProperty Name="MasterData6" Relationship="InventoryManagementModel.FK_Product_MasterData_Specie" FromRole="Product" ToRole="MasterData" />
           <NavigationProperty Name="MasterData7" Relationship="InventoryManagementModel.FK_Product_MasterData_Type" FromRole="Product" ToRole="MasterData" />
           <NavigationProperty Name="MasterData8" Relationship="InventoryManagementModel.FK_Product_MasterData_Variety" FromRole="Product" ToRole="MasterData" />
+          <Property Name="Soaked" Type="Int32" />
         </EntityType>
         <Association Name="FK_Product_aspnet_Users">
           <End Type="InventoryManagementModel.aspnet_Users" Role="aspnet_Users" Multiplicity="1" />
@@ -3598,6 +3598,7 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="InventoryManagementModel.Product">
               <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="Soaked" ColumnName="Soaked" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
@@ -3608,7 +3609,6 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
                 <ScalarProperty Name="TopType" ColumnName="TopType" />
                 <ScalarProperty Name="PrintType" ColumnName="PrintType" />
                 <ScalarProperty Name="Ply" ColumnName="Ply" />
-                <ScalarProperty Name="SoakedFL" ColumnName="SoakedFL" />
                 <ScalarProperty Name="Grade" ColumnName="Grade" />
                 <ScalarProperty Name="PackingStyle" ColumnName="PackingStyle" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
