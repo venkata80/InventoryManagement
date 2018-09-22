@@ -90,7 +90,6 @@ namespace InventoryManagement.Models
         public string NetWeight { get; set; }
         public string ThresholdLimit { get; set; }
         public string Description { get; set; }
-        //public Tuple<string, string> PackingStyle { get; set; }
         public ProductCoreType CoreType { get; set; }
         public ProductSoakedType Soaked { get; set; }
         public ProductPrint Print { get; set; }
