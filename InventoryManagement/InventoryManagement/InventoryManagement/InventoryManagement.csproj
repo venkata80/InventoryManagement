@@ -338,6 +338,10 @@
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Admin\Product\CreateProduct.cshtml" />
     <Content Include="Views\Admin\Supplier\CreateSupplierPriceList.cshtml" />
+    <Content Include="Views\Admin\Product\_CoreProducts.cshtml" />
+    <Content Include="Views\Admin\Product\_NonCoreProducts.cshtml" />
+    <Content Include="Views\Admin\Product\_CreateCoreProduct.cshtml" />
+    <Content Include="Views\Admin\Product\_CreateNonCoreProduct.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,194 @@
+﻿@using InventoryManagement.Models
+@using InventoryManagement.Enums
+
+@model ProductDTO
+
+@functions{
+
+    public SelectList GetMasterData(MasterDataType type)
+    {
+        if (Session["MasterData"] != null)
+        {
+            List<MasterDataDTO> masterData = (List<MasterDataDTO>)Session["MasterData"];
+            if (masterData != null && masterData.Any())
+            {
+                if (type != MasterDataType.PackingType)
+                {
+                    return new SelectList(masterData.Where(c => c.Type == type).Select(c => new SelectListItem
+                    {
+                        Text = c.MasterName,
+                        Value = c.Id.ToString()
+                    }), "Value", "Text");
+                }
+                else
+                {
+                    return new SelectList(masterData.Where(c => c.Type == type).Select(c => new SelectListItem
+                    {
+                        Text = string.Concat(c.MasterName, " ", c.Unitname),
+                        Value = c.Id.ToString()
+                    }), "Value", "Text");
+                }
+            }
+        }
+        return new SelectList(new List<MasterDataDTO>());
+    }
+
+    public SelectList GetSoakedItems()
+    {
+        return new SelectList(
+            new List<SelectListItem>
+            {
+                new SelectListItem {Value="1", Text="Soaked" },
+                new SelectListItem {Value="2", Text="NonSoaked" }
+            }, "Value", "Text");
+    }
+
+    public SelectList GetPlyItems()
+    {
+        return new SelectList(
+            new List<SelectListItem>
+            {
+                new SelectListItem {Value="5", Text="5" },
+                new SelectListItem {Value="7", Text="7" }
+            }, "Value", "Text");
+    }
+
+    public SelectList GetPrintItems()
+    {
+        return new SelectList(
+            new List<SelectListItem>
+            {
+                new SelectListItem {Value="1", Text="Plain" },
+                new SelectListItem {Value="2", Text="Single" },
+                new SelectListItem {Value="3", Text="Two" },
+                new SelectListItem {Value="4", Text="Three" },
+                new SelectListItem {Value="5", Text="Multi" },
+            }, "Value", "Text");
+    }
+
+    public SelectList GetTopItems()
+    {
+        return new SelectList(
+            new List<SelectListItem>
+            {
+                new SelectListItem {Value="1", Text="White" },
+                new SelectListItem {Value="2", Text="Brown" }
+            }, "Value", "Text");
+    }
+
+}
+
+
+<div class="form-group">
+    @Html.LabelFor(model => model.ShortCode, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.EditorFor(model => model.ShortCode, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ShortCode, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.DropDownListFor(model => model.Brand, GetMasterData(MasterDataType.Brand), "Select Brand", new { @class = "form-control" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.ProductForm, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.DropDownListFor(model => model.ProductForm, GetMasterData(MasterDataType.ProductForm), "Select Product From", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.ProductForm, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Variety, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.DropDownListFor(model => model.Variety, GetMasterData(MasterDataType.Variety), "Select Variety", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Variety, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Specie, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.DropDownListFor(model => model.Specie, GetMasterData(MasterDataType.Specie), "Select Specie", new { @class = "form-control" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.FreezingType, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.DropDownListFor(model => model.FreezingType, GetMasterData(MasterDataType.FreezingType), "Select Freezing Type", new { @class = "form-control" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.PackingType, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.DropDownListFor(model => model.PackingType, GetMasterData(MasterDataType.ProductType), "Select Packing Type", new { @class = "form-control" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.PackingStyle, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } }) &#10006;
+        @Html.DropDownListFor(model => model.PackingStyle, GetMasterData(MasterDataType.PackingType), "Select Packing Style", new { @class = "form-control" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Grade, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.DropDownListFor(model => model.Grade, GetMasterData(MasterDataType.Grades), "Select Grade", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Grade, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Soaked, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.DropDownListFor(model => model.Soaked, GetSoakedItems(), "Select Soaked", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Soaked, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Ply, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.DropDownListFor(model => model.Ply, GetPlyItems(), "Select Ply", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Ply, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Print, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.DropDownListFor(model => model.Print, GetPrintItems(), "Select Print", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Print, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Top, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.DropDownListFor(model => model.Top, GetTopItems(), "Select Top", new { @class = "form-control" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Dimensions, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.EditorFor(model => model.Dimensions, new { htmlAttributes = new { @class = "form-control" } })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.NetWeight, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.EditorFor(model => model.NetWeight, new { htmlAttributes = new { @class = "form-control" } })
+    </div>
+</div>
+

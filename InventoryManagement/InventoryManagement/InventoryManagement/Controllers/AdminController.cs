@@ -475,8 +475,8 @@ namespace InventoryManagement.Controllers
             if (Session["CurrentUser"] != null)
             {
                 SupplierPriceListDTO supplierl = new SupplierPriceListDTO();
-             //   if (MasterDataDetails == null)
-                    MasterDataDetails = ReadMasterData(MasterDataType.None);               
+                //   if (MasterDataDetails == null)
+                MasterDataDetails = ReadMasterData(MasterDataType.None);
                 supplierl.SupplierList = GetSupplierList();
                 return View("Supplier/CreateSupplierPriceList", supplierl);
             }
@@ -695,7 +695,7 @@ namespace InventoryManagement.Controllers
         {
             if (Session["CurrentUser"] != null)
             {
-                IList<EmployerDTO> emplist = null;
+                IList<ProductDTO> productlst = null;
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(value);
@@ -704,25 +704,86 @@ namespace InventoryManagement.Controllers
                     var result = responseTask.Result;
                     if (result.IsSuccessStatusCode)
                     {
-                        var readTask = result.Content.ReadAsAsync<IList<EmployerDTO>>();
+                        var readTask = result.Content.ReadAsAsync<IList<ProductDTO>>();
                         readTask.Wait();
 
-                        emplist = readTask.Result;
+                        productlst = readTask.Result;
                     }
                 }
-                return PartialView("Employer/_Employers", emplist);
+                if (CoreItemFL == 1)
+                    return PartialView("Product/_CoreProducts", productlst);
+                else
+                    return PartialView("Product/_NonCoreProducts", productlst);
             }
             return RedirectToAction("UserLogin", "Account");
         }
 
-        public ActionResult CreateProduct()
+        public ActionResult CreateProduct(Guid? id = null, long? coreItem = null)
         {
             if (Session["CurrentUser"] != null)
             {
                 if (MasterDataDetails == null)
                     MasterDataDetails = ReadMasterData(MasterDataType.None);
 
-                return View("Product/CreateProduct", new ProductDTO());
+                ProductDTO product = new ProductDTO();
+                if (id != null && id != Guid.Empty)
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(value);
+                        var responseTask = client.GetAsync("Employer/GetProduct?id=" + id);
+                        responseTask.Wait();
+                        var result = responseTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            var readTask = result.Content.ReadAsAsync<ProductDTO>();
+                            readTask.Wait();
+
+                            product = readTask.Result;
+                        }
+                    }
+                }
+
+                return View("Product/CreateProduct", product);
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+
+        public ActionResult CoreProduct(long? coreItem = null)
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                ProductDTO product = new ProductDTO();
+                return PartialView(coreItem == 1 ? "Product/_CreateCoreProduct" : "Product/_CreateNonCoreProduct", new ProductDTO());
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+
+
+        [HttpPost]
+        public ActionResult SaveProduct(ProductDTO model)
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(value);
+                        model.CreatedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
+                        model.ModifiedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
+                        var postTask = client.PostAsJsonAsync<ProductDTO>("Employer/SaveProduct", model);
+                        postTask.Wait();
+                        var result = postTask.Result;
+
+                        if (result.IsSuccessStatusCode)
+                        {
+                            return RedirectToAction("Products");
+                        }
+                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                    }
+                }
+                return View("Product/CreateProduct", model);
             }
             return RedirectToAction("UserLogin", "Account");
         }

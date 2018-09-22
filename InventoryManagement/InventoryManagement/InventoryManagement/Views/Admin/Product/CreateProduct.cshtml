@@ -6,231 +6,88 @@
     ViewBag.Title = "CreateProduct";
 }
 
-@functions{
-
-    public SelectList GetMasterData(MasterDataType type)
-    {
-        if (Session["MasterData"] != null)
-        {
-            List<MasterDataDTO> masterData = (List<MasterDataDTO>)Session["MasterData"];
-            if (masterData != null && masterData.Any())
-            {
-                return new SelectList(masterData.Where(c => c.Type == type).Select(c => new SelectListItem
-                {
-                    Text = c.MasterName,
-                    Value = c.Id.ToString()
-                }), "Value", "Text");
-            }
-        }
-        return new SelectList(new List<MasterDataDTO>());
-    }
-
-    public SelectList GetSoakedItems()
-    {
-        return new SelectList(
-            new List<SelectListItem>
-            {
-                new SelectListItem {Value="1", Text="Soaked" },
-                new SelectListItem {Value="2", Text="NonSoaked" }
-            }, "Value", "Text");
-    }
-
-    public SelectList GetPlyItems()
-    {
-        return new SelectList(
-            new List<SelectListItem>
-            {
-                new SelectListItem {Value="5", Text="5" },
-                new SelectListItem {Value="7", Text="7" }
-            }, "Value", "Text");
-    }
-
-    public SelectList GetPrintItems()
-    {
-        return new SelectList(
-            new List<SelectListItem>
-            {
-                new SelectListItem {Value="1", Text="Plain" },
-                new SelectListItem {Value="2", Text="Single" },
-                new SelectListItem {Value="3", Text="Two" },
-                new SelectListItem {Value="4", Text="Three" },
-                new SelectListItem {Value="5", Text="Multi" },
-            }, "Value", "Text");
-    }
-
-    public SelectList GetTopItems()
-    {
-        return new SelectList(
-            new List<SelectListItem>
-            {
-                new SelectListItem {Value="1", Text="White" },
-                new SelectListItem {Value="2", Text="Brown" }
-            }, "Value", "Text");
-    }
-
-}
-
 <h2>CreateProduct</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("SaveProduct", "Admin", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     <div class="panel panel-default ">
         <div class="panel-heading">
-            <b> Add Employer</b> <span class="label label-info ">    <span class="glyphicon glyphicon-th-list"></span>    @Html.ActionLink("View Employers", "Employers", "Admin")</span>
+            <b> Add Product</b> <span class="label label-info ">    <span class="glyphicon glyphicon-th-list"></span>  @Html.ActionLink("View Employers", "Employers", "Admin")</span>
         </div>
         <div class="panel-body">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
                 @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-9">
-                    @Html.RadioButtonFor(model => model.Type, 1, new { @id = "rdCoreItem" })
-                    @Html.LabelFor(model => model.Type, "Core Item", new { @for = "rdCoreItem" })
+                    @if (Model.Id == Guid.Empty)
+                    {
+                        @Html.RadioButtonFor(model => model.Type, 1, new { @id = "rdCoreItem", @onchange = "OnTypeClicked(1)" })
+                        @Html.LabelFor(model => model.Type, "Core Item", new { @for = "rdCoreItem" })
 
-                    @Html.RadioButtonFor(model => model.Type, 2, new { @id = "rdNonCoreItem" })
-                    @Html.LabelFor(model => model.Type, "Non Core Item", new { @for = "rdNonCoreItem" })
+                        @Html.RadioButtonFor(model => model.Type, 2, new { @id = "rdNonCoreItem", @onchange = "OnTypeClicked(2)" })
+                        @Html.LabelFor(model => model.Type, "Non Core Item", new { @for = "rdNonCoreItem" })
 
-                    @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                    }
+                    else
+                    {
+                        @Html.LabelFor(model => model.Type, Model.Type == 1 ? "Core Item" : "Non Core Item")
+                        @Html.HiddenFor(model => model.Type, Model.Type)
+                    }
                 </div>
             </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.ShortCode, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.EditorFor(model => model.ShortCode, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.ShortCode, "", new { @class = "text-danger" })
-                </div>
+            <div id="dvproducttypecontent">
+                @if (Convert.ToInt64(Model.Type) > 0)
+                {
+                    if (Model.Type.Value == 1)
+                    {
+                        @Html.Partial("Product/_CoreProducts", Model);
+                    }
+                    else
+                    {
+                        @Html.Partial("Product/_NonCoreProducts", Model);
+                    }
+                }
             </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.DropDownListFor(model => model.Brand, GetMasterData(MasterDataType.Brand), "Select Brand", new { @class = "form-control" })
+            <div id="dvcommonproductcontent" class="collapse">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ThresholdLimit, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.ThresholdLimit, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.ProductForm, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.DropDownListFor(model => model.ProductForm, GetMasterData(MasterDataType.ProductForm), "Select Product From", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.ProductForm, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Variety, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.DropDownListFor(model => model.Variety, GetMasterData(MasterDataType.Variety), "Select Variety", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Variety, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Specie, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.DropDownListFor(model => model.Specie, GetMasterData(MasterDataType.Specie), "Select Specie", new{ @class = "form-control" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.FreezingType, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.DropDownListFor(model => model.FreezingType, GetMasterData(MasterDataType.FreezingType), "Select Freezing Type", new{ @class = "form-control" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.PackingType, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.DropDownListFor(model => model.PackingType, GetMasterData(MasterDataType.ProductType), "Select Packing Type", new { @class = "form-control" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.PackingStyle, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.EditorFor(model => model.PackingStyle.Item1, new { htmlAttributes = new { @class = "form-control" } }) &#10006;
-                    @Html.DropDownListFor(model => model.PackingStyle.Item2, GetMasterData(MasterDataType.PackingType), "Select Packing Style", new{ @class = "form-control" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Grade, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.DropDownListFor(model => model.Grade, GetMasterData(MasterDataType.Grades), "Select Grade", new{ @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Grade, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Soaked, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.DropDownListFor(model => model.Soaked, GetSoakedItems(), "Select Soaked", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Soaked, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Ply, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.DropDownListFor(model => model.Ply, GetPlyItems(), "Select Ply", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Ply, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Print, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.DropDownListFor(model => model.Print, GetPrintItems(), "Select Print", new{ @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Print, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Top, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.DropDownListFor(model => model.Top, GetTopItems(), "Select Top", new{ @class = "form-control" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Dimensions, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.EditorFor(model => model.Dimensions, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.NetWeight, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.EditorFor(model => model.NetWeight, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.ThresholdLimit, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.EditorFor(model => model.ThresholdLimit, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.TextAreaFor(model => model.Description, new{ @class = "form-control" })
-                </div>
-            </div>
-
-            <div class="form-group"></div>
-            <div class="row">
-                <div class="col-md-offset-2 col-md-10">
-                    @Html.HiddenFor(model => model.Id, Model.Id)
-                    <br />
-                    <input type="submit" value="@(Model.Id != Guid.Empty ? "Save" : "Create")" class="btn btn-default" />
-                    <input type="button" value="Cancel" class="btn" onclick="javascript: window.location.href='@Url.Action("Products","Admin")'" />
+                <div class="form-group"></div>
+                <div class="row">
+                    <div class="col-md-offset-2 col-md-10">
+                        @Html.HiddenFor(model => model.Id, Model.Id)
+                        <br />
+                        <input type="submit" value="@(Model.Id != Guid.Empty ? "Save" : "Create")" class="btn btn-default" />
+                        <input type="button" value="Cancel" class="btn" onclick="javascript: window.location.href='@Url.Action("Products","Admin")'" />
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+}
 
+@section scripts{
+    <script type="text/javascript">
+        function OnTypeClicked(type) {
+            $('#dvproducttypecontent').load('@Url.Action("CoreProduct","Admin")', { coreItem: type }, function (response, status, xhr ) {
+                $('#ThresholdLimit, #Description').val('');
+                $('#dvcommonproductcontent').removeClass();
+            });
+        }
+    </script>
 }

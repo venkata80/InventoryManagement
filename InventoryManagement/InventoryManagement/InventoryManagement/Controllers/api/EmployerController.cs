@@ -968,12 +968,111 @@ namespace InventoryManagement.Controllers.api
             return Ok(productDTO);
         }
 
+        public IHttpActionResult GetProduct(Guid id)
+        {
+            ProductDTO product = null;
+            using (InventoryManagementEntities hhh = new InventoryManagementEntities())
+            {
+                var filteredemployers = hhh.Products.Where(c => c.ID == id);
+                if (filteredemployers != null && filteredemployers.Any())
+                {
+                    product = SetProductData(filteredemployers.AsEnumerable()).FirstOrDefault();
+                }
+            }
+            return Ok(product);
+        }
+
         IList<ProductDTO> SetProductData(IEnumerable<Product> products)
         {
             return products.Select(c => new ProductDTO
             {
-
+                Id = c.ID,
+                Type = c.Type,
+                Description = c.Description,
+                ShortCode = c.ShortCode,
+                Brand = c.Brand,
+                ProductForm = c.ProductForm,
+                Variety = c.Variety,
+                Specie = c.Specie,
+                FreezingType = c.FreezingType,
+                PackingType = c.PackingType,
+                Quantity = c.Quantity,
+                PackingStyle = c.PackingStyle,
+                Grade = c.Grade,
+                Soaked = (ProductSoakedType)c.Soaked,
+                Ply = Convert.ToInt32(c.Ply),
+                Print = (ProductPrint)c.PrintType,
+                Top = (ProductTop)c.TopType,
+                Dimensions = c.Dimensions,
+                ThresholdLimit = Convert.ToInt32(c.ThresholdLimit).ToString(),
+                Category = c.Catergory,
+                Unit = c.Unit
             }).ToList();
+        }
+
+        [HttpPost]
+        public IHttpActionResult SaveProduct(ProductDTO product)
+        {
+            using (var productctx = new InventoryManagementEntities())
+            {
+                try
+                {
+                    Product pro = SetProduct(product);
+                    productctx.Products.Add(pro);
+
+                    if (product.Id != Guid.Empty)
+                        productctx.Entry(pro).State = System.Data.Entity.EntityState.Modified;
+                    else
+                        productctx.Entry(pro).State = System.Data.Entity.EntityState.Added;
+
+                    productctx.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+            return Ok();
+        }
+
+        Product SetProduct(ProductDTO product)
+        {
+            int? Nullablevalue = null;
+            Product pro = new Product();
+            pro.ID = product.Id == Guid.Empty ? Guid.NewGuid() : product.Id;
+            pro.Name = product.Name;
+            pro.Description = product.Description;
+            pro.Type = product.Type;
+            pro.ShortCode = product.ShortCode;
+            pro.Brand = Convert.ToInt64(product.Brand) > long.MinValue ? product.Brand : Nullablevalue;
+            pro.ProductForm = Convert.ToInt64(product.ProductForm) > long.MinValue ? product.ProductForm : Nullablevalue;
+            pro.Variety = Convert.ToInt64(product.Variety) > long.MinValue ? product.Variety : Nullablevalue;
+            pro.Specie = Convert.ToInt64(product.Specie) > long.MinValue ? product.Specie : Nullablevalue;
+            pro.FreezingType = Convert.ToInt64(product.FreezingType) > long.MinValue ? product.FreezingType : Nullablevalue;
+            pro.PackingType = Convert.ToInt64(product.PackingType) > long.MinValue ? product.PackingType : Nullablevalue;
+            pro.Quantity = Convert.ToInt64(product.Quantity) > long.MinValue ? Convert.ToInt32(product.Quantity) : Nullablevalue;
+            pro.PackingStyle = Convert.ToInt64(product.PackingStyle) > long.MinValue ? Convert.ToInt32(product.PackingStyle) : Nullablevalue;
+            pro.Grade = Convert.ToInt64(product.Grade);
+            pro.Soaked = product.Soaked != ProductSoakedType.None ? (int)product.Soaked : Nullablevalue;
+            pro.Ply = product.Ply > int.MinValue ? product.Ply : Nullablevalue;
+            pro.PrintType = product.Print != ProductPrint.None ? (int)product.Print : Nullablevalue;
+            pro.TopType = product.Top != ProductTop.None ? (int)product.Top : Nullablevalue;
+            pro.Dimensions = product.Dimensions;
+            pro.ThresholdLimit = !string.IsNullOrWhiteSpace(product.ThresholdLimit) ? Convert.ToInt32(product.ThresholdLimit) : Nullablevalue;
+            pro.Catergory= Convert.ToInt64(product.Category) > long.MinValue ? product.Category : Nullablevalue;
+            pro.Unit= Convert.ToInt64(product.Unit) > long.MinValue ? product.Unit : Nullablevalue;
+            pro.Isactive = true;
+            if (product.Id == Guid.Empty)
+            {
+                pro.CreatedBy = product.CreatedBy;
+                pro.CreatedDate = DateTime.UtcNow;
+            }
+            else
+                pro.ModifiedDate = DateTime.UtcNow;
+
+            pro.ModifiedBy = product.ModifiedBy;
+
+            return pro;
         }
 
         #endregion

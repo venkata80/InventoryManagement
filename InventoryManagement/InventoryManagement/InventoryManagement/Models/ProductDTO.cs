@@ -2,28 +2,95 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace InventoryManagement.Models
 {
     public class ProductDTO : CommonBaseDTO<Guid>
     {
-        public int Brand { get; set; }
-        public int ProductForm { get; set; }
-        public int Variety { get; set; }
-        public int Specie { get; set; }
-        public int FreezingType { get; set; }
-        public int PackingType { get; set; }
-        public int Grade { get; set; }
-        public int Ply { get; set; }
-        public int Category { get; set; }
-        public int Type { get; set; }
+        public long? Brand { get; set; }
+        public long? ProductForm { get; set; }
+        public long? Variety { get; set; }
+        public long? Specie { get; set; }
+        public long? FreezingType { get; set; }
+        public long? PackingType { get; set; }
+        public long? Grade { get; set; }
+        public int? Ply { get; set; }
+        public long? Category { get; set; }
+        public long? Type { get; set; }
+        public long? Quantity { get; set; }
+        public long? PackingStyle { get; set; }
+        public long? Unit { get; set; }
+        public string Name
+        {
+            get
+            {
+                StringBuilder name = new StringBuilder();
+                if (HttpContext.Current !=null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
+                {
+                    List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
+                    if (!string.IsNullOrWhiteSpace(ShortCode))
+                    {
+                        name.Append(ShortCode);
+                        name.Append("-");
+                    }
+                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    {
+                        name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Brand && c.Id == Brand)?.MasterName);
+                        name.Append("-");
+                    }
+                    if (Convert.ToInt32(ProductForm) > int.MinValue)
+                    {
+                        name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.ProductForm && c.Id == ProductForm)?.MasterName);
+                        name.Append("-");
+                    }
+                    if (Convert.ToInt32(Variety) > int.MinValue)
+                    {
+                        name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Variety && c.Id == Variety)?.MasterName);
+                        name.Append("-");
+                    }
+                    if (Convert.ToInt32(Specie) > int.MinValue)
+                    {
+                        name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Specie && c.Id == Specie)?.MasterName);
+                        name.Append("-");
+                    }
+                    if (Convert.ToInt32(FreezingType) > int.MinValue)
+                    {
+                        name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.FreezingType && c.Id == FreezingType)?.MasterName);
+                        name.Append("-");
+                    }
+                    if (Convert.ToInt32(PackingType) > int.MinValue)
+                    {
+                        name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.PackingType && c.Id == PackingType)?.MasterName);
+                        name.Append("-");
+                    }
+                    if (Soaked != ProductSoakedType.None)
+                    {
+                        name.Append(Soaked == ProductSoakedType.Soaked ? "S" : "NS");
+                        name.Append("-");
+                    }
+                    if (Convert.ToInt32(Grade) > int.MinValue)
+                    {
+                        name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Grades && c.Id == Grade)?.MasterName);
+                        name.Append("-");
+                    }
+                    if (Convert.ToInt32(Quantity) > int.MinValue && Convert.ToInt32(PackingStyle) > int.MinValue)
+                    {
+                        name.Append(Quantity);
+                        name.Append("x");
+                        name.Append(PackingStyle);
+                    }
+                }
+                return name.ToString();
+            }
+        }
         public string ShortCode { get; set; }
         public string Dimensions { get; set; }
         public string NetWeight { get; set; }
         public string ThresholdLimit { get; set; }
         public string Description { get; set; }
-        public Tuple<string, string> PackingStyle { get; set; }
+        //public Tuple<string, string> PackingStyle { get; set; }
         public ProductCoreType CoreType { get; set; }
         public ProductSoakedType Soaked { get; set; }
         public ProductPrint Print { get; set; }

@@ -1,0 +1,29 @@
+﻿@model IEnumerable<InventoryManagement.Models.ProductDTO>
+
+<div class="padding-md clearfix">
+    <table class="table table-striped" id="dataTable">
+        <tr>
+            <th>Product Name </th>
+            <th>Product Category</th>
+            <th>Units</th>
+            <th>Threshold Limit</th>
+            <th></th>
+        </tr>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr class="tremployers">
+                    <td>@item.Name</td>
+                    <td>@item.Category</td>
+                    <td>@item.Unit</td>
+                    <td>@item.ThresholdLimit</td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditProduct", new { id = item.Id }) @Html.Raw(" | ")
+                        @Html.ActionLink("Delete", "DeleteProduct", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');" })
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
