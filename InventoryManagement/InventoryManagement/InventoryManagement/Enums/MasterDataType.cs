@@ -26,6 +26,18 @@ namespace InventoryManagement.Enums
         [Display(Name = "Product Type")]
         ProductType = 8,
         [Display(Name = "Product Category")]
-        PoductCategory = 9
+        PoductCategory = 9,
+        [Display(Name = "Soaked")]
+        Soaked = 10,
+        [Display(Name = "Ply")]
+        Ply = 11,
+        [Display(Name = "Print")]
+        Print = 12,
+        [Display(Name = "Top")]
+        Top = 13
+
+
+
+
     }
 }
