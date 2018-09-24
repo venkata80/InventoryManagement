@@ -470,18 +470,18 @@ namespace InventoryManagement.Controllers
             }
             return RedirectToAction("UserLogin", "Account");
         }
-        public ActionResult CreateSupplierPriceList()
-        {
-            if (Session["CurrentUser"] != null)
-            {
-                SupplierPriceListDTO supplierl = new SupplierPriceListDTO();
-                //   if (MasterDataDetails == null)
-                MasterDataDetails = ReadMasterData(MasterDataType.None);
-                supplierl.SupplierList = GetSupplierList();
-                return View("Supplier/CreateSupplierPriceList", supplierl);
-            }
-            return RedirectToAction("UserLogin", "Account");
-        }
+        //public ActionResult CreateSupplierPriceList()
+        //{
+        //    if (Session["CurrentUser"] != null)
+        //    {
+        //        SupplierPriceListDTO supplierl = new SupplierPriceListDTO();
+        //        //   if (MasterDataDetails == null)
+        //        MasterDataDetails = ReadMasterData(MasterDataType.None);
+        //        supplierl.SupplierList = GetSupplierList();
+        //        return View("Supplier/CreateSupplierPriceList", supplierl);
+        //    }
+        //    return RedirectToAction("UserLogin", "Account");
+        //}
 
         #region MASTER DATA
 
@@ -680,6 +680,126 @@ namespace InventoryManagement.Controllers
 
         #endregion
 
+        public ActionResult SupplierPriceList()
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                return View("Supplier/SupplierPriceList");
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+        public ActionResult GetSupplierPriceList(int CoreItemFL = 1)
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                IList<SupplierPriceListDTO> supplierlst =null;
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(value);
+                    var responseTask = client.GetAsync("Employer/GetSuplirespricelist?CoreItemFL=" + CoreItemFL);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<IList<SupplierPriceListDTO>>();
+                        readTask.Wait();
+
+                        supplierlst = readTask.Result;
+                    }
+                }
+
+                if (CoreItemFL == 1)
+                    return PartialView("Supplier/_CreateCoreSupplierPricelist", supplierlst);
+                else
+                    return PartialView("Supplier/_CreateNonCoreSupplierPricelist", supplierlst);
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+        public ActionResult CoreSupplierPriceList(long? coreItem = null)
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                SupplierPriceListDTO product = new SupplierPriceListDTO();
+                return PartialView(coreItem == 1 ? "Supplier/_CreateCoreSupplierPricelist" : "Supplier/_CreateNonCoreSupplierPricelist", new ProductDTO());
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+        public ActionResult CreateSupplierPriceList(Guid? id = null, long? coreItem = null)
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                if (MasterDataDetails == null)
+                    MasterDataDetails = ReadMasterData(MasterDataType.None);
+               
+                SupplierPriceListDTO supplierl = new SupplierPriceListDTO();
+                supplierl.SupplierList = GetSupplierList();
+                if (id != null && id != Guid.Empty)
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(value);
+                        var responseTask = client.GetAsync("Employer/GetSuplirespricelist?id=" + id);
+                        responseTask.Wait();
+                        var result = responseTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            var readTask = result.Content.ReadAsAsync<SupplierPriceListDTO>();
+                            readTask.Wait();
+
+                            supplierl = readTask.Result;
+                        }
+                    }
+                }
+
+                return View("Supplier/CreateSupplier", supplierl);
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+        public ActionResult EditSupplierPricelist(long id)
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                return View("Supplier/CreateSupplierPriceList");
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+
+        public ActionResult SaveSupplierPriceList()
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                return View("Supplier/SupplierPriceList");
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+
+        [HttpPost]
+        public ActionResult SaveSupplierPriceList(SupplierPriceListDTO model)
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(value);
+                        model.CreatedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
+                        model.ModifiedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
+                        var postTask = client.PostAsJsonAsync<SupplierPriceListDTO>("Employer/SaveSuppliersPriceList", model);
+                        postTask.Wait();
+                        var result = postTask.Result;
+
+                        if (result.IsSuccessStatusCode)
+                        {
+                            return RedirectToAction("Products");
+                        }
+                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                    }
+                }
+                return View("Supplier/CreateSupplierPriceList", model);
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
         #region PRODUCT
 
         public ActionResult Products()

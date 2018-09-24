@@ -39,6 +39,8 @@ namespace InventoryManagement.EF
         public System.Guid ModifiedBy { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> Soaked { get; set; }
+        public Nullable<long> Catergory { get; set; }
+        public Nullable<long> Unit { get; set; }
     
         public virtual aspnet_Users aspnet_Users { get; set; }
         public virtual aspnet_Users aspnet_Users1 { get; set; }
@@ -51,5 +53,7 @@ namespace InventoryManagement.EF
         public virtual MasterData MasterData6 { get; set; }
         public virtual MasterData MasterData7 { get; set; }
         public virtual MasterData MasterData8 { get; set; }
+        public virtual MasterData MasterData11 { get; set; }
+        public virtual Unit Unit1 { get; set; }
     }
 }

@@ -23,7 +23,7 @@
                     <td>@item.ThresholdLimit</td>
                     <td>Image</td>
                     <td>
-                        @Html.ActionLink("Edit", "EditProduct", new { id = item.Id }) @Html.Raw(" | ")
+                        @Html.ActionLink("Edit", "EditSupplierPricelist", new { id = item.Id }) @Html.Raw(" | ")
                         @Html.ActionLink("Delete", "DeleteProduct", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');" })
                     </td>
                 </tr>

@@ -74,6 +74,9 @@
         <AssociationConnector Association="InventoryManagementModel.FK_Product_MasterData_Specie" />
         <AssociationConnector Association="InventoryManagementModel.FK_Product_MasterData_Type" />
         <AssociationConnector Association="InventoryManagementModel.FK_Product_MasterData_Variety" />
+        <AssociationConnector Association="InventoryManagementModel.FK_Product_MasterData_Catergory" />
+        <AssociationConnector Association="InventoryManagementModel.FK_Product_Units" />
+        <EntityTypeShape EntityType="InventoryManagementModel.SupplierPriceList" Width="1.5" PointX="9.375" PointY="9.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

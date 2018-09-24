@@ -717,6 +717,115 @@ namespace InventoryManagement.Controllers.api
 
         #endregion
 
+        public IHttpActionResult GetSuplirespricelist(int? CoreItemFL = null)
+        {
+            IList<SupplierPriceListDTO> productDTO = null;
+
+            using (InventoryManagementEntities hhh = new InventoryManagementEntities())
+            {
+                if (CoreItemFL == null)
+                    productDTO = SetSupplierpricelistData(hhh.SupplierPriceLists.AsEnumerable());
+                else
+                {
+                    var filteredemployers = hhh.SupplierPriceLists.Where(c => c.Type == CoreItemFL && c.IsActive == true);
+                    if (filteredemployers != null && filteredemployers.Any())
+                        productDTO = SetSupplierpricelistData(filteredemployers.AsEnumerable());
+                }
+            }
+            return Ok(productDTO);
+        }
+
+        IList<SupplierPriceListDTO> SetSupplierpricelistData(IEnumerable<SupplierPriceList> suppliers)
+        {
+            return suppliers.Select(c => new SupplierPriceListDTO
+            {
+                Id = c.SupplierPLId,
+                SupplierId = (c.SupplierId == null ? Guid.Empty : c.SupplierId.Value),
+                ProductId = (c.ProductId == null ? Guid.Empty : c.ProductId.Value),
+                Brand = c.BrandId,
+                Type = c.Type,
+                FreezingType = c.FreezingId,
+                ProductForm = c.ProductformId,
+                Variety = c.VarietyId,
+                Specie = c.SpiceId,
+                PackingType = c.PackingId,
+                PackingCount = c.PackingUnits.Value,
+                Grade = c.GradeId,
+                Soaked = c.Socked,
+                ExpectedDays = c.ExpertedDays,
+                VenderUnits = c.SupplierUnits,
+                IsActive = c.IsActive.Value,
+                CreatedBy = c.CreatedBy.Value,
+                CreatedOn = c.CreatedOn,
+                ModifiedBy = c.ModifiedBy.Value
+            }).ToList();
+        }
+
+        [HttpPost]
+        public IHttpActionResult SaveSuppliersPriceList(SupplierPriceListDTO product)
+        {
+            using (var productctx = new InventoryManagementEntities())
+            {
+                try
+                {
+                    SupplierPriceList pro = SetProduct(product);
+                    productctx.SupplierPriceLists.Add(pro);
+
+                    if (product.Id != Guid.Empty)
+                        productctx.Entry(pro).State = System.Data.Entity.EntityState.Modified;
+                    else
+                        productctx.Entry(pro).State = System.Data.Entity.EntityState.Added;
+
+                    productctx.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+            return Ok();
+        }
+
+        SupplierPriceList SetProduct(SupplierPriceListDTO product)
+        {
+            int? Nullablevalue = null;
+            SupplierPriceList pro = new SupplierPriceList();
+            pro.SupplierPLId = product.Id == Guid.Empty ? Guid.NewGuid() : product.Id;
+            pro.Type = product.Type;
+            pro.BrandId = Convert.ToInt64(product.Brand) > long.MinValue ? product.Brand : Nullablevalue;
+            pro.ProductformId = Convert.ToInt64(product.ProductForm) > long.MinValue ? product.ProductForm : Nullablevalue;
+            pro.VarietyId = Convert.ToInt64(product.Variety) > long.MinValue ? product.Variety : Nullablevalue;
+            pro.SpiceId = Convert.ToInt64(product.Specie) > long.MinValue ? product.Specie : Nullablevalue;
+            pro.FreezingId = Convert.ToInt64(product.FreezingType) > long.MinValue ? product.FreezingType : Nullablevalue;
+            pro.PackingId = Convert.ToInt64(product.PackingType) > long.MinValue ? product.PackingType : Nullablevalue;
+            pro.PackingUnits = Convert.ToInt64(product.PackingCount) > long.MinValue ? Convert.ToInt32(product.PackingCount) : Nullablevalue;
+            // pro.PackingStyle = Convert.ToInt64(product.PackingStyle) > long.MinValue ? Convert.ToInt32(product.PackingStyle) : Nullablevalue;
+            pro.GradeId = Convert.ToInt64(product.Grade);
+            pro.Socked = Convert.ToInt64(product.Soaked) > long.MinValue ? product.Soaked : Nullablevalue;
+            //product.Soaked != ProductSoakedType.None ? (int)product.Soaked : Nullablevalue;
+            // pro.Ply = Convert.ToInt64(product.Soaked) > long.MinValue ? product.Soaked : Nullablevalue;//product.Ply > int.MinValue ? product.Ply : Nullablevalue;
+            // pro.PrintType = Convert.ToInt64(product.Soaked) > long.MinValue ? product.Soaked : Nullablevalue; //product.Print != ProductPrint.None ? (int)product.Print : Nullablevalue;
+            //pro.TopType = product.Top != ProductTop.None ? (int)product.Top : Nullablevalue;
+            // pro.Dimensions = product.Dimensions;
+            //  pro.ThresholdLimit = !string.IsNullOrWhiteSpace(product.ThresholdLimit) ? Convert.ToInt32(product.ThresholdLimit) : Nullablevalue;
+            // pro.Catergory = Convert.ToInt64(product.Category) > long.MinValue ? product.Category : Nullablevalue;
+            pro.SupplierUnits = Convert.ToInt64(product.VenderUnits) > long.MinValue ? product.VenderUnits : Nullablevalue;
+            pro.ExpertedDays = product.ExpectedDays;
+            pro.IsActive = true;
+            if (product.Id == Guid.Empty)
+            {
+                pro.CreatedBy = product.CreatedBy;
+                pro.CreatedOn = DateTime.UtcNow;
+            }
+            else
+                pro.ModifiedOn = DateTime.UtcNow;
+
+            pro.ModifiedBy = product.ModifiedBy;
+
+            return pro;
+        }
+
+
         #region Master Data
 
         [HttpGet]
@@ -1059,8 +1168,8 @@ namespace InventoryManagement.Controllers.api
             pro.TopType = product.Top != ProductTop.None ? (int)product.Top : Nullablevalue;
             pro.Dimensions = product.Dimensions;
             pro.ThresholdLimit = !string.IsNullOrWhiteSpace(product.ThresholdLimit) ? Convert.ToInt32(product.ThresholdLimit) : Nullablevalue;
-            pro.Catergory= Convert.ToInt64(product.Category) > long.MinValue ? product.Category : Nullablevalue;
-            pro.Unit= Convert.ToInt64(product.Unit) > long.MinValue ? product.Unit : Nullablevalue;
+            pro.Catergory = Convert.ToInt64(product.Category) > long.MinValue ? product.Category : Nullablevalue;
+            pro.Unit = Convert.ToInt64(product.Unit) > long.MinValue ? product.Unit : Nullablevalue;
             pro.Isactive = true;
             if (product.Id == Guid.Empty)
             {

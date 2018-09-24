@@ -239,6 +239,8 @@
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="ModifiedBy" Type="uniqueidentifier" Nullable="false" />
           <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="Catergory" Type="bigint" />
+          <Property Name="Unit" Type="bigint" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
@@ -257,6 +259,32 @@
           <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
           <Property Name="ModifiedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SupplierPriceList">
+          <Key>
+            <PropertyRef Name="SupplierPLId" />
+          </Key>
+          <Property Name="SupplierPLId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SupplierId" Type="uniqueidentifier" />
+          <Property Name="ProductId" Type="uniqueidentifier" />
+          <Property Name="Type" Type="bigint" />
+          <Property Name="BrandId" Type="bigint" />
+          <Property Name="FreezingId" Type="bigint" />
+          <Property Name="Socked" Type="bigint" />
+          <Property Name="VarietyId" Type="bigint" />
+          <Property Name="SpiceId" Type="bigint" />
+          <Property Name="PackingId" Type="bigint" />
+          <Property Name="PackingUnits" Type="bigint" />
+          <Property Name="ProductformId" Type="bigint" />
+          <Property Name="ProductTypeId" Type="bigint" />
+          <Property Name="GradeId" Type="bigint" />
+          <Property Name="SupplierUnits" Type="bigint" />
+          <Property Name="ExpertedDays" Type="nchar" MaxLength="10" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="uniqueidentifier" />
           <Property Name="ModifiedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="Units">
@@ -768,6 +796,18 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Product_MasterData_Catergory">
+          <End Role="MasterData" Type="Self.MasterData" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Catergory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Product_MasterData_FreezingType">
           <End Role="MasterData" Type="Self.MasterData" Multiplicity="0..1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
@@ -861,6 +901,18 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
             </Principal>
             <Dependent Role="Product">
               <PropertyRef Name="Variety" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Units">
+          <End Role="Units" Type="Self.Units" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Units">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Unit" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1286,6 +1338,7 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <EntitySet Name="MasterData" EntityType="Self.MasterData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SupplierPriceList" EntityType="Self.SupplierPriceList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Units" EntityType="Self.Units" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="vw_aspnet_Applications" EntityType="Self.vw_aspnet_Applications" store:Type="Views" store:Schema="dbo">
@@ -1491,6 +1544,10 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
             <End Role="MasterData" EntitySet="MasterData" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_Catergory" Association="Self.FK_Product_MasterData_Catergory">
+            <End Role="MasterData" EntitySet="MasterData" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
           <AssociationSet Name="FK_Product_MasterData_FreezingType" Association="Self.FK_Product_MasterData_FreezingType">
             <End Role="MasterData" EntitySet="MasterData" />
             <End Role="Product" EntitySet="Product" />
@@ -1521,6 +1578,10 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           </AssociationSet>
           <AssociationSet Name="FK_Product_MasterData_Variety" Association="Self.FK_Product_MasterData_Variety">
             <End Role="MasterData" EntitySet="MasterData" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Units" Association="Self.FK_Product_Units">
+            <End Role="Units" EntitySet="Units" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
           <AssociationSet Name="FK_Supplier_Address" Association="Self.FK_Supplier_Address">
@@ -1809,6 +1870,7 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <NavigationProperty Name="Products6" Relationship="InventoryManagementModel.FK_Product_MasterData_Specie" FromRole="MasterData" ToRole="Product" />
           <NavigationProperty Name="Products7" Relationship="InventoryManagementModel.FK_Product_MasterData_Type" FromRole="MasterData" ToRole="Product" />
           <NavigationProperty Name="Products8" Relationship="InventoryManagementModel.FK_Product_MasterData_Variety" FromRole="MasterData" ToRole="Product" />
+          <NavigationProperty Name="Products11" Relationship="InventoryManagementModel.FK_Product_MasterData_Catergory" FromRole="MasterData" ToRole="Product" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
@@ -2862,6 +2924,15 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
             <End Role="MasterData" EntitySet="MasterDatas" />
             <End Role="Product" EntitySet="Products" />
           </AssociationSet>
+          <AssociationSet Name="FK_Product_MasterData_Catergory" Association="InventoryManagementModel.FK_Product_MasterData_Catergory">
+            <End Role="MasterData" EntitySet="MasterDatas" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Units" Association="InventoryManagementModel.FK_Product_Units">
+            <End Role="Unit" EntitySet="Units" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <EntitySet Name="SupplierPriceLists" EntityType="InventoryManagementModel.SupplierPriceList" />
         </EntityContainer>
         <ComplexType Name="aspnet_Membership_GetPassword_Result">
           <Property Type="String" Name="Column1" Nullable="true" MaxLength="128" />
@@ -2919,6 +2990,7 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Descrption" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Products" Relationship="InventoryManagementModel.FK_Product_Units" FromRole="Unit" ToRole="Product" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -2960,6 +3032,10 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <NavigationProperty Name="MasterData7" Relationship="InventoryManagementModel.FK_Product_MasterData_Type" FromRole="Product" ToRole="MasterData" />
           <NavigationProperty Name="MasterData8" Relationship="InventoryManagementModel.FK_Product_MasterData_Variety" FromRole="Product" ToRole="MasterData" />
           <Property Name="Soaked" Type="Int32" />
+          <Property Name="Catergory" Type="Int64" />
+          <Property Name="Unit" Type="Int64" />
+          <NavigationProperty Name="MasterData11" Relationship="InventoryManagementModel.FK_Product_MasterData_Catergory" FromRole="Product" ToRole="MasterData" />
+          <NavigationProperty Name="Unit1" Relationship="InventoryManagementModel.FK_Product_Units" FromRole="Product" ToRole="Unit" />
         </EntityType>
         <Association Name="FK_Product_aspnet_Users">
           <End Type="InventoryManagementModel.aspnet_Users" Role="aspnet_Users" Multiplicity="1" />
@@ -3093,6 +3169,56 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Product_MasterData_Catergory">
+          <End Type="InventoryManagementModel.MasterData" Role="MasterData" Multiplicity="0..1" />
+          <End Type="InventoryManagementModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Catergory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Units">
+          <End Type="InventoryManagementModel.Unit" Role="Unit" Multiplicity="0..1" />
+          <End Type="InventoryManagementModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Unit">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Unit" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SupplierPriceList">
+          <Key>
+            <PropertyRef Name="SupplierPLId" />
+          </Key>
+          <Property Name="SupplierPLId" Type="Guid" Nullable="false" />
+          <Property Name="SupplierId" Type="Guid" />
+          <Property Name="ProductId" Type="Guid" />
+          <Property Name="Type" Type="Int64" />
+          <Property Name="BrandId" Type="Int64" />
+          <Property Name="FreezingId" Type="Int64" />
+          <Property Name="Socked" Type="Int64" />
+          <Property Name="VarietyId" Type="Int64" />
+          <Property Name="SpiceId" Type="Int64" />
+          <Property Name="PackingId" Type="Int64" />
+          <Property Name="PackingUnits" Type="Int64" />
+          <Property Name="ProductformId" Type="Int64" />
+          <Property Name="ProductTypeId" Type="Int64" />
+          <Property Name="GradeId" Type="Int64" />
+          <Property Name="SupplierUnits" Type="Int64" />
+          <Property Name="ExpertedDays" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Guid" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Guid" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3598,6 +3724,8 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="InventoryManagementModel.Product">
               <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Catergory" ColumnName="Catergory" />
                 <ScalarProperty Name="Soaked" ColumnName="Soaked" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
@@ -3623,6 +3751,33 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SupplierPriceLists">
+            <EntityTypeMapping TypeName="InventoryManagementModel.SupplierPriceList">
+              <MappingFragment StoreEntitySet="SupplierPriceList">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ExpertedDays" ColumnName="ExpertedDays" />
+                <ScalarProperty Name="SupplierUnits" ColumnName="SupplierUnits" />
+                <ScalarProperty Name="GradeId" ColumnName="GradeId" />
+                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
+                <ScalarProperty Name="ProductformId" ColumnName="ProductformId" />
+                <ScalarProperty Name="PackingUnits" ColumnName="PackingUnits" />
+                <ScalarProperty Name="PackingId" ColumnName="PackingId" />
+                <ScalarProperty Name="SpiceId" ColumnName="SpiceId" />
+                <ScalarProperty Name="VarietyId" ColumnName="VarietyId" />
+                <ScalarProperty Name="Socked" ColumnName="Socked" />
+                <ScalarProperty Name="FreezingId" ColumnName="FreezingId" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+                <ScalarProperty Name="SupplierPLId" ColumnName="SupplierPLId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

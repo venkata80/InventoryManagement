@@ -50,13 +50,12 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })          
            
             <div class="form-group">
-                @Html.Label("Supplier Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.Label("Supplier Name", htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-7">
                     @Html.DropDownListFor(model => model.SupplierId, new SelectList(Model.SupplierList, "Id", "SupplierBussinessName", "Select Supplier"), new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.SupplierId, "", new { @class = "text-danger" })
                 </div>
             </div>
-            <div></div>
             <div class="form-group">
                 @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-7">
@@ -74,7 +73,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Soaked, htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-9">
-                    @Html.DropDownListFor(model => model.Soaked, GetSoakedItems(), "Select Soaked", new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.Soaked, GetMasterData(MasterDataType.Soaked), "Select Soaked", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Soaked, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -91,8 +90,7 @@
                     @Html.DropDownListFor(model => model.Specie, GetMasterData(MasterDataType.Specie), "Select Specie", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Specie, "", new { @class = "text-danger" })
                 </div>
-            </div>
-           
+            </div>          
 
             <div class="form-group">
                 @Html.LabelFor(model => model.PackingType, htmlAttributes: new { @class = "control-label col-md-3" })
@@ -122,7 +120,7 @@
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Grade, htmlAttributes: new { @class = "control-label col-md-3" })
+                @Html.Label("Grade", htmlAttributes: new { @class = "control-label  col-md-3" })
                 <div class="col-md-7">
                     @Html.DropDownListFor(model => model.Grade, GetMasterData(MasterDataType.Grades), "Select Grades", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Grade, "", new { @class = "text-danger" })

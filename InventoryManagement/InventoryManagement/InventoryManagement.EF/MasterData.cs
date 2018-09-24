@@ -26,6 +26,7 @@ namespace InventoryManagement.EF
             this.Products6 = new HashSet<Product>();
             this.Products7 = new HashSet<Product>();
             this.Products8 = new HashSet<Product>();
+            this.Products11 = new HashSet<Product>();
         }
     
         public long Id { get; set; }
@@ -59,5 +60,7 @@ namespace InventoryManagement.EF
         public virtual ICollection<Product> Products7 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product> Products8 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Product> Products11 { get; set; }
     }
 }
