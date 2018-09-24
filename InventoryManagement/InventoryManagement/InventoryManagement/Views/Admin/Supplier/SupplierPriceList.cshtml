@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "SupplierPriceList";   
+}
+
+<h2>Supplier Price List</h2>
+
+<div class="padding-md">
+    <div class="main-header clearfix">
+        <div class="panel panel-default table-responsive">
+            <div class="panel-heading">
+                <span class="label label-info ">
+                    <span class="glyphicon glyphicon-plus-sign"></span>
+                    @Html.ActionLink("Create New", "CreateSupplierPriceList", "Admin")
+                </span>
+                <span class="label label-info pull-right" id="spnSupplierPricecount"></span>
+            </div>
+        </div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="lisupplierpricelist">
+                @Ajax.ActionLink("Core Items", "GetSupplierPriceList", "Admin", new { CoreItemFL = 1 }, new AjaxOptions { UpdateTargetId = "dvproductcontent", OnSuccess = "OnSuccessetSupplierPriceList" }, new { @id = "anchrcoreitemSupplierPriceList", @onclick = "OnBeginGetSupplierPriceList(this)" })
+            </li>
+            <li class="lisupplierpricelist">
+                @Ajax.ActionLink("Non Core Items", "GetSupplierPriceList", "Admin", new { CoreItemFL = 2 }, new AjaxOptions { UpdateTargetId = "dvproductcontent", OnSuccess = "OnSuccessetSupplierPriceList" }, new { @id = "anchrnoncoreitemSupplierPriceList", @onclick = "OnBeginGetSupplierPriceList(this)" })
+            </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content in" style="padding-top: 20px">
+            <div role="tabpanel" class="tab-pane active" id="dvproductcontent"></div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#anchrcoreitemSupplierPriceList').trigger('click');
+        });
+        function OnBeginGetSupplierPriceList(ele) {
+            $('.lisupplierpricelist').removeClass('active');
+            $(ele).parent().addClass('active');
+        }
+
+        function OnSuccessetSupplierPriceList(result) {
+            var trproducts = $('.trproducts');
+            if (trproducts != null && trproducts != undefined && trproducts.length > 0)
+                $('#spnSupplierPricecount').text(trproducts.length + " Suppliers(s)");
+            else
+                $('#spnSupplierPricecount').text('');
+        }
+    </script>
+}

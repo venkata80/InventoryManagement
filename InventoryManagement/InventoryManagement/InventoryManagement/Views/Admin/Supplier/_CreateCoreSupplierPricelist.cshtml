@@ -1,0 +1,72 @@
+﻿@using InventoryManagement.Models
+@using InventoryManagement.Enums
+
+@model SupplierPriceListDTO
+@{
+    ViewBag.Title = "CoreSupplierPriceList";
+}
+@functions{
+
+    public SelectList GetMasterData(MasterDataType type)
+    {
+        if (Session["MasterData"] != null)
+        {
+            List<MasterDataDTO> masterData = (List<MasterDataDTO>)Session["MasterData"];
+            if (masterData != null && masterData.Any())
+            {
+                return new SelectList(masterData.Where(c => c.Type == type).Select(c => new SelectListItem
+                {
+                    Text = c.MasterName,
+                    Value = c.Id.ToString()
+                }), "Value", "Text");
+            }
+        }
+        return new SelectList(new List<MasterDataDTO>());
+    }
+}
+
+
+<h2>Core Supplier Price List</h2>
+
+
+
+
+<div class="form-group">
+    @Html.Label("Supplier Name", htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-7">
+        @Html.DropDownListFor(model => model.SupplierId, new SelectList(Model.SupplierList, "Id", "SupplierBussinessName", "Select Supplier"), new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.SupplierId, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-7">
+        @Html.DropDownListFor(model => model.Category, GetMasterData(MasterDataType.PoductCategory), "Select Brand", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.ProductId, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-7">
+        @Html.DropDownListFor(model => model.ProductId, new SelectList(Model.ProductList, "Id", "", "Select Product"), new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.ProductId, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.VenderUnits, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.EditorFor(model => model.VenderUnits, "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.VenderUnits, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.ExpectedDays, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-7">
+        @Html.EditorFor(model => model.ExpectedDays, "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Variety, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+
+
+
