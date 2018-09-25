@@ -41,10 +41,25 @@
         @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
     </div>
 </div>
-@*<div class="form-group">
+<div class="form-group">
     @Html.LabelFor(model => model.ProductId, htmlAttributes: new { @class = "control-label col-md-3" })
     <div class="col-md-7">
-        @Html.DropDownListFor(model => model.ProductId, new SelectList(Model.ProductList, "Id", "SupplierBussinessName", "Select Supplier"), new { @class = "form-control" })
+        @Html.DropDownListFor(model => model.ProductId, GetMasterData(MasterDataType.PoductCategory), "Select Brand", new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.ProductId, "", new { @class = "text-danger" })
     </div>
-</div>*@
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.VenderUnits, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-7">
+        @Html.EditorFor(model => model.VenderUnits, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.VenderUnits, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.ExpectedDays, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-7">
+        @Html.EditorFor(model => model.ExpectedDays, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.ExpectedDays, "", new { @class = "text-danger" })
+    </div>
+</div>

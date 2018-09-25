@@ -343,10 +343,10 @@
     <Content Include="Views\Admin\Product\_CreateCoreProduct.cshtml" />
     <Content Include="Views\Admin\Product\_CreateNonCoreProduct.cshtml" />
     <Content Include="Views\Admin\Supplier\SupplierPriceList.cshtml" />
-    <Content Include="Views\Admin\Supplier\_CoreSupplierPricelist.cshtml" />
     <Content Include="Views\Admin\Supplier\_NonCoreSupplierPricelist.cshtml" />
     <Content Include="Views\Admin\Supplier\_CreateCoreSupplierPricelist.cshtml" />
     <Content Include="Views\Admin\Supplier\_CreateNonCoreSupplierPricelist.cshtml" />
+    <Content Include="Views\Admin\Supplier\_CoreSupplierPricelist.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

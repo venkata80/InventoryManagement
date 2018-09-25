@@ -703,7 +703,6 @@ namespace InventoryManagement.Controllers
                     {
                         var readTask = result.Content.ReadAsAsync<IList<SupplierPriceListDTO>>();
                         readTask.Wait();
-
                         supplierlst = readTask.Result;
                     }
                 }
@@ -794,7 +793,7 @@ namespace InventoryManagement.Controllers
 
                         if (result.IsSuccessStatusCode)
                         {
-                            return RedirectToAction("Products");
+                            return RedirectToAction("SupplierPriceList");
                         }
                         ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
                     }

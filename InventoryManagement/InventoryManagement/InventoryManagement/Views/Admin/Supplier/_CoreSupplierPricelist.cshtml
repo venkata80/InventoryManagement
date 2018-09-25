@@ -3,168 +3,91 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-       
-        <th>
-            @Html.DisplayNameFor(model => model.SupplierId)
-        </th>      
-        <th>
-            @Html.DisplayNameFor(model => model.Brand)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FreezingType)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Variety)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Specie)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PackingType)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProductForm)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Type)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Grade)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Ply)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Category)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CoreType)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Soaked)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PackingCount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.VenderUnits)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ExpectedDays)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsActive)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedBy)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ModifiedBy)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedOn)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ModifiedOn)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SupplierId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Brand)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FreezingType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Variety)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Specie)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PackingType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductForm)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Type)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Grade)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Ply)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Category)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CoreType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Soaked)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PackingCount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.VenderUnits)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ExpectedDays)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsActive)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
-
-</table>
 <div class="padding-md clearfix">
     <table class="table table-striped" id="dataTable">
         <tr>
-            <th>Product Name </th>
-            <th>Product Code</th>
-            <th>Product Type</th>
-            <th>Dimensions</th>
-            <th>Threshold Limit</th>
-            <th>Product Image</th>
+            <th>SupplierId</th>
+            <th>Brand</th>
+            <th>Freezing Type</th>
+            <th>Variety</th>
+            <th>Specie</th>
+            <th>Packing Type</th>
+            <th>Product Form</th>
+            <th>Type</th>
+            <th>Grade</th>
+            <th>Ply</th>
+            <th>Category</th>
+            <th>Core Type</th>
+            <th>Soaked</th>
+            <th>Packing Count</th>
+            <th>Vender Units</th>
+            <th>Expected Days</th>
+            <th></th>
             <th></th>
         </tr>
         @if (Model != null && Model.Any())
         {
-            foreach (var item in Model)
+            @foreach (var item in Model)
             {
-                <tr class="tremployers">
-                    <td>@item.Name</td>
-                    <td>@item.ShortCode</td>
-                    <td>@item.PackingType</td>
-                    <td>@item.Dimensions</td>
-                    <td>@item.ThresholdLimit</td>
-                    <td>Image</td>
+                <tr>
                     <td>
-                        @Html.ActionLink("Edit", "EditProduct", new { id = item.Id }) @Html.Raw(" | ")
-                        @Html.ActionLink("Delete", "DeleteProduct", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');" })
+                        @Html.DisplayFor(modelItem => item.SupplierId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Brand)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FreezingType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Variety)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Specie)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PackingType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductForm)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Grade)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ply)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoreType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Soaked)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PackingCount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VenderUnits)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ExpectedDays)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
                     </td>
                 </tr>
             }
         }
     </table>
 </div>
+

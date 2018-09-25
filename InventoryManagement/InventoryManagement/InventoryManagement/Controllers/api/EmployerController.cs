@@ -791,6 +791,7 @@ namespace InventoryManagement.Controllers.api
             int? Nullablevalue = null;
             SupplierPriceList pro = new SupplierPriceList();
             pro.SupplierPLId = product.Id == Guid.Empty ? Guid.NewGuid() : product.Id;
+            pro.SupplierId = product.SupplierId == Guid.Empty ? Guid.NewGuid() : product.SupplierId;
             pro.Type = product.Type;
             pro.BrandId = Convert.ToInt64(product.Brand) > long.MinValue ? product.Brand : Nullablevalue;
             pro.ProductformId = Convert.ToInt64(product.ProductForm) > long.MinValue ? product.ProductForm : Nullablevalue;
@@ -802,13 +803,6 @@ namespace InventoryManagement.Controllers.api
             // pro.PackingStyle = Convert.ToInt64(product.PackingStyle) > long.MinValue ? Convert.ToInt32(product.PackingStyle) : Nullablevalue;
             pro.GradeId = Convert.ToInt64(product.Grade);
             pro.Socked = Convert.ToInt64(product.Soaked) > long.MinValue ? product.Soaked : Nullablevalue;
-            //product.Soaked != ProductSoakedType.None ? (int)product.Soaked : Nullablevalue;
-            // pro.Ply = Convert.ToInt64(product.Soaked) > long.MinValue ? product.Soaked : Nullablevalue;//product.Ply > int.MinValue ? product.Ply : Nullablevalue;
-            // pro.PrintType = Convert.ToInt64(product.Soaked) > long.MinValue ? product.Soaked : Nullablevalue; //product.Print != ProductPrint.None ? (int)product.Print : Nullablevalue;
-            //pro.TopType = product.Top != ProductTop.None ? (int)product.Top : Nullablevalue;
-            // pro.Dimensions = product.Dimensions;
-            //  pro.ThresholdLimit = !string.IsNullOrWhiteSpace(product.ThresholdLimit) ? Convert.ToInt32(product.ThresholdLimit) : Nullablevalue;
-            // pro.Catergory = Convert.ToInt64(product.Category) > long.MinValue ? product.Category : Nullablevalue;
             pro.SupplierUnits = Convert.ToInt64(product.VenderUnits) > long.MinValue ? product.VenderUnits : Nullablevalue;
             pro.ExpertedDays = product.ExpectedDays;
             pro.IsActive = true;
