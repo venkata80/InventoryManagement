@@ -269,6 +269,7 @@
           <Property Name="SupplierId" Type="uniqueidentifier" />
           <Property Name="ProductId" Type="uniqueidentifier" />
           <Property Name="Type" Type="bigint" />
+          <Property Name="CategoryType" Type="bigint" />
           <Property Name="BrandId" Type="bigint" />
           <Property Name="FreezingId" Type="bigint" />
           <Property Name="Socked" Type="bigint" />
@@ -3201,6 +3202,7 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <Property Name="SupplierId" Type="Guid" />
           <Property Name="ProductId" Type="Guid" />
           <Property Name="Type" Type="Int64" />
+          <Property Name="CategoryType" Type="Int64" />
           <Property Name="BrandId" Type="Int64" />
           <Property Name="FreezingId" Type="Int64" />
           <Property Name="Socked" Type="Int64" />
@@ -3774,6 +3776,7 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
                 <ScalarProperty Name="Socked" ColumnName="Socked" />
                 <ScalarProperty Name="FreezingId" ColumnName="FreezingId" />
                 <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="CategoryType" ColumnName="CategoryType" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />

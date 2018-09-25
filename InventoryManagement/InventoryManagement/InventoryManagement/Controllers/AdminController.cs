@@ -798,6 +798,13 @@ namespace InventoryManagement.Controllers
                         ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
                     }
                 }
+                model.SupplierList = GetSupplierList();
+                model.ProductList = new List<ProductDTO>();
+                //if (model.Type == 1)
+                //    return PartialView("Supplier/_CreateCoreSupplierPricelist", model);
+                //else
+                //    return PartialView("Supplier/_CreateNonCoreSupplierPricelist", model);
+
                 return View("Supplier/CreateSupplierPriceList", model);
             }
             return RedirectToAction("UserLogin", "Account");

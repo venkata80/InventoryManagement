@@ -10,6 +10,7 @@ namespace InventoryManagement.Models
     {
         public Guid SupplierId { get; set; }
         public Guid ProductId { get; set; }
+        public long? Type { get; set; }
 
         public List<SuppliersDTO> SupplierList { get; set; }
         public List<ProductDTO> ProductList { get; set; }
@@ -20,8 +21,8 @@ namespace InventoryManagement.Models
         public long? Specie { get; set; }
         public long? PackingType { get; set; }
         public long? ProductForm { get; set; }
-        public long? Type { get; set; }
         public long? Grade { get; set; }
+        public long? ProductType { get; set; }
         public long? Ply { get; set; }
         public long? Category { get; set; }
         public long? CoreType { get; set; }

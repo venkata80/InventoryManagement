@@ -791,7 +791,8 @@ namespace InventoryManagement.Controllers.api
             int? Nullablevalue = null;
             SupplierPriceList pro = new SupplierPriceList();
             pro.SupplierPLId = product.Id == Guid.Empty ? Guid.NewGuid() : product.Id;
-            pro.SupplierId = product.SupplierId == Guid.Empty ? Guid.NewGuid() : product.SupplierId;
+            pro.ProductId = product.ProductId == Guid.Empty ? Guid.NewGuid() : product.ProductId;
+           pro.SupplierId = product.SupplierId == Guid.Empty ? Guid.NewGuid() : product.SupplierId;
             pro.Type = product.Type;
             pro.BrandId = Convert.ToInt64(product.Brand) > long.MinValue ? product.Brand : Nullablevalue;
             pro.ProductformId = Convert.ToInt64(product.ProductForm) > long.MinValue ? product.ProductForm : Nullablevalue;
@@ -800,11 +801,12 @@ namespace InventoryManagement.Controllers.api
             pro.FreezingId = Convert.ToInt64(product.FreezingType) > long.MinValue ? product.FreezingType : Nullablevalue;
             pro.PackingId = Convert.ToInt64(product.PackingType) > long.MinValue ? product.PackingType : Nullablevalue;
             pro.PackingUnits = Convert.ToInt64(product.PackingCount) > long.MinValue ? Convert.ToInt32(product.PackingCount) : Nullablevalue;
-            // pro.PackingStyle = Convert.ToInt64(product.PackingStyle) > long.MinValue ? Convert.ToInt32(product.PackingStyle) : Nullablevalue;
+            pro.ProductTypeId = Convert.ToInt64(product.ProductType) > long.MinValue ? Convert.ToInt32(product.ProductType) : Nullablevalue;
             pro.GradeId = Convert.ToInt64(product.Grade);
             pro.Socked = Convert.ToInt64(product.Soaked) > long.MinValue ? product.Soaked : Nullablevalue;
             pro.SupplierUnits = Convert.ToInt64(product.VenderUnits) > long.MinValue ? product.VenderUnits : Nullablevalue;
             pro.ExpertedDays = product.ExpectedDays;
+            pro.CategoryType= Convert.ToInt64(product.Category) > long.MinValue ? Convert.ToInt32(product.Category) : Nullablevalue; 
             pro.IsActive = true;
             if (product.Id == Guid.Empty)
             {
