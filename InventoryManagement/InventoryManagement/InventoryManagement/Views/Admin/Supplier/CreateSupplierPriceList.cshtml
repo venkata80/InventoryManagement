@@ -30,129 +30,94 @@
         return new SelectList(
             new List<SelectListItem>
             {
-                new SelectListItem {Value="1", Text="Soaked" },
-                new SelectListItem {Value="2", Text="NonSoaked" }
+        new SelectListItem {Value="1", Text="Soaked" },
+        new SelectListItem {Value="2", Text="NonSoaked" }
             }, "Value", "Text");
     }
 }
 <h2>Supplier Price List</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("SaveSupplierPriceList", "Admin", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
-
-    <div class="panel panel-default">
+    <div class="panel panel-default ">
         <div class="panel-heading">
-            <b> Add Employer</b> <span class="label label-info ">    <span class="glyphicon glyphicon-th-list"></span>    @Html.ActionLink("View Employers", "Employers", "Admin")</span>
+            <b> Add Product</b> <span class="label label-info ">    <span class="glyphicon glyphicon-th-list"></span>  @Html.ActionLink("View Employers", "Employers", "Admin")</span>
         </div>
-        <hr />
         <div class="panel-body">
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })          
-           
-            <div class="form-group">
-                @Html.Label("Supplier Name", htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-7">
-                    @Html.DropDownListFor(model => model.SupplierId, new SelectList(Model.SupplierList, "Id", "SupplierBussinessName", "Select Supplier"), new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.SupplierId, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-7">
-                    @Html.DropDownListFor(model => model.Brand, GetMasterData(MasterDataType.Brand), "Select Brand", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Brand,"", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.FreezingType, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-7">
-                    @Html.DropDownListFor(model => model.FreezingType, GetMasterData(MasterDataType.FreezingType), "Select Freezing Type", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.FreezingType, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Soaked, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.DropDownListFor(model => model.Soaked, GetMasterData(MasterDataType.Soaked), "Select Soaked", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Soaked, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Variety, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-7">
-                    @Html.DropDownListFor(model => model.Variety, GetMasterData(MasterDataType.Variety), "Select Variety", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Variety, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Specie, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-7">
-                    @Html.DropDownListFor(model => model.Specie, GetMasterData(MasterDataType.Specie), "Select Specie", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Specie, "", new { @class = "text-danger" })
-                </div>
-            </div>          
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.PackingType, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-7">
-                    <span>
-                        @Html.EditorFor(model => model.PackingCount, new { @class = "form-control" })
-                        @Html.DropDownListFor(model => model.PackingType, GetMasterData(MasterDataType.PackingType), "Select Packing Type", new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.PackingType, "", new { @class = "text-danger" })
-                    </span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.ProductForm, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-7">
-                    @Html.DropDownListFor(model => model.ProductForm, GetMasterData(MasterDataType.ProductForm), "Select Product Form",  new { @class = "form-control" } )
-                    @Html.ValidationMessageFor(model => model.ProductForm, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
                 @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-7">
-                    @Html.EditorFor(model => model.Type, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                <div class="col-md-9">
+                    @if (Model.Id == Guid.Empty)
+                    {
+                        @Html.RadioButtonFor(model => model.Type, 1, new { @id = "rdCoreItem", @onchange = "OnTypeClicked(1)" })
+                        @Html.LabelFor(model => model.Type, "Core Item", new { @for = "rdCoreItem" })
+
+                        @Html.RadioButtonFor(model => model.Type, 2, new { @id = "rdNonCoreItem", @onchange = "OnTypeClicked(2)" })
+                        @Html.LabelFor(model => model.Type, "Non Core Item", new { @for = "rdNonCoreItem" })
+
+                        @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                    }
+                    else
+                    {
+                        @Html.LabelFor(model => model.Type, Model.Type == 1 ? "Core Item" : "Non Core Item")
+                        @Html.HiddenFor(model => model.Type, Model.Type)
+                    }
                 </div>
             </div>
 
-            <div class="form-group">
-                @Html.Label("Grade", htmlAttributes: new { @class = "control-label  col-md-3" })
-                <div class="col-md-7">
-                    @Html.DropDownListFor(model => model.Grade, GetMasterData(MasterDataType.Grades), "Select Grades", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Grade, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.VenderUnits, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-7">
-                    @Html.EditorFor(model => model.VenderUnits, new { @class = "form-control" } )
-                    @Html.ValidationMessageFor(model => model.VenderUnits, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.ExpectedDays, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-7">
-                    @Html.EditorFor(model => model.ExpectedDays, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.ExpectedDays, "", new { @class = "text-danger" })
-                </div>
+            <div id="dvpsupplierpricelisttypecontent">
+                @if (Convert.ToInt64(Model.Type) > 0)
+                {
+                    if (Model.Type.Value == 1)
+                    {
+                        @Html.Partial("Product/_CreateCoreSupplierPricelist", Model);
+                    }
+                    else
+                    {
+                        @Html.Partial("Product/_CreateNonCoreSupplierPricelist", Model);
+                    }
+                }
             </div>
 
-            <div class="form-group">               
-            </div>
-            <div class="row">
-                <div class="col-md-offset-2 col-md-7">
-                    @Html.HiddenFor(model => model.Id, Model.Id)
-                    <br />
-                    <input type="submit" value="@(Model.Id != Guid.Empty ? "Save" : "Create")" class="btn btn-default" />
-                    @*<input type="button" value="Cancel" class="btn" onclick="javascript: window.location.href='@Url.Action("ProductsPriceList","Admin")'" />*@
+            <div id="dvcommonsupplierpricelistcontent" class="collapse">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ProductForm, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.ProductForm, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.TextAreaFor(model => model.Brand, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group"></div>
+                <div class="row">
+                    <div class="col-md-offset-2 col-md-10">
+                        @Html.HiddenFor(model => model.Id, Model.Id)
+                        <br />
+                        <input type="submit" value="@(Model.Id != Guid.Empty ? "Save" : "Create")" class="btn btn-default" />
+                        <input type="button" value="Cancel" class="btn" onclick="javascript: window.location.href='@Url.Action("SupplierPriceList","Admin")'" />
+                    </div>
                 </div>
             </div>
-            </div>
-  </div>
+        </div>
+    </div>
+
 }
+@section scripts{
+    <script type="text/javascript">
+        function OnTypeClicked(type) {
+            $('#dvpsupplierpricelisttypecontent').load('@Url.Action("CoreSupplierPriceList", "Admin")', { coreItem: type }, function (response, status, xhr ) {
+                $('#ThresholdLimit, #Description').val('');
+                $('#dvcommonsupplierpricelistcontent').removeClass();
+            });
+        }
+    </script>
+    }
 

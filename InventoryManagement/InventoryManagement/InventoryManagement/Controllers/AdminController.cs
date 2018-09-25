@@ -709,9 +709,9 @@ namespace InventoryManagement.Controllers
                 }
 
                 if (CoreItemFL == 1)
-                    return PartialView("Supplier/_CreateCoreSupplierPricelist", supplierlst);
+                    return PartialView("Supplier/_CoreSupplierPricelist", supplierlst);
                 else
-                    return PartialView("Supplier/_CreateNonCoreSupplierPricelist", supplierlst);
+                    return PartialView("Supplier/_NonCoreSupplierPricelist", supplierlst);
             }
             return RedirectToAction("UserLogin", "Account");
         }
@@ -719,8 +719,10 @@ namespace InventoryManagement.Controllers
         {
             if (Session["CurrentUser"] != null)
             {
-                SupplierPriceListDTO product = new SupplierPriceListDTO();
-                return PartialView(coreItem == 1 ? "Supplier/_CreateCoreSupplierPricelist" : "Supplier/_CreateNonCoreSupplierPricelist", new ProductDTO());
+                SupplierPriceListDTO supplierpl = new SupplierPriceListDTO();
+                supplierpl.SupplierList = GetSupplierList();
+                supplierpl.ProductList = new List<ProductDTO>();
+                return PartialView(coreItem == 1 ? "Supplier/_CreateCoreSupplierPricelist" : "Supplier/_CreateNonCoreSupplierPricelist", supplierpl);
             }
             return RedirectToAction("UserLogin", "Account");
         }
@@ -733,6 +735,7 @@ namespace InventoryManagement.Controllers
                
                 SupplierPriceListDTO supplierl = new SupplierPriceListDTO();
                 supplierl.SupplierList = GetSupplierList();
+                supplierl.ProductList = new List<ProductDTO>();
                 if (id != null && id != Guid.Empty)
                 {
                     using (var client = new HttpClient())
@@ -751,7 +754,7 @@ namespace InventoryManagement.Controllers
                     }
                 }
 
-                return View("Supplier/CreateSupplier", supplierl);
+                return View("Supplier/CreateSupplierPriceList", supplierl);
             }
             return RedirectToAction("UserLogin", "Account");
         }

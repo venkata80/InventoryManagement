@@ -41,10 +41,10 @@
         @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
     </div>
 </div>
-<div class="form-group">
+@*<div class="form-group">
     @Html.LabelFor(model => model.ProductId, htmlAttributes: new { @class = "control-label col-md-3" })
     <div class="col-md-7">
         @Html.DropDownListFor(model => model.ProductId, new SelectList(Model.ProductList, "Id", "SupplierBussinessName", "Select Supplier"), new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.ProductId, "", new { @class = "text-danger" })
     </div>
-</div>
+</div>*@
