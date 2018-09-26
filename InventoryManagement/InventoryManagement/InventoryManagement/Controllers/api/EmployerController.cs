@@ -1093,6 +1093,7 @@ namespace InventoryManagement.Controllers.api
             {
                 Id = c.ID,
                 Type = c.Type,
+               // Name = c.Name,
                 Description = c.Description,
                 ShortCode = c.ShortCode,
                 Brand = c.Brand,
@@ -1104,15 +1105,82 @@ namespace InventoryManagement.Controllers.api
                 Quantity = c.Quantity,
                 PackingStyle = c.PackingStyle,
                 Grade = c.Grade,
-                Soaked = (ProductSoakedType)c.Soaked,
-                Ply = Convert.ToInt32(c.Ply),
-                Print = (ProductPrint)c.PrintType,
-                Top = (ProductTop)c.TopType,
+                Soaked = c.Soaked,
+                Ply = c.Ply,
+                Print = c.PrintType,
+                Top =c.TopType,
                 Dimensions = c.Dimensions,
+                NetWeight=c.NetWeight,
                 ThresholdLimit = Convert.ToInt32(c.ThresholdLimit).ToString(),
                 Category = c.Catergory,
-                Unit = c.Unit
+                Unit = c.Unit,
+                CreatedBy=c.CreatedBy,
+                CreatedOn=c.CreatedDate,
+                ModifiedBy=c.ModifiedBy,
             }).ToList();
+        }
+
+        [HttpGet]
+        [ActionName("GetProductById")]
+        public IHttpActionResult GetProductBy(Guid id)
+        {
+            ProductDTO productt = new ProductDTO();
+            using (InventoryManagementEntities hhh = new InventoryManagementEntities())
+            {
+               // DateTime? nullabledate = null;
+                Product c = hhh.Products ?.Where(s1 => s1.ID == id)?.FirstOrDefault();
+                if (c != null)
+                {
+                    productt.Id = c.ID;
+                productt.Type = c.Type;
+               // Name = c.Name;
+                productt.Description = c.Description;
+                productt.ShortCode = c.ShortCode;
+                productt.Brand = c.Brand;
+                productt.ProductForm = c.ProductForm;
+                productt.Variety = c.Variety;
+                productt.Specie = c.Specie;
+                productt.FreezingType = c.FreezingType;
+                productt.PackingType = c.PackingType;
+                productt.Quantity = c.Quantity;
+                productt.PackingStyle = c.PackingStyle;
+                productt.Grade = c.Grade;
+                productt.Soaked = c.Soaked;
+                productt.Ply = c.Ply;
+                productt.Print = c.PrintType;
+                productt.Top = c.TopType;
+                productt.Dimensions = c.Dimensions;
+                productt.ThresholdLimit = Convert.ToInt32(c.ThresholdLimit).ToString();
+                productt.Category = c.Catergory;
+                    productt.Unit = c.Unit;
+
+                    //employer.Id = s.ID;
+                    //employer.FirstName = s.User.FirstName;
+                    //employer.LastName = s.User.LastName;
+                    //employer.MiddleName = s.User.MiddleName;
+                    //employer.Designation = s.Designation;
+                    //employer.Dateofbirth = s.DOB;
+                    //employer.gender = s.Gender;
+                    //employer.ResPhone = s.ResPhone;
+                    //employer.CellPhone = s.CellPhone;
+                    //employer.Email = s.User.Email;
+                    //employer.Address = new AddressDTO()
+                    //{
+                    //    Id = s.Address.ID,
+                    //    Address = s.Address.Address1,
+                    //    City = s.Address.City,
+                    //    State = s.Address.State,
+                    //    Zipcode = s.Address.Zipcode
+                    //};
+                    //employer.JoinDate = s.JoinDate;
+                    //employer.Relieved = s.RelievedDate == DateTime.MinValue ? nullabledate : s.RelievedDate;
+                    //employer.Isactive = Convert.ToBoolean(s.User.ActiveFL);
+
+                }
+            }
+            //if (Supplier.Id == 0)
+            //    return NotFound();
+            return Ok(productt);
         }
 
         [HttpPost]
@@ -1158,15 +1226,17 @@ namespace InventoryManagement.Controllers.api
             pro.Quantity = Convert.ToInt64(product.Quantity) > long.MinValue ? Convert.ToInt32(product.Quantity) : Nullablevalue;
             pro.PackingStyle = Convert.ToInt64(product.PackingStyle) > long.MinValue ? Convert.ToInt32(product.PackingStyle) : Nullablevalue;
             pro.Grade = Convert.ToInt64(product.Grade);
-            pro.Soaked = product.Soaked != ProductSoakedType.None ? (int)product.Soaked : Nullablevalue;
-            pro.Ply = product.Ply > int.MinValue ? product.Ply : Nullablevalue;
-            pro.PrintType = product.Print != ProductPrint.None ? (int)product.Print : Nullablevalue;
-            pro.TopType = product.Top != ProductTop.None ? (int)product.Top : Nullablevalue;
+            pro.Soaked = Convert.ToInt64(product.Soaked) > long.MinValue ? Convert.ToInt32(product.Soaked) : Nullablevalue;
+            pro.Ply = Convert.ToInt64(product.Ply) > long.MinValue ? Convert.ToInt32(product.Ply) : Nullablevalue;
+            pro.PrintType = Convert.ToInt64(product.Print) > long.MinValue ? Convert.ToInt32(product.Print) : Nullablevalue;
+            pro.TopType = Convert.ToInt64(product.Top) > long.MinValue ? Convert.ToInt32(product.Top) : Nullablevalue;
             pro.Dimensions = product.Dimensions;
+            pro.NetWeight = product.NetWeight;
             pro.ThresholdLimit = !string.IsNullOrWhiteSpace(product.ThresholdLimit) ? Convert.ToInt32(product.ThresholdLimit) : Nullablevalue;
             pro.Catergory = Convert.ToInt64(product.Category) > long.MinValue ? product.Category : Nullablevalue;
             pro.Unit = Convert.ToInt64(product.Unit) > long.MinValue ? product.Unit : Nullablevalue;
             pro.Isactive = true;
+            pro.CreatedBy = product.CreatedBy;
             if (product.Id == Guid.Empty)
             {
                 pro.CreatedBy = product.CreatedBy;

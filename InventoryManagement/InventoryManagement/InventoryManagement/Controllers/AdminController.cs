@@ -883,7 +883,9 @@ namespace InventoryManagement.Controllers
             if (Session["CurrentUser"] != null)
             {
                 ProductDTO product = new ProductDTO();
-                return PartialView(coreItem == 1 ? "Product/_CreateCoreProduct" : "Product/_CreateNonCoreProduct", new ProductDTO());
+                if (MasterDataDetails == null)
+                    MasterDataDetails = ReadMasterData(MasterDataType.None);
+                return PartialView(coreItem == 1 ? "Product/_CreateCoreProduct" : "Product/_CreateNonCoreProduct", product);
             }
             return RedirectToAction("UserLogin", "Account");
         }
@@ -917,11 +919,37 @@ namespace InventoryManagement.Controllers
             return RedirectToAction("UserLogin", "Account");
         }
 
-        public ActionResult EditProduct(long id)
+        public ActionResult EditProduct(Guid? id)
         {
             if (Session["CurrentUser"] != null)
             {
-                return View("Product/CreateProduct");
+                ProductDTO emplist = null;
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(value);
+                    var responseTask = client.GetAsync("Employer/GetProduct/" + id);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<ProductDTO>();
+                        readTask.Wait();
+
+                        emplist =(ProductDTO)readTask.Result;
+                    }
+                    else //web api sent error response 
+                    {
+                        //log response status here..
+
+                        //  emplist =  IList.Empty<BaseEmployerDTO>();
+
+
+                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                    }
+                    if (MasterDataDetails == null)
+                        MasterDataDetails = ReadMasterData(MasterDataType.None);
+                    return View("Product/CreateProduct", emplist);
+                }
             }
             return RedirectToAction("UserLogin", "Account");
         }
@@ -935,7 +963,7 @@ namespace InventoryManagement.Controllers
             return RedirectToAction("UserLogin", "Account");
         }
 
-        public ActionResult DeleteProduct(long id)
+        public ActionResult DeleteProduct(Guid? id)
         {
             if (Session["CurrentUser"] != null)
             {

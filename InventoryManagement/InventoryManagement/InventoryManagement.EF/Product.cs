@@ -28,32 +28,23 @@ namespace InventoryManagement.EF
         public Nullable<int> Quantity { get; set; }
         public Nullable<long> PackingStyle { get; set; }
         public Nullable<long> Grade { get; set; }
+        public Nullable<int> Soaked { get; set; }
         public Nullable<int> Ply { get; set; }
         public Nullable<int> PrintType { get; set; }
         public Nullable<int> TopType { get; set; }
         public string Dimensions { get; set; }
         public Nullable<int> ThresholdLimit { get; set; }
+        public Nullable<long> NetWeight { get; set; }
+        public Nullable<long> Unit { get; set; }
         public Nullable<bool> Isactive { get; set; }
         public System.Guid CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public System.Guid ModifiedBy { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
-        public Nullable<int> Soaked { get; set; }
         public Nullable<long> Catergory { get; set; }
-        public Nullable<long> Unit { get; set; }
     
         public virtual aspnet_Users aspnet_Users { get; set; }
         public virtual aspnet_Users aspnet_Users1 { get; set; }
-        public virtual MasterData MasterData { get; set; }
-        public virtual MasterData MasterData1 { get; set; }
-        public virtual MasterData MasterData2 { get; set; }
-        public virtual MasterData MasterData3 { get; set; }
-        public virtual MasterData MasterData4 { get; set; }
-        public virtual MasterData MasterData5 { get; set; }
-        public virtual MasterData MasterData6 { get; set; }
-        public virtual MasterData MasterData7 { get; set; }
-        public virtual MasterData MasterData8 { get; set; }
-        public virtual MasterData MasterData11 { get; set; }
         public virtual Unit Unit1 { get; set; }
     }
 }

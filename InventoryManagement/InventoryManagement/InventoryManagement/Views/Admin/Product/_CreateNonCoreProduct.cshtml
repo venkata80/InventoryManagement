@@ -1,1 +1,58 @@
-﻿
+﻿@using InventoryManagement.Models
+@using InventoryManagement.Enums
+
+@model ProductDTO
+@functions{
+
+    public SelectList GetMasterData(MasterDataType type)
+    {
+        if (Session["MasterData"] != null)
+        {
+            List<MasterDataDTO> masterData = (List<MasterDataDTO>)Session["MasterData"];
+            if (masterData != null && masterData.Any())
+            {
+                if (type != MasterDataType.PackingType)
+                {
+                    return new SelectList(masterData.Where(c => c.Type == type).Select(c => new SelectListItem
+                    {
+                        Text = c.MasterName,
+                        Value = c.Id.ToString()
+                    }), "Value", "Text");
+                }
+                else
+                {
+                    return new SelectList(masterData.Where(c => c.Type == type).Select(c => new SelectListItem
+                    {
+                        Text = string.Concat(c.MasterName, " ", c.Unitname),
+                        Value = c.Id.ToString()
+                    }), "Value", "Text");
+                }
+            }
+        }
+        return new SelectList(new List<MasterDataDTO>());
+    }
+
+}
+
+<div class="form-group">
+    @Html.Label("Category:", htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-7">
+        @Html.DropDownListFor(model => model.Category, GetMasterData(MasterDataType.PoductCategory), "Select Category", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.Label("Product Name:", htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-7">
+        @Html.EditorFor(model => model.Name, "", "Select Specie", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.Label("Units:", htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-7">
+        @Html.EditorFor(model => model.Quantity, "", new { @class = "form-control" })
+        @Html.DropDownListFor(model => model.PackingStyle, GetMasterData(MasterDataType.PackingType), "Select Units", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.PackingStyle, "", new { @class = "text-danger" })
+    </div>
+</div>

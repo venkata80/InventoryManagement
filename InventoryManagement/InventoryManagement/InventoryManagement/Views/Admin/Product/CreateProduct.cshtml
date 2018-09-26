@@ -43,16 +43,16 @@
                 {
                     if (Model.Type.Value == 1)
                     {
-                        @Html.Partial("Product/_CoreProducts", Model);
+                        @Html.Partial("Product/_CreateCoreProduct", Model);
                     }
                     else
                     {
-                        @Html.Partial("Product/_NonCoreProducts", Model);
+                        @Html.Partial("Product/_CreateNonCoreProduct", Model);
                     }
                 }
             </div>
 
-            <div id="dvcommonproductcontent" class="collapse">
+            <div id="dvcommonproductcontent">
                 <div class="form-group">
                     @Html.LabelFor(model => model.ThresholdLimit, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-9">

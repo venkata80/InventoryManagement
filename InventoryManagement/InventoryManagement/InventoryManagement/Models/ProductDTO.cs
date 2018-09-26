@@ -65,9 +65,9 @@ namespace InventoryManagement.Models
                         name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.PackingType && c.Id == PackingType)?.MasterName);
                         name.Append("-");
                     }
-                    if (Soaked != ProductSoakedType.None)
+                    if (Convert.ToInt32(Soaked) > int.MinValue)
                     {
-                        name.Append(Soaked == ProductSoakedType.Soaked ? "S" : "NS");
+                        name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.PackingType && c.Id == Soaked)?.MasterName);
                         name.Append("-");
                     }
                     if (Convert.ToInt32(Grade) > int.MinValue)
@@ -87,13 +87,13 @@ namespace InventoryManagement.Models
         }
         public string ShortCode { get; set; }
         public string Dimensions { get; set; }
-        public string NetWeight { get; set; }
+        public long? NetWeight { get; set; }
         public string ThresholdLimit { get; set; }
         public string Description { get; set; }
-        public ProductCoreType CoreType { get; set; }
-        public ProductSoakedType Soaked { get; set; }
-        public ProductPrint Print { get; set; }
-        public ProductTop Top { get; set; }
+        public long? CoreType { get; set; }
+        public long? Soaked { get; set; }
+        public long? Print { get; set; }
+        public long? Top { get; set; }
         public FileUploadDTO UploadImage { get; set; }
 
     }
