@@ -1093,7 +1093,7 @@ namespace InventoryManagement.Controllers.api
             {
                 Id = c.ID,
                 Type = c.Type,
-               // Name = c.Name,
+                //Name = c.Name,
                 Description = c.Description,
                 ShortCode = c.ShortCode,
                 Brand = c.Brand,
@@ -1117,72 +1117,10 @@ namespace InventoryManagement.Controllers.api
                 CreatedBy=c.CreatedBy,
                 CreatedOn=c.CreatedDate,
                 ModifiedBy=c.ModifiedBy,
+                Isactive=c.Isactive.Value,
             }).ToList();
         }
-
-        [HttpGet]
-        [ActionName("GetProductById")]
-        public IHttpActionResult GetProductBy(Guid id)
-        {
-            ProductDTO productt = new ProductDTO();
-            using (InventoryManagementEntities hhh = new InventoryManagementEntities())
-            {
-               // DateTime? nullabledate = null;
-                Product c = hhh.Products ?.Where(s1 => s1.ID == id)?.FirstOrDefault();
-                if (c != null)
-                {
-                    productt.Id = c.ID;
-                productt.Type = c.Type;
-               // Name = c.Name;
-                productt.Description = c.Description;
-                productt.ShortCode = c.ShortCode;
-                productt.Brand = c.Brand;
-                productt.ProductForm = c.ProductForm;
-                productt.Variety = c.Variety;
-                productt.Specie = c.Specie;
-                productt.FreezingType = c.FreezingType;
-                productt.PackingType = c.PackingType;
-                productt.Quantity = c.Quantity;
-                productt.PackingStyle = c.PackingStyle;
-                productt.Grade = c.Grade;
-                productt.Soaked = c.Soaked;
-                productt.Ply = c.Ply;
-                productt.Print = c.PrintType;
-                productt.Top = c.TopType;
-                productt.Dimensions = c.Dimensions;
-                productt.ThresholdLimit = Convert.ToInt32(c.ThresholdLimit).ToString();
-                productt.Category = c.Catergory;
-                    productt.Unit = c.Unit;
-
-                    //employer.Id = s.ID;
-                    //employer.FirstName = s.User.FirstName;
-                    //employer.LastName = s.User.LastName;
-                    //employer.MiddleName = s.User.MiddleName;
-                    //employer.Designation = s.Designation;
-                    //employer.Dateofbirth = s.DOB;
-                    //employer.gender = s.Gender;
-                    //employer.ResPhone = s.ResPhone;
-                    //employer.CellPhone = s.CellPhone;
-                    //employer.Email = s.User.Email;
-                    //employer.Address = new AddressDTO()
-                    //{
-                    //    Id = s.Address.ID,
-                    //    Address = s.Address.Address1,
-                    //    City = s.Address.City,
-                    //    State = s.Address.State,
-                    //    Zipcode = s.Address.Zipcode
-                    //};
-                    //employer.JoinDate = s.JoinDate;
-                    //employer.Relieved = s.RelievedDate == DateTime.MinValue ? nullabledate : s.RelievedDate;
-                    //employer.Isactive = Convert.ToBoolean(s.User.ActiveFL);
-
-                }
-            }
-            //if (Supplier.Id == 0)
-            //    return NotFound();
-            return Ok(productt);
-        }
-
+       
         [HttpPost]
         public IHttpActionResult SaveProduct(ProductDTO product)
         {
@@ -1235,7 +1173,7 @@ namespace InventoryManagement.Controllers.api
             pro.ThresholdLimit = !string.IsNullOrWhiteSpace(product.ThresholdLimit) ? Convert.ToInt32(product.ThresholdLimit) : Nullablevalue;
             pro.Catergory = Convert.ToInt64(product.Category) > long.MinValue ? product.Category : Nullablevalue;
             pro.Unit = Convert.ToInt64(product.Unit) > long.MinValue ? product.Unit : Nullablevalue;
-            pro.Isactive = true;
+            pro.Isactive = product.Isactive;
             pro.CreatedBy = product.CreatedBy;
             if (product.Id == Guid.Empty)
             {
@@ -1248,6 +1186,25 @@ namespace InventoryManagement.Controllers.api
             pro.ModifiedBy = product.ModifiedBy;
 
             return pro;
+        }
+
+        [HttpDelete]
+        [ActionName("InactiveProductData")]
+        public IHttpActionResult InactiveProduct(Guid id)
+        {           
+            using (var ctx = new InventoryManagementEntities())
+            {
+                var user = ctx.Products.FirstOrDefault(c => c.ID == id);
+                if (user != null)
+                {
+                    user.Isactive = false;
+                    ctx.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                    ctx.SaveChanges();
+                }
+
+            }
+
+            return Ok();
         }
 
         #endregion

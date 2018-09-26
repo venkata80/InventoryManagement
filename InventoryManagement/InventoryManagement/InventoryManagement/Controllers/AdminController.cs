@@ -903,7 +903,8 @@ namespace InventoryManagement.Controllers
                         client.BaseAddress = new Uri(value);
                         model.CreatedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
                         model.ModifiedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
-                        var postTask = client.PostAsJsonAsync<ProductDTO>("Employer/SaveProduct", model);
+                        model.Isactive = true;
+                       var postTask = client.PostAsJsonAsync<ProductDTO>("Employer/SaveProduct", model);
                         postTask.Wait();
                         var result = postTask.Result;
 
@@ -936,6 +937,7 @@ namespace InventoryManagement.Controllers
                         readTask.Wait();
 
                         emplist =(ProductDTO)readTask.Result;
+                       
                     }
                     else //web api sent error response 
                     {
@@ -962,12 +964,28 @@ namespace InventoryManagement.Controllers
             }
             return RedirectToAction("UserLogin", "Account");
         }
-
         public ActionResult DeleteProduct(Guid? id)
         {
             if (Session["CurrentUser"] != null)
-            {
-                return View("Product/Products");
+            {              
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(value);
+                    var responseTask = client.DeleteAsync("Employer/InactiveProductData/" + id);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result;
+                       // readTask.Wait();
+                    }
+                    else //web api sent error response 
+                    {                    
+                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                    }
+                    return View("Product/Products");
+                }
+               
             }
             return RedirectToAction("UserLogin", "Account");
         }
