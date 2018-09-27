@@ -768,7 +768,7 @@ namespace InventoryManagement.Controllers.api
             {
                 try
                 {
-                    SupplierPriceList pro = SetProduct(product);
+                    SupplierPriceList pro = SetSupplier(product);
                     productctx.SupplierPriceLists.Add(pro);
 
                     if (product.Id != Guid.Empty)
@@ -786,7 +786,7 @@ namespace InventoryManagement.Controllers.api
             return Ok();
         }
 
-        SupplierPriceList SetProduct(SupplierPriceListDTO product)
+        SupplierPriceList SetSupplier(SupplierPriceListDTO product)
         {
             int? Nullablevalue = null;
             SupplierPriceList pro = new SupplierPriceList();
@@ -1205,6 +1205,88 @@ namespace InventoryManagement.Controllers.api
             }
 
             return Ok();
+        }
+
+        [HttpGet]
+        [ActionName("GetProductTaxesData")]
+        public IHttpActionResult GetProductsTaxes()
+        {
+            IList<ProductTypeTaxesDTO> productDTO = null;
+            
+            using (InventoryManagementEntities hhh = new InventoryManagementEntities())
+            {
+               
+                    var filteredemployers = hhh.ProductTypeTaxes.Where(c => c.Isactive == true);
+                    if (filteredemployers != null && filteredemployers.Any())
+                        productDTO = SetProductData(filteredemployers.AsEnumerable());
+                
+            }
+            return Ok(productDTO);
+        }
+
+        IList<ProductTypeTaxesDTO> SetProductData(IEnumerable<ProductTypeTax> products)
+        {
+            return products.Select(c => new ProductTypeTaxesDTO
+            {
+                ProductTaxeId = c.ProductTypeId,
+                ProductTypeId = c.ProductTypeId,
+                SGST = c.SGST,
+                CGST = c.CGST,
+                IGST = c.IGST,
+                AffectiveFrom = c.AffectiveFrom,
+                AffectiveTo = c.AffectiveTo,                
+                CreatedBy = c.CreatedBy.Value,
+                CreatedOn = c.CreatedOn,
+                ModifiedBy = c.ModifiedBy.Value,
+                Isactive = c.Isactive.Value,
+            }).ToList();
+        }
+        [HttpPost]
+        public IHttpActionResult SaveProductTaxes(ProductTypeTaxesDTO product)
+        {
+            using (var productctx = new InventoryManagementEntities())
+            {
+                try
+                {
+                    ProductTypeTax pro = SetProductTaxes(product);
+                    productctx.ProductTypeTaxes.Add(pro);
+
+                    if (product.Id != Guid.Empty)
+                        productctx.Entry(pro).State = System.Data.Entity.EntityState.Modified;
+                    else
+                        productctx.Entry(pro).State = System.Data.Entity.EntityState.Added;
+
+                    productctx.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+            return Ok();
+        }
+
+        ProductTypeTax SetProductTaxes(ProductTypeTaxesDTO product)
+        {           
+            ProductTypeTax pro = new ProductTypeTax();
+            pro.ProductTypeId = product.ProductTypeId;
+            pro.SGST = product.SGST;
+            pro.CGST = product.CGST;
+            pro.IGST = product.IGST;
+            pro.AffectiveFrom = product.AffectiveFrom;
+            pro.AffectiveTo = product.AffectiveTo;
+            pro.Isactive = product.Isactive;
+            if (product.Id == Guid.Empty)
+            {
+                pro.CreatedBy = product.CreatedBy;
+                pro.CreatedOn = DateTime.UtcNow;
+            }
+            else
+                pro.ModifiedOn = DateTime.UtcNow;
+
+            pro.ModifiedBy = product.ModifiedBy;
+
+            return pro;
         }
 
         #endregion

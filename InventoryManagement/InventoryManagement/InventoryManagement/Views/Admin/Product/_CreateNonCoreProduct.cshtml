@@ -56,3 +56,5 @@
         @Html.ValidationMessageFor(model => model.PackingStyle, "", new { @class = "text-danger" })
     </div>
 </div>
+@Html.HiddenFor(model => model.CreatedBy, Model.CreatedBy)
+@Html.HiddenFor(model => model.CreatedOn, Model.CreatedOn)

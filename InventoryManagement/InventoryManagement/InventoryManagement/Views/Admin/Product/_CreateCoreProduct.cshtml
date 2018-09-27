@@ -147,4 +147,6 @@
         @Html.EditorFor(model => model.NetWeight, new { htmlAttributes = new { @class = "form-control" } })
     </div>
 </div>
+@Html.HiddenFor(model => model.CreatedBy, Model.CreatedBy)
+@Html.HiddenFor(model => model.CreatedOn, Model.CreatedOn)
 

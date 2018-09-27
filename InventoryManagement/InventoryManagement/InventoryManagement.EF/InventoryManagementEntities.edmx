@@ -243,6 +243,23 @@
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="Catergory" Type="bigint" />
         </EntityType>
+        <EntityType Name="ProductTypeTaxes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductTypeId" Type="bigint" />
+          <Property Name="SGST" Type="bigint" />
+          <Property Name="CGST" Type="bigint" />
+          <Property Name="IGST" Type="bigint" />
+          <Property Name="AffectiveFrom" Type="date" />
+          <Property Name="AffectiveTo" Type="date" />
+          <Property Name="Isactive" Type="bit" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="uniqueidentifier" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
         <EntityType Name="Supplier">
           <Key>
             <PropertyRef Name="ID" />
@@ -1219,6 +1236,7 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <EntitySet Name="EmployerUserPermission" EntityType="Self.EmployerUserPermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MasterData" EntityType="Self.MasterData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductTypeTaxes" EntityType="Self.ProductTypeTaxes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SupplierPriceList" EntityType="Self.SupplierPriceList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Units" EntityType="Self.Units" Schema="dbo" store:Type="Tables" />
@@ -2725,6 +2743,7 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
             <End Role="Unit" EntitySet="Units" />
             <End Role="Product" EntitySet="Products" />
           </AssociationSet>
+          <EntitySet Name="ProductTypeTaxes" EntityType="InventoryManagementModel.ProductTypeTax" />
           </EntityContainer>
         <ComplexType Name="aspnet_Membership_GetPassword_Result">
           <Property Type="String" Name="Column1" Nullable="true" MaxLength="128" />
@@ -2883,6 +2902,23 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ProductTypeTax">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductTypeId" Type="Int64" />
+          <Property Name="SGST" Type="Int64" />
+          <Property Name="CGST" Type="Int64" />
+          <Property Name="IGST" Type="Int64" />
+          <Property Name="AffectiveFrom" Type="DateTime" Precision="0" />
+          <Property Name="AffectiveTo" Type="DateTime" Precision="0" />
+          <Property Name="Isactive" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Guid" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Guid" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3444,6 +3480,24 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductTypeTaxes">
+            <EntityTypeMapping TypeName="InventoryManagementModel.ProductTypeTax">
+              <MappingFragment StoreEntitySet="ProductTypeTaxes">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Isactive" ColumnName="Isactive" />
+                <ScalarProperty Name="AffectiveTo" ColumnName="AffectiveTo" />
+                <ScalarProperty Name="AffectiveFrom" ColumnName="AffectiveFrom" />
+                <ScalarProperty Name="IGST" ColumnName="IGST" />
+                <ScalarProperty Name="CGST" ColumnName="CGST" />
+                <ScalarProperty Name="SGST" ColumnName="SGST" />
+                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

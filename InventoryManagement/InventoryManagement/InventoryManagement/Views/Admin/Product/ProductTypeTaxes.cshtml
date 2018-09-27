@@ -1,0 +1,81 @@
+﻿@model IEnumerable<InventoryManagement.Models.ProductTypeTaxesDTO>
+
+@{
+    ViewBag.Title = "ProductTypeTaxes";
+}
+
+<h2>ProductTypeTaxes</h2>
+
+<p>
+    @Html.ActionLink("Create New", "SaveProductTypetaxes", "Admin")
+</p>
+<table style="width:100%">
+    <tr>
+        <td valign="top" width="500px" style=" padding: 10px; margin: 5px">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductTypeId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SGST)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CGST)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IGST)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AffectiveFrom)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AffectiveTo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedOn)
+                    </th>
+                    <th></th>
+                </tr>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProductTypeId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SGST)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CGST)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IGST)
+                            </td>                           
+                            <td>
+                                @(Convert.ToDateTime(item.AffectiveFrom) != DateTime.MinValue ? item.AffectiveFrom.Value.ToString("MM/dd/yyyy") : string.Empty)
+                            </td>
+                            <td>
+                                @(Convert.ToDateTime(item.AffectiveTo) != DateTime.MinValue ? item.AffectiveTo.Value.ToString("MM/dd/yyyy") : string.Empty)
+                            </td>
+                            <td>
+                                @(Convert.ToDateTime(item.CreatedOn) != DateTime.MinValue ? item.CreatedOn.Value.ToString("MM/dd/yyyy") : string.Empty)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </table>
+        </td>
+        <td id="tdmasterdata" valign="top" width="500px" style=" padding: 10px; margin: 5px">
+            @*@Html.Action("SaveProductTypetaxes", "Admin")*@
+        </td>
+    </tr>
+
+</table>

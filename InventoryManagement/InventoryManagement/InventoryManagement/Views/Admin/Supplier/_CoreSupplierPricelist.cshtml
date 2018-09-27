@@ -1,8 +1,5 @@
 ﻿@model IEnumerable<InventoryManagement.Models.SupplierPriceListDTO>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <div class="padding-md clearfix">
     <table class="table table-striped" id="dataTable">
         <tr>
@@ -22,68 +19,67 @@
             <th>Packing Count</th>
             <th>Vender Units</th>
             <th>Expected Days</th>
-            <th></th>
-            <th></th>
+            <th></th>            
         </tr>
         @if (Model != null && Model.Any())
         {
             @foreach (var item in Model)
             {
-                <tr>
+                <tr class="tremployers">
                     <td>
-                        @Html.DisplayFor(modelItem => item.SupplierId)
+                        @item.SupplierId
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ProductId)
+                        @item.ProductId
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Brand)
+                        @item.Brand
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.FreezingType)
+                        @item.FreezingType 
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Variety)
+                        @item.Variety 
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Specie)
+                        @item.Specie 
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PackingType)
+                        @item.PackingType 
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ProductForm)
+                        @item.ProductForm 
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Type)
+                        @item.Type 
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Grade)
+                        @item.Grade 
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Ply)
+                        @item.Ply 
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Category)
+                        @item.Category 
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CoreType)
+                        @item.CoreType 
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Soaked)
+                        @item.Soaked 
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PackingCount)
+                        @item.PackingCount 
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.VenderUnits)
+                        @item.VenderUnits 
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ExpectedDays)
+                        @item.ExpectedDays 
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
                     </td>
                 </tr>
             }

@@ -15,24 +15,24 @@
         {
             @foreach (var item in Model)
             {
-                <tr>
-                   
+                <tr class="tremployers">
+
                     <td>
-                        @Html.DisplayFor(modelItem => item.SupplierId)
+                        @item.SupplierId
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ProductId)
+                        @item.ProductId
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Category)
-                    </td>                    
-                    <td>
-                        @Html.DisplayFor(modelItem => item.VenderUnits)
+                        @item.Category
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ExpectedDays)
+                        @item.VenderUnits
                     </td>
-                  
+                    <td>
+                        @item.ExpectedDays
+                    </td>
+
                     <td>
                         @Html.ActionLink("Edit", "EditSupplierPricelist", new { id = item.Id }) @Html.Raw(" | ")
                         @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');" })

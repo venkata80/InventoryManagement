@@ -1,0 +1,133 @@
+﻿@using InventoryManagement.Models
+@using InventoryManagement.Enums
+
+@model ProductTypeTaxesDTO
+
+
+<h2>CreateProductTypeTaxes</h2>
+
+
+@functions{
+
+    public SelectList GetMasterData(MasterDataType type)
+    {
+        if (Session["MasterData"] != null)
+        {
+            List<MasterDataDTO> masterData = (List<MasterDataDTO>)Session["MasterData"];
+            if (masterData != null && masterData.Any())
+            {
+                if (type != MasterDataType.PackingType)
+                {
+                    return new SelectList(masterData.Where(c => c.Type == type).Select(c => new SelectListItem
+                    {
+                        Text = c.MasterName,
+                        Value = c.Id.ToString()
+                    }), "Value", "Text");
+                }
+                else
+                {
+                    return new SelectList(masterData.Where(c => c.Type == type).Select(c => new SelectListItem
+                    {
+                        Text = string.Concat(c.MasterName, " ", c.Unitname),
+                        Value = c.Id.ToString()
+                    }), "Value", "Text");
+                }
+            }
+        }
+        return new SelectList(new List<MasterDataDTO>());
+    }
+}
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>ProductTypeTaxesDTO</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })       
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ProductTypeId, GetMasterData(MasterDataType.ProductType), "Select Packing Type", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ProductTypeId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SGST, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SGST, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SGST, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CGST, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CGST, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CGST, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IGST, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.IGST, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IGST, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AffectiveFrom, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.AffectiveFrom, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.TextBox("AffectiveFrom", Convert.ToDateTime(Model.AffectiveFrom) != DateTime.MinValue ? Model.AffectiveFrom.Value.ToString("MM/dd/yyyy") : string.Empty, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AffectiveFrom, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AffectiveTo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.AffectiveTo, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.TextBox("AffectiveTo", Convert.ToDateTime(Model.AffectiveTo) != DateTime.MinValue ? Model.AffectiveTo.Value.ToString("MM/dd/yyyy") : string.Empty, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AffectiveTo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Isactive, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Isactive)
+                    @Html.ValidationMessageFor(model => model.Isactive, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#AffectiveFrom, #AffectiveTo').datetimepicker({
+                timepicker: false,
+                datepicker: true,
+                lang: 'en',
+                format: 'm/d/Y',
+            });
+        });
+    </script>
+}

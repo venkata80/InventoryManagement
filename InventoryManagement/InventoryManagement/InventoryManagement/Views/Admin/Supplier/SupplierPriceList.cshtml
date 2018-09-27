@@ -1,9 +1,9 @@
-﻿    
+﻿
 @{
-    ViewBag.Title = "SupplierPriceList";   
+    ViewBag.Title = "Supplier Price Lists";
 }
 
-<h2>Supplier Price List</h2>
+<h2>Supplier Price Lists</h2>
 
 <div class="padding-md">
     <div class="main-header clearfix">
@@ -18,27 +18,16 @@
         </div>
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-            <li class="lisupplierpricelist">
-                @Ajax.ActionLink("Core Items", "GetSupplierPriceList", "Admin", new { CoreItemFL = 1 }, new AjaxOptions { UpdateTargetId = "dvsupplierpricelistcontent", OnSuccess = "OnSuccessetSupplierPriceList" }, new { @id = "anchrcoreitemSupplierPriceList", @onclick = "OnBeginGetSupplierPriceList(this)" })
+            <li class="liproduct">
+                @Ajax.ActionLink("Core Items", "GetSupplierPriceList", "Admin", new { CoreItemFL = 1 }, new AjaxOptions { UpdateTargetId = "dvproductcontent", OnSuccess = "OnSuccessetSupplierPriceList" }, new { @id = "anchrcoreitemproduct", @onclick = "OnBeginGetSupplierPriceList(this)" })
             </li>
-            <li class="lisupplierpricelist">
-                @Ajax.ActionLink("Non Core Items", "GetSupplierPriceList", "Admin", new { CoreItemFL = 2 }, new AjaxOptions { UpdateTargetId = "dvsupplierpricelistcontent", OnSuccess = "OnSuccessetSupplierPriceList" }, new { @id = "anchrnoncoreitemSupplierPriceList", @onclick = "OnBeginGetSupplierPriceList(this)" })
+            <li class="liproduct">
+                @Ajax.ActionLink("Non Core Items", "GetSupplierPriceList", "Admin", new { CoreItemFL = 2 }, new AjaxOptions { UpdateTargetId = "dvproductcontent", OnSuccess = "OnSuccessetSupplierPriceList" }, new { @id = "anchrnoncoreitemproduct", @onclick = "OnBeginGetSupplierPriceList(this)" })
             </li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content in" style="padding-top: 20px">
-            <div role="tabpanel" class="tab-pane active" id="dvsupplierpricelistcontent">
-                @*@if (Convert.ToInt64(Model.Type) > 0)
-                {
-                    if (Model.Type.Value == 1)
-                    {
-                        @Html.Partial("Supplier/_CoreSupplierPricelist", Model);
-                    }
-                    else
-                    {
-                        @Html.Partial("Supplier/_NonCoreSupplierPricelist", Model);
-                    }
-                }*@
+            <div role="tabpanel" class="tab-pane active" id="dvproductcontent">             
             </div>
         </div>
     </div>
@@ -46,19 +35,19 @@
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#anchrcoreitemSupplierPriceList').trigger('click');
+            $('#anchrcoreitemproduct').trigger('click');
         });
         function OnBeginGetSupplierPriceList(ele) {
-            $('.lisupplierpricelist').removeClass('active');
+            $('.liproduct').removeClass('active');
             $(ele).parent().addClass('active');
         }
 
         function OnSuccessetSupplierPriceList(result) {
-            var trproducts1 = $('.trproducts1');
-            if (trproducts1 != null && trproducts1 != undefined && trproducts1.length > 0)
-                $('#spnSupplierPricecount').text(trproducts1.length + " Suppliers(s)");
+            var trproducts = $('.trproducts');
+            if (trproducts != null && trproducts != undefined && trproducts.length > 0)
+                $('#spnSupplierPricecount').text(trproducts.length + " Suppliers(s)");
             else
                 $('#spnSupplierPricecount').text('');
         }
     </script>
-    }
+}

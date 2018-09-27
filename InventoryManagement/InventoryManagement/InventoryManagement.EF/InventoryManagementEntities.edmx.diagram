@@ -67,6 +67,7 @@
         <AssociationConnector Association="InventoryManagementModel.FK_Product_aspnet_Users" />
         <AssociationConnector Association="InventoryManagementModel.FK_Product_aspnet_Users1" />
         <AssociationConnector Association="InventoryManagementModel.FK_Product_Units" />
+        <EntityTypeShape EntityType="InventoryManagementModel.ProductTypeTax" Width="1.5" PointX="3.375" PointY="10.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -990,6 +990,73 @@ namespace InventoryManagement.Controllers
             return RedirectToAction("UserLogin", "Account");
         }
 
+
+        public ActionResult ProductTypeTaxes()
+        {
+            if (Session["CurrentUser"] != null)
+            {
+              // List<ProductTypeTaxesDTO> producttaxes = new List<ProductTypeTaxesDTO>();
+                IList<ProductTypeTaxesDTO> productlst = null;
+                if (Session["MasterData"] == null)
+                {
+                    Session["MasterData"] = ReadMasterData(MasterDataType.None);
+                }
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(value);
+                    var responseTask = client.GetAsync("Employer/GetProductTaxesData");
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<IList<ProductTypeTaxesDTO>>();
+                        readTask.Wait();
+
+                        productlst = readTask.Result;
+                    }
+                }
+                return View("Product/ProductTypeTaxes", productlst);
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+
+        public ActionResult SaveProductTypetaxes()
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                ProductTypeTaxesDTO product = new ProductTypeTaxesDTO();
+                return View("Product/CreateProductTypeTaxes", product);
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+        [HttpPost]
+        public ActionResult SaveProductTypetaxes(ProductTypeTaxesDTO model)
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(value);
+                        model.CreatedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
+                        model.ModifiedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
+                        model.Isactive = true;
+                        var postTask = client.PostAsJsonAsync<ProductTypeTaxesDTO>("Employer/SaveProductTaxes", model);
+                        postTask.Wait();
+                        var result = postTask.Result;
+
+                        if (result.IsSuccessStatusCode)
+                        {
+                            return RedirectToAction("ProductTypeTaxes");
+                        }
+                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                    }
+                }
+                return View("Product/ProductTypeTaxes", model);
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
         #endregion
     }
 }
