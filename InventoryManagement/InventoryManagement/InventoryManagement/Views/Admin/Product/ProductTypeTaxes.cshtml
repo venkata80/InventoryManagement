@@ -64,8 +64,9 @@
                                 @(Convert.ToDateTime(item.CreatedOn) != DateTime.MinValue ? item.CreatedOn.Value.ToString("MM/dd/yyyy") : string.Empty)
                             </td>
                             <td>
-                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                @Html.ActionLink("Edit", "EditProductTypetaxes", new { id = item.ProductTaxeId }) @Html.Raw(" | ")
+                                @Html.ActionLink("Delete", "DeleteProductTypetaxes", new { id = item.ProductTaxeId }, new { onclick = "return confirm('Are sure wants to delete?');" })
+
                             </td>
                         </tr>
                     }

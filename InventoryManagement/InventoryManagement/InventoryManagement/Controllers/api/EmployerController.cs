@@ -1128,13 +1128,22 @@ namespace InventoryManagement.Controllers.api
             {
                 try
                 {
-                    Product pro = SetProduct(product);
-                    productctx.Products.Add(pro);
+                    Product pro1 = new Product();
+
+                    if (product.Id == null)
+                    {
+                        productctx.Products.Add(SetProduct(pro1, product));
+                    }
+                    else
+                    {
+                        pro1 = productctx.Products.Where(c => c.ID == product.Id).FirstOrDefault();
+                        SetProduct(pro1, product);
+                    }
 
                     if (product.Id != Guid.Empty)
-                        productctx.Entry(pro).State = System.Data.Entity.EntityState.Modified;
+                        productctx.Entry(pro1).State = System.Data.Entity.EntityState.Modified;
                     else
-                        productctx.Entry(pro).State = System.Data.Entity.EntityState.Added;
+                        productctx.Entry(pro1).State = System.Data.Entity.EntityState.Added;
 
                     productctx.SaveChanges();
                 }
@@ -1146,10 +1155,11 @@ namespace InventoryManagement.Controllers.api
             return Ok();
         }
 
-        Product SetProduct(ProductDTO product)
+        Product SetProduct(Product pro, ProductDTO product)
         {
             int? Nullablevalue = null;
-            Product pro = new Product();
+            if(product.Id ==Guid.Empty)
+             pro = new Product();
             pro.ID = product.Id == Guid.Empty ? Guid.NewGuid() : product.Id;
             pro.Name = product.Name;
             pro.Description = product.Description;
@@ -1228,7 +1238,7 @@ namespace InventoryManagement.Controllers.api
         {
             return products.Select(c => new ProductTypeTaxesDTO
             {
-                ProductTaxeId = c.ProductTypeId,
+                ProductTaxeId = c.Id,
                 ProductTypeId = c.ProductTypeId,
                 SGST = c.SGST,
                 CGST = c.CGST,
@@ -1248,13 +1258,24 @@ namespace InventoryManagement.Controllers.api
             {
                 try
                 {
-                    ProductTypeTax pro = SetProductTaxes(product);
-                    productctx.ProductTypeTaxes.Add(pro);
+                    ProductTypeTax pro1=new ProductTypeTax();
 
-                    if (product.Id != Guid.Empty)
-                        productctx.Entry(pro).State = System.Data.Entity.EntityState.Modified;
+                    if (product.ProductTaxeId ==null || product.ProductTaxeId == 0)
+                    {
+                        // SetProductTaxes(pro,product);
+                        productctx.ProductTypeTaxes.Add(SetProductTaxes(pro1, product));
+                    }
                     else
-                        productctx.Entry(pro).State = System.Data.Entity.EntityState.Added;
+                    {
+                        pro1= productctx.ProductTypeTaxes.Where(c => c.Id == product.ProductTaxeId).FirstOrDefault();
+                        SetProductTaxes(pro1, product);
+                    }
+                      
+
+                    if (product.ProductTaxeId == null ||  product.ProductTaxeId == 0)
+                        productctx.Entry(pro1).State = System.Data.Entity.EntityState.Added;
+                    else
+                        productctx.Entry(pro1).State = System.Data.Entity.EntityState.Modified;
 
                     productctx.SaveChanges();
                 }
@@ -1266,9 +1287,12 @@ namespace InventoryManagement.Controllers.api
             return Ok();
         }
 
-        ProductTypeTax SetProductTaxes(ProductTypeTaxesDTO product)
+        ProductTypeTax SetProductTaxes(ProductTypeTax pro, ProductTypeTaxesDTO product)
         {           
-            ProductTypeTax pro = new ProductTypeTax();
+            if(product.ProductTaxeId == null || product.ProductTaxeId==0)
+            pro = new ProductTypeTax();
+           // else
+
             pro.ProductTypeId = product.ProductTypeId;
             pro.SGST = product.SGST;
             pro.CGST = product.CGST;
@@ -1276,7 +1300,7 @@ namespace InventoryManagement.Controllers.api
             pro.AffectiveFrom = product.AffectiveFrom;
             pro.AffectiveTo = product.AffectiveTo;
             pro.Isactive = product.Isactive;
-            if (product.Id == Guid.Empty)
+            if (product.ProductTaxeId == null || product.ProductTaxeId == 0)
             {
                 pro.CreatedBy = product.CreatedBy;
                 pro.CreatedOn = DateTime.UtcNow;
@@ -1289,6 +1313,38 @@ namespace InventoryManagement.Controllers.api
             return pro;
         }
 
+        public IHttpActionResult GetProductTaxes(long? id)
+        {
+            ProductTypeTaxesDTO product = null;
+            using (InventoryManagementEntities hhh = new InventoryManagementEntities())
+            {
+                var filteredemployers = hhh.ProductTypeTaxes.Where(c => c.Id == id);
+                if (filteredemployers != null && filteredemployers.Any())
+                {
+                    product = SetProductData(filteredemployers.AsEnumerable()).FirstOrDefault();
+                }
+            }
+            return Ok(product);
+        }
+
+        [HttpDelete]
+        [ActionName("InactiveProductTaxesData")]
+        public IHttpActionResult InactiveProductTaxes(long id)
+        {
+            using (var ctx = new InventoryManagementEntities())
+            {
+                var user = ctx.ProductTypeTaxes.FirstOrDefault(c => c.Id == id);
+                if (user != null)
+                {
+                    user.Isactive = false;
+                    ctx.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                    ctx.SaveChanges();
+                }
+
+            }
+
+            return Ok();
+        }
         #endregion
 
         void SendMail(MailMessage Message)

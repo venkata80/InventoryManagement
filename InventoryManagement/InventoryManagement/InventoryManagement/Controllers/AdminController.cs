@@ -692,7 +692,7 @@ namespace InventoryManagement.Controllers
         {
             if (Session["CurrentUser"] != null)
             {
-                IList<SupplierPriceListDTO> supplierlst =null;
+                IList<SupplierPriceListDTO> supplierlst = null;
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(value);
@@ -731,7 +731,7 @@ namespace InventoryManagement.Controllers
             {
                 if (MasterDataDetails == null)
                     MasterDataDetails = ReadMasterData(MasterDataType.None);
-               
+
                 SupplierPriceListDTO supplierl = new SupplierPriceListDTO();
                 supplierl.SupplierList = GetSupplierList();
                 supplierl.ProductList = new List<ProductDTO>();
@@ -904,7 +904,7 @@ namespace InventoryManagement.Controllers
                         model.CreatedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
                         model.ModifiedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
                         model.Isactive = true;
-                       var postTask = client.PostAsJsonAsync<ProductDTO>("Employer/SaveProduct", model);
+                        var postTask = client.PostAsJsonAsync<ProductDTO>("Employer/SaveProduct", model);
                         postTask.Wait();
                         var result = postTask.Result;
 
@@ -936,8 +936,8 @@ namespace InventoryManagement.Controllers
                         var readTask = result.Content.ReadAsAsync<ProductDTO>();
                         readTask.Wait();
 
-                        emplist =(ProductDTO)readTask.Result;
-                       
+                        emplist = (ProductDTO)readTask.Result;
+
                     }
                     else //web api sent error response 
                     {
@@ -967,7 +967,7 @@ namespace InventoryManagement.Controllers
         public ActionResult DeleteProduct(Guid? id)
         {
             if (Session["CurrentUser"] != null)
-            {              
+            {
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(value);
@@ -977,15 +977,15 @@ namespace InventoryManagement.Controllers
                     if (result.IsSuccessStatusCode)
                     {
                         var readTask = result;
-                       // readTask.Wait();
+                        // readTask.Wait();
                     }
                     else //web api sent error response 
-                    {                    
+                    {
                         ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
                     }
                     return View("Product/Products");
                 }
-               
+
             }
             return RedirectToAction("UserLogin", "Account");
         }
@@ -995,7 +995,7 @@ namespace InventoryManagement.Controllers
         {
             if (Session["CurrentUser"] != null)
             {
-              // List<ProductTypeTaxesDTO> producttaxes = new List<ProductTypeTaxesDTO>();
+                // List<ProductTypeTaxesDTO> producttaxes = new List<ProductTypeTaxesDTO>();
                 IList<ProductTypeTaxesDTO> productlst = null;
                 if (Session["MasterData"] == null)
                 {
@@ -1054,6 +1054,68 @@ namespace InventoryManagement.Controllers
                     }
                 }
                 return View("Product/ProductTypeTaxes", model);
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+
+        public ActionResult EditProductTypetaxes(long? id)
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                ProductTypeTaxesDTO emplist = null;
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(value);
+                    var responseTask = client.GetAsync("Employer/GetProductTaxes/" + id);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<ProductTypeTaxesDTO>();
+                        readTask.Wait();
+
+                        emplist = (ProductTypeTaxesDTO)readTask.Result;
+
+                    }
+                    else //web api sent error response 
+                    {
+                        //log response status here..
+
+                        //  emplist =  IList.Empty<BaseEmployerDTO>();
+
+
+                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                    }
+                    if (Session["MasterData"] == null)
+                        Session["MasterData"] = ReadMasterData(MasterDataType.None);
+                    return View("Product/CreateProductTypeTaxes", emplist);
+                }
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
+
+        public ActionResult DeleteProductTypetaxes(long? id)
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(value);
+                    var responseTask = client.DeleteAsync("Employer/InactiveProductTaxesData/" + id);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result;
+                        // readTask.Wait();
+                    }
+                    else //web api sent error response 
+                    {
+                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                    }
+                    return View("Product/ProductTypeTaxes");
+                }
+
             }
             return RedirectToAction("UserLogin", "Account");
         }
