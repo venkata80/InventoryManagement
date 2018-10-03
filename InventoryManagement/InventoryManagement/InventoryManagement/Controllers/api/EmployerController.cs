@@ -768,13 +768,19 @@ namespace InventoryManagement.Controllers.api
             {
                 try
                 {
-                    SupplierPriceList pro = SetSupplier(product);
-                    productctx.SupplierPriceLists.Add(pro);
+                    SupplierPriceList pro1 = new SupplierPriceList();
+                    if(product.Id==Guid.Empty)
+                        productctx.SupplierPriceLists.Add(SetSupplier(pro1,product));
+                    else
+                    {
+                        pro1 = productctx.SupplierPriceLists.Where(c => c.SupplierPLId == product.Id).FirstOrDefault();
+                        SetSupplier(pro1, product);
+                    }                       
 
                     if (product.Id != Guid.Empty)
-                        productctx.Entry(pro).State = System.Data.Entity.EntityState.Modified;
+                        productctx.Entry(pro1).State = System.Data.Entity.EntityState.Modified;
                     else
-                        productctx.Entry(pro).State = System.Data.Entity.EntityState.Added;
+                        productctx.Entry(pro1).State = System.Data.Entity.EntityState.Added;
 
                     productctx.SaveChanges();
                 }
@@ -786,10 +792,11 @@ namespace InventoryManagement.Controllers.api
             return Ok();
         }
 
-        SupplierPriceList SetSupplier(SupplierPriceListDTO product)
+        SupplierPriceList SetSupplier(SupplierPriceList pro, SupplierPriceListDTO product)
         {
             int? Nullablevalue = null;
-            SupplierPriceList pro = new SupplierPriceList();
+            if(product.Id ==Guid.Empty)
+             pro = new SupplierPriceList();
             pro.SupplierPLId = product.Id == Guid.Empty ? Guid.NewGuid() : product.Id;
             pro.ProductId = product.ProductId == Guid.Empty ? Guid.NewGuid() : product.ProductId;
            pro.SupplierId = product.SupplierId == Guid.Empty ? Guid.NewGuid() : product.SupplierId;
