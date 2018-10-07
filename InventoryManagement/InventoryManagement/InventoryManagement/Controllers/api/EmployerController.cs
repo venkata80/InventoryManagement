@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
+using System.Text;
 using System.Web.Configuration;
 using System.Web.Http;
 using System.Web.Security;
@@ -1127,19 +1128,20 @@ namespace InventoryManagement.Controllers.api
                 Isactive=c.Isactive.Value,
             }).ToList();
         }
-       
+
         [HttpPost]
         public IHttpActionResult SaveProduct(ProductDTO product)
         {
+            Product pro1 = new Product();
+            ProductImage proimage = new ProductImage();
             using (var productctx = new InventoryManagementEntities())
             {
                 try
                 {
-                    Product pro1 = new Product();
-
-                    if (product.Id == null)
+                    if (product.Id == Guid.Empty)
                     {
-                        productctx.Products.Add(SetProduct(pro1, product));
+                        pro1 = SetProduct(pro1, product);
+                        productctx.Products.Add(pro1);
                     }
                     else
                     {
@@ -1147,28 +1149,41 @@ namespace InventoryManagement.Controllers.api
                         SetProduct(pro1, product);
                     }
 
-                    if (product.Id != Guid.Empty)
-                        productctx.Entry(pro1).State = System.Data.Entity.EntityState.Modified;
-                    else
-                        productctx.Entry(pro1).State = System.Data.Entity.EntityState.Added;
-
                     productctx.SaveChanges();
+
+                    if (product.UploadImage != null && !string.IsNullOrWhiteSpace(product.UploadImage.FileName))
+                    {
+                        product.Id = pro1.ID;
+                        if (product.UploadImage.Id == Guid.Empty)
+                        {
+                            proimage = SetProductImage(proimage, product);
+                            productctx.ProductImages.Add(proimage);
+                        }
+                        else
+                        {
+                            proimage = productctx.ProductImages.Where(c => c.ID == product.UploadImage.Id).FirstOrDefault();
+                            SetProductImage(proimage, product);
+                        }
+                        
+                        productctx.SaveChanges();
+                    }
+
                 }
                 catch (Exception ex)
                 {
 
                 }
             }
-            return Ok();
+            return Ok(proimage.ID);
         }
 
         Product SetProduct(Product pro, ProductDTO product)
         {
             int? Nullablevalue = null;
-            if(product.Id ==Guid.Empty)
-             pro = new Product();
+            if (product.Id == Guid.Empty)
+                pro = new Product();
             pro.ID = product.Id == Guid.Empty ? Guid.NewGuid() : product.Id;
-            pro.Name = product.Name;
+            pro.Name = SetProductName(product);
             pro.Description = product.Description;
             pro.Type = product.Type;
             pro.ShortCode = product.ShortCode;
@@ -1191,7 +1206,6 @@ namespace InventoryManagement.Controllers.api
             pro.Catergory = Convert.ToInt64(product.Category) > long.MinValue ? product.Category : Nullablevalue;
             pro.Unit = Convert.ToInt64(product.Unit) > long.MinValue ? product.Unit : Nullablevalue;
             pro.Isactive = product.Isactive;
-            pro.CreatedBy = product.CreatedBy;
             if (product.Id == Guid.Empty)
             {
                 pro.CreatedBy = product.CreatedBy;
@@ -1203,6 +1217,90 @@ namespace InventoryManagement.Controllers.api
             pro.ModifiedBy = product.ModifiedBy;
 
             return pro;
+        }
+
+        string SetProductName(ProductDTO product)
+        {
+            StringBuilder name = new StringBuilder();
+            List<MasterDataDTO> MasterDataDetails = MaterDataList();
+            if (MasterDataDetails != null && MasterDataDetails.Any())
+            {
+                if (!string.IsNullOrWhiteSpace(product.ShortCode))
+                {
+                    name.Append(product.ShortCode);
+                    name.Append("-");
+                }
+                if (Convert.ToInt32(product.Brand) > int.MinValue)
+                {
+                    name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Brand && c.Id == product.Brand)?.MasterName);
+                    name.Append("-");
+                }
+                if (Convert.ToInt32(product.ProductForm) > int.MinValue)
+                {
+                    name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.ProductForm && c.Id == product.ProductForm)?.MasterName);
+                    name.Append("-");
+                }
+                if (Convert.ToInt32(product.Variety) > int.MinValue)
+                {
+                    name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Variety && c.Id == product.Variety)?.MasterName);
+                    name.Append("-");
+                }
+                if (Convert.ToInt32(product.Specie) > int.MinValue)
+                {
+                    name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Specie && c.Id == product.Specie)?.MasterName);
+                    name.Append("-");
+                }
+                if (Convert.ToInt32(product.FreezingType) > int.MinValue)
+                {
+                    name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.FreezingType && c.Id == product.FreezingType)?.MasterName);
+                    name.Append("-");
+                }
+                if (Convert.ToInt32(product.PackingType) > int.MinValue)
+                {
+                    name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.PackingType && c.Id == product.PackingType)?.MasterName);
+                    name.Append("-");
+                }
+                if (Convert.ToInt32(product.Soaked) > int.MinValue)
+                {
+                    name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.PackingType && c.Id == product.Soaked)?.MasterName);
+                    name.Append("-");
+                }
+                if (Convert.ToInt32(product.Grade) > int.MinValue)
+                {
+                    name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Grades && c.Id == product.Grade)?.MasterName);
+                    name.Append("-");
+                }
+                if (Convert.ToInt32(product.Quantity) > int.MinValue && Convert.ToInt32(product.PackingStyle) > int.MinValue)
+                {
+                    name.Append(product.Quantity);
+                    name.Append("x");
+                    name.Append(product.PackingStyle);
+                }
+            }
+            return name.ToString();
+        }
+
+        ProductImage SetProductImage(ProductImage proImage, ProductDTO product)
+        {
+            if (product.UploadImage.Id == Guid.Empty)
+                proImage = new ProductImage();
+
+            proImage.ID = product.UploadImage.Id == Guid.Empty ? Guid.NewGuid() : product.UploadImage.Id;
+            proImage.ProductID = product.Id;
+            proImage.ImageName = product.UploadImage.FileName;
+            proImage.ActiveFL = true;
+            proImage.CreatedBy = product.CreatedBy;
+            if (product.UploadImage.Id == Guid.Empty)
+            {
+                proImage.CreatedBy = product.CreatedBy;
+                proImage.CreatedDate = DateTime.UtcNow;
+            }
+            else
+                proImage.ModifiedDate = DateTime.UtcNow;
+
+            proImage.ModifiedBy = product.ModifiedBy;
+
+            return proImage;
         }
 
         [HttpDelete]

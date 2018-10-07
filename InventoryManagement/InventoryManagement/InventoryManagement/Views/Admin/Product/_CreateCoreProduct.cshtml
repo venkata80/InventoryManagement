@@ -24,7 +24,7 @@
                 {
                     return new SelectList(masterData.Where(c => c.Type == type).Select(c => new SelectListItem
                     {
-                        Text = string.Concat(c.MasterName, " ", c.Unitname),
+                        Text = c.MasterName,
                         Value = c.Id.ToString()
                     }), "Value", "Text");
                 }
@@ -144,9 +144,46 @@
 <div class="form-group">
     @Html.LabelFor(model => model.NetWeight, htmlAttributes: new { @class = "control-label col-md-3" })
     <div class="col-md-9">
-        @Html.EditorFor(model => model.NetWeight, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.EditorFor(model => model.NetWeight, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
     </div>
 </div>
-@Html.HiddenFor(model => model.CreatedBy, Model.CreatedBy)
-@Html.HiddenFor(model => model.CreatedOn, Model.CreatedOn)
+<div class="form-group">
+    @Html.LabelFor(model => model.UploadImage.File, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.TextBoxFor(model => model.UploadImage.File, new { @class = "form-control", @type = "file" })
+        @Html.ValidationMessageFor(model => model.UploadImage.File, "", new { @id = "spnerrorfile", @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.UploadImage.FileName, htmlAttributes: new { @class = "control-label col-md-3" })
+    <div class="col-md-9">
+        @Html.EditorFor(model => model.UploadImage.FileName, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
+    </div>
+</div>
 
+<script type="text/javascript">
+    $(document).on('change', '#UploadImage_File', function () {
+        var a = 0;
+        if ($('input:submit').attr('disabled', false)) {
+            $('input:submit').attr('disabled', true);
+        }
+        var ext = $('#UploadImage_File').val().split('.').pop().toLowerCase();
+        if ($.inArray(ext, ['png']) == -1) {
+            $('#spnerrorfile').text("Invalid image format! image format must be PNG").show();
+            a = 0;
+        } else {
+            var picsize = (this.files[0].size);
+            if (picsize > 2097152) {
+                $('#spnerrorfile').text("Maximum file size limit is 2MB.").show();
+                a = 0;
+            } else {
+                a = 1;
+                $('#spnerrorfile').text("").hide();
+                $('#UploadImage_FileName').val(this.files[0].name);
+            }
+            if (a == 1) {
+                $('input:submit').attr('disabled', false);
+            }
+        }
+    });
+</script>

@@ -3,6 +3,7 @@ using InventoryManagement.Models;
 using InventoryManagement.Util;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
@@ -619,6 +620,7 @@ namespace InventoryManagement.Controllers
                                 }
                             }
                             TempData["MaterDataType"] = model.Type;
+                            MasterDataDetails = ReadMasterData(MasterDataType.None);
                             return Json(new Response { Status = AjaxResponse.Success });
                         }
 
@@ -643,6 +645,7 @@ namespace InventoryManagement.Controllers
                     var result = postTask.Result;
                     if (result.IsSuccessStatusCode)
                     {
+                        MasterDataDetails = ReadMasterData(MasterDataType.None);
                         return Json(new Response { Status = AjaxResponse.Success }, JsonRequestBehavior.AllowGet);
                     }
 
@@ -815,6 +818,8 @@ namespace InventoryManagement.Controllers
         {
             if (Session["CurrentUser"] != null)
             {
+                if (MasterDataDetails == null)
+                    MasterDataDetails = ReadMasterData(MasterDataType.None);
                 return View("Product/Products");
             }
             return RedirectToAction("UserLogin", "Account");
@@ -904,12 +909,28 @@ namespace InventoryManagement.Controllers
                         model.CreatedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
                         model.ModifiedBy = ((UserSecurityToken)Session["CurrentUser"]).Id;
                         model.Isactive = true;
+
+                        HttpPostedFileBase file = model.UploadImage.File;
+                        model.UploadImage.File = null;
+                        model.UploadImage.FileName = Path.GetFileName(file.FileName);
+
                         var postTask = client.PostAsJsonAsync<ProductDTO>("Employer/SaveProduct", model);
                         postTask.Wait();
                         var result = postTask.Result;
 
                         if (result.IsSuccessStatusCode)
                         {
+                            var readTask = result.Content.ReadAsAsync<Guid>();
+                            readTask.Wait();
+
+                            Guid.TryParse(readTask.Result.ToString(), out Guid productimageid);
+
+                            if (productimageid != Guid.Empty)
+                            {
+                                model.UploadImage.File = file;
+                                SaveFile(model.UploadImage, productimageid);
+                            }
+
                             return RedirectToAction("Products");
                         }
                         ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
@@ -1119,6 +1140,36 @@ namespace InventoryManagement.Controllers
             }
             return RedirectToAction("UserLogin", "Account");
         }
+
+        private string SaveFile(FileUploadDTO hpf, Guid productImageID)
+        {
+            string fileName = string.Empty;
+            try
+            {
+                string uploadPath = Server.MapPath("~/Images/Product");
+                fileName = string.Concat(Path.GetFileNameWithoutExtension(hpf.File.FileName), "_", productImageID,Path.GetExtension(hpf.File.FileName));
+                if (Path.GetFileName(hpf.File.FileName) != null)
+                {
+                    string path = Path.Combine(uploadPath, fileName);
+                    if (!Directory.Exists(uploadPath))
+                    {
+                        Directory.CreateDirectory(uploadPath);
+                    }
+                    hpf.File.SaveAs(path);
+                    //string[] words = hpf.Base64String.Split(',');
+                    //byte[] sPDFDecoded = Convert.FromBase64String(words[1]);
+                    //System.IO.File.WriteAllBytes(path, sPDFDecoded);
+                }
+            }
+            catch (Exception ex)
+            {
+                fileName = string.Empty;
+                throw new Exception("Error while saving file, please try again", ex);
+
+            }
+            return fileName;
+        }
+
         #endregion
     }
 }

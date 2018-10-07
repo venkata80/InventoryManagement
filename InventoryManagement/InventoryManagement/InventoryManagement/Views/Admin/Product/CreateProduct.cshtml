@@ -8,7 +8,7 @@
 
 <h2>CreateProduct</h2>
 
-@using (Html.BeginForm("SaveProduct", "Admin", FormMethod.Post))
+@using (Html.BeginForm("SaveProduct", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <div class="panel panel-default ">
@@ -52,7 +52,7 @@
                 }
             </div>
 
-            <div id="dvcommonproductcontent">
+            <div id="dvcommonproductcontent" class="@(Model.Id != Guid.Empty ? string.Empty : "collapse")">
                 <div class="form-group">
                     @Html.LabelFor(model => model.ThresholdLimit, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-9">

@@ -79,7 +79,7 @@ namespace InventoryManagement.Models
                     {
                         name.Append(Quantity);
                         name.Append("x");
-                        name.Append(PackingStyle);
+                        name.Append(MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.PackingType && c.Id == PackingStyle)?.MasterName);
                     }
                 }
                 return name.ToString();
