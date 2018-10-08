@@ -735,7 +735,42 @@ namespace InventoryManagement.Controllers.api
             }
             return Ok(productDTO);
         }
-
+        public IHttpActionResult GetSuplirespricelistByid(Guid id)
+        {
+            SupplierPriceListDTO product = null;
+            using (InventoryManagementEntities hhh = new InventoryManagementEntities())
+            {
+                var filteredemployers = hhh.SupplierPriceLists.Where(c => c.SupplierPLId == id);
+                if (filteredemployers != null && filteredemployers.Any())
+                {
+                    product = SetSuplirespricelistData(filteredemployers.AsEnumerable()).FirstOrDefault();
+                }
+            }
+            return Ok(product);
+        }
+        IList<SupplierPriceListDTO> SetSuplirespricelistData(IEnumerable<SupplierPriceList> products)
+        {
+            return products.Select(c => new SupplierPriceListDTO
+            {
+                Id = c.SupplierPLId,
+                ProductId = c.ProductId.Value,
+                SupplierId = c.SupplierId.Value,
+                Type = c.Type,
+                Brand = c.BrandId,
+                ProductForm = c.ProductformId,
+                Variety = c.VarietyId,
+                Specie = c.SpiceId,
+                FreezingType = c.FreezingId,
+                PackingType = c.PackingId,
+                PackingCount = c.PackingUnits,
+                ProductType = c.ProductTypeId,
+                Grade = c.GradeId,
+                Soaked = c.Socked,
+                VenderUnits = c.SupplierUnits,
+                ExpectedDays = c.ExpertedDays,
+                Category = c.CategoryType,
+            }).ToList();
+        }
         IList<SupplierPriceListDTO> SetSupplierpricelistData(IEnumerable<SupplierPriceList> suppliers)
         {
             return suppliers.Select(c => new SupplierPriceListDTO
@@ -761,7 +796,7 @@ namespace InventoryManagement.Controllers.api
                 ModifiedBy = c.ModifiedBy.Value
             }).ToList();
         }
-
+        
         [HttpPost]
         public IHttpActionResult SaveSuppliersPriceList(SupplierPriceListDTO product)
         {

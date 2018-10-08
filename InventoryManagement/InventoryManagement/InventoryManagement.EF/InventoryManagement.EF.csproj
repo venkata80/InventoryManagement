@@ -135,6 +135,9 @@
     <Compile Include="Product.cs">
       <DependentUpon>InventoryManagementEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ProductImage.cs">
+      <DependentUpon>InventoryManagementEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ProductTypeTax.cs">
       <DependentUpon>InventoryManagementEntities.tt</DependentUpon>
     </Compile>

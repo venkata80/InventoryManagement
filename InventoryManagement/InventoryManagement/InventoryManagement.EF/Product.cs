@@ -14,6 +14,12 @@ namespace InventoryManagement.EF
     
     public partial class Product
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Product()
+        {
+            this.ProductImages = new HashSet<ProductImage>();
+        }
+    
         public System.Guid ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -46,5 +52,7 @@ namespace InventoryManagement.EF
         public virtual aspnet_Users aspnet_Users { get; set; }
         public virtual aspnet_Users aspnet_Users1 { get; set; }
         public virtual Unit Unit1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProductImage> ProductImages { get; set; }
     }
 }

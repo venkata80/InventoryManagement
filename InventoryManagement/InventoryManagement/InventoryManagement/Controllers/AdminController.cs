@@ -760,12 +760,48 @@ namespace InventoryManagement.Controllers
             }
             return RedirectToAction("UserLogin", "Account");
         }
-        public ActionResult EditSupplierPricelist(long id)
+        public ActionResult EditSupplierPricelist(Guid? id)
         {
             if (Session["CurrentUser"] != null)
             {
-                return View("Supplier/CreateSupplierPriceList");
+                SupplierPriceListDTO emplist = null;
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(value);
+                    var responseTask = client.GetAsync("Employer/GetSuplirespricelistByid/" + id);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<SupplierPriceListDTO>();
+                        readTask.Wait();
+
+                        emplist = (SupplierPriceListDTO)readTask.Result;
+
+                    }
+                    else //web api sent error response 
+                    {
+                        //log response status here..
+
+                        //  emplist =  IList.Empty<BaseEmployerDTO>();
+
+
+                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                    }
+                    if (Session["MasterData"] == null)
+                        Session["MasterData"] = ReadMasterData(MasterDataType.None);
+                    if (emplist == null)
+                        emplist = new SupplierPriceListDTO();
+                    emplist.SupplierList = new List<SuppliersDTO>();
+                    emplist.SupplierList = GetSupplierList();
+                    emplist.ProductList = new List<ProductDTO>();
+                    return View("Supplier/CreateSupplierPriceList", emplist);
+                }
             }
+            //if (Session["CurrentUser"] != null)
+            //{
+            //    return View("Supplier/CreateSupplierPriceList");
+            //}
             return RedirectToAction("UserLogin", "Account");
         }
 

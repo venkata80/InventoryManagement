@@ -81,16 +81,15 @@
                 }
             </div>
 
-            <div id="dvcommonsupplierpricelistcontent" class="collapse">
+           
                  <div class="form-group"></div>
                 <div class="row">
                     <div class="col-md-offset-2 col-md-10">
-                        @Html.HiddenFor(model => model.Id, Model.Id)
+                        @Html.HiddenFor(model => model.Id , Model.Id)
                         <br />
                         <input type="submit" value="@(Model.Id != Guid.Empty ? "Save" : "Create")" class="btn btn-default" />
                         <input type="button" value="Cancel" class="btn" onclick="javascript: window.location.href='@Url.Action("SupplierPriceList","Admin")'" />
-                    </div>
-                </div>
+                    </div>              
             </div>
         </div>
     </div>

@@ -57,6 +57,7 @@ namespace InventoryManagement.EF
         public virtual DbSet<SupplierPriceList> SupplierPriceLists { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductTypeTax> ProductTypeTaxes { get; set; }
+        public virtual DbSet<ProductImage> ProductImages { get; set; }
     
         public virtual ObjectResult<string> aspnet_AnyDataInTables(Nullable<int> tablesToCheck)
         {

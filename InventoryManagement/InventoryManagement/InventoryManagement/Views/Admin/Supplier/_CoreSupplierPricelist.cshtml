@@ -78,8 +78,8 @@
                         @item.ExpectedDays 
                     </td>
                     <td>
-                        @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
+                        @Html.ActionLink("Edit", "EditSupplierPricelist", new { id = item.Id }) @Html.Raw(" | ")
+                        @Html.ActionLink("Delete", "DeleteProduct", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');" })
                     </td>
                 </tr>
             }

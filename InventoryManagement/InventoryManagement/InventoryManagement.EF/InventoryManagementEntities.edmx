@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="InventoryManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="InventoryManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Address">
           <Key>
             <PropertyRef Name="ID" />
@@ -242,6 +242,19 @@
           <Property Name="ModifiedBy" Type="uniqueidentifier" Nullable="false" />
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="Catergory" Type="bigint" />
+        </EntityType>
+        <EntityType Name="ProductImage">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ProductID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ImageName" Type="nvarchar" MaxLength="500" />
+          <Property Name="ActiveFL" Type="bit" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="ProductTypeTaxes">
           <Key>
@@ -815,6 +828,42 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ProductImage_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="ProductImage" Type="Self.ProductImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProductImage">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductImage_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="ProductImage" Type="Self.ProductImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProductImage">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductImage_User1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="ProductImage" Type="Self.ProductImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProductImage">
+              <PropertyRef Name="ModifiedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Supplier_Address">
           <End Role="Address" Type="Self.Address" Multiplicity="0..1" />
           <End Role="Supplier" Type="Self.Supplier" Multiplicity="*" />
@@ -1236,6 +1285,7 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <EntitySet Name="EmployerUserPermission" EntityType="Self.EmployerUserPermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MasterData" EntityType="Self.MasterData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductImage" EntityType="Self.ProductImage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductTypeTaxes" EntityType="Self.ProductTypeTaxes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SupplierPriceList" EntityType="Self.SupplierPriceList" Schema="dbo" store:Type="Tables" />
@@ -1443,6 +1493,18 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <AssociationSet Name="FK_Product_Units" Association="Self.FK_Product_Units">
             <End Role="Units" EntitySet="Units" />
             <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductImage_Product" Association="Self.FK_ProductImage_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="ProductImage" EntitySet="ProductImage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductImage_User" Association="Self.FK_ProductImage_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="ProductImage" EntitySet="ProductImage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductImage_User1" Association="Self.FK_ProductImage_User1">
+            <End Role="User" EntitySet="User" />
+            <End Role="ProductImage" EntitySet="ProductImage" />
           </AssociationSet>
           <AssociationSet Name="FK_Supplier_Address" Association="Self.FK_Supplier_Address">
             <End Role="Address" EntitySet="Address" />
@@ -1766,6 +1828,8 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <NavigationProperty Name="EmployerUsers" Relationship="Self.FK_EmployerUser_User" FromRole="User" ToRole="EmployerUser" />
           <NavigationProperty Name="EmployerUserPermissions" Relationship="Self.FK_EmployerUserPermission_User" FromRole="User" ToRole="EmployerUserPermission" />
           <NavigationProperty Name="Supplier" Relationship="Self.FK_Supplier_User" FromRole="User" ToRole="Supplier" />
+          <NavigationProperty Name="ProductImages" Relationship="InventoryManagementModel.FK_ProductImage_User" FromRole="User" ToRole="ProductImage" />
+          <NavigationProperty Name="ProductImages1" Relationship="InventoryManagementModel.FK_ProductImage_User1" FromRole="User" ToRole="ProductImage" />
         </EntityType>
         <EntityType Name="vw_aspnet_Applications">
           <Key>
@@ -2744,6 +2808,19 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
             <End Role="Product" EntitySet="Products" />
           </AssociationSet>
           <EntitySet Name="ProductTypeTaxes" EntityType="InventoryManagementModel.ProductTypeTax" />
+          <EntitySet Name="ProductImages" EntityType="InventoryManagementModel.ProductImage" />
+          <AssociationSet Name="FK_ProductImage_Product" Association="InventoryManagementModel.FK_ProductImage_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="ProductImage" EntitySet="ProductImages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductImage_User" Association="InventoryManagementModel.FK_ProductImage_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ProductImage" EntitySet="ProductImages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductImage_User1" Association="InventoryManagementModel.FK_ProductImage_User1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ProductImage" EntitySet="ProductImages" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="aspnet_Membership_GetPassword_Result">
           <Property Type="String" Name="Column1" Nullable="true" MaxLength="128" />
@@ -2865,6 +2942,7 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <NavigationProperty Name="aspnet_Users" Relationship="InventoryManagementModel.FK_Product_aspnet_Users" FromRole="Product" ToRole="aspnet_Users" />
           <NavigationProperty Name="aspnet_Users1" Relationship="InventoryManagementModel.FK_Product_aspnet_Users1" FromRole="Product" ToRole="aspnet_Users" />
           <NavigationProperty Name="Unit1" Relationship="InventoryManagementModel.FK_Product_Units" FromRole="Product" ToRole="Unit" />
+          <NavigationProperty Name="ProductImages" Relationship="InventoryManagementModel.FK_ProductImage_Product" FromRole="Product" ToRole="ProductImage" />
         </EntityType>
         <Association Name="FK_Product_aspnet_Users">
           <End Type="InventoryManagementModel.aspnet_Users" Role="aspnet_Users" Multiplicity="1" />
@@ -2919,6 +2997,58 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
           <Property Name="ModifiedBy" Type="Guid" />
           <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="ProductImage">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="ProductID" Type="Guid" Nullable="false" />
+          <Property Name="ImageName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ActiveFL" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="Guid" Nullable="false" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Product" Relationship="InventoryManagementModel.FK_ProductImage_Product" FromRole="ProductImage" ToRole="Product" />
+          <NavigationProperty Name="User" Relationship="InventoryManagementModel.FK_ProductImage_User" FromRole="ProductImage" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="InventoryManagementModel.FK_ProductImage_User1" FromRole="ProductImage" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_ProductImage_Product">
+          <End Type="InventoryManagementModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="InventoryManagementModel.ProductImage" Role="ProductImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProductImage">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductImage_User">
+          <End Type="InventoryManagementModel.User" Role="User" Multiplicity="1" />
+          <End Type="InventoryManagementModel.ProductImage" Role="ProductImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProductImage">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductImage_User1">
+          <End Type="InventoryManagementModel.User" Role="User" Multiplicity="1" />
+          <End Type="InventoryManagementModel.ProductImage" Role="ProductImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProductImage">
+              <PropertyRef Name="ModifiedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3498,6 +3628,20 @@ warning 6002: The table/view 'InventoryManagement_05092018.dbo.vw_aspnet_WebPart
                 <ScalarProperty Name="SGST" ColumnName="SGST" />
                 <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductImages">
+            <EntityTypeMapping TypeName="InventoryManagementModel.ProductImage">
+              <MappingFragment StoreEntitySet="ProductImage">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ActiveFL" ColumnName="ActiveFL" />
+                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
