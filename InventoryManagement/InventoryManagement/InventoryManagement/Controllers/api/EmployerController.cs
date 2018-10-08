@@ -1151,17 +1151,24 @@ namespace InventoryManagement.Controllers.api
                 Soaked = c.Soaked,
                 Ply = c.Ply,
                 Print = c.PrintType,
-                Top =c.TopType,
+                Top = c.TopType,
                 Dimensions = c.Dimensions,
-                NetWeight=c.NetWeight,
+                NetWeight = c.NetWeight,
                 ThresholdLimit = Convert.ToInt32(c.ThresholdLimit).ToString(),
                 Category = c.Catergory,
                 Unit = c.Unit,
-                CreatedBy=c.CreatedBy,
-                CreatedOn=c.CreatedDate,
-                ModifiedBy=c.ModifiedBy,
-                Isactive=c.Isactive.Value,
+                CreatedBy = c.CreatedBy,
+                CreatedOn = c.CreatedDate,
+                ModifiedBy = c.ModifiedBy,
+                Isactive = c.Isactive.Value,
+                UploadImage = ReadProductImage(c)
             }).ToList();
+        }
+
+        FileUploadDTO ReadProductImage(Product product)
+        {
+            ProductImage productimage = product.ProductImages.FirstOrDefault(c => c.ProductID == product.ID);
+            return productimage != null ? new FileUploadDTO { Id = productimage.ID, FileName = productimage.ImageName } : new FileUploadDTO();
         }
 
         [HttpPost]
@@ -1322,7 +1329,7 @@ namespace InventoryManagement.Controllers.api
 
             proImage.ID = product.UploadImage.Id == Guid.Empty ? Guid.NewGuid() : product.UploadImage.Id;
             proImage.ProductID = product.Id;
-            proImage.ImageName = product.UploadImage.FileName;
+            proImage.ImageName = string.Concat(proImage.ID, System.IO.Path.GetExtension(product.UploadImage.FileName));
             proImage.ActiveFL = true;
             proImage.CreatedBy = product.CreatedBy;
             if (product.UploadImage.Id == Guid.Empty)

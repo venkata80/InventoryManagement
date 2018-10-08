@@ -6,14 +6,14 @@
     ViewBag.Title = "CreateProduct";
 }
 
-<h2>CreateProduct</h2>
+<h2>Create Product</h2>
 
 @using (Html.BeginForm("SaveProduct", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <div class="panel panel-default ">
         <div class="panel-heading">
-            <b> Add Product</b> <span class="label label-info ">    <span class="glyphicon glyphicon-th-list"></span>  @Html.ActionLink("View Employers", "Employers", "Admin")</span>
+            <b> Add Product</b> <span class="label label-info ">    <span class="glyphicon glyphicon-th-list"></span>  @Html.ActionLink("View Products", "Products", "Admin")</span>
         </div>
         <div class="panel-body">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })

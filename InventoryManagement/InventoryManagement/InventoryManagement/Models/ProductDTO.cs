@@ -95,7 +95,7 @@ namespace InventoryManagement.Models
         public long? Print { get; set; }
         public long? Top { get; set; }
         public bool Isactive { get; set; }
-       public FileUploadDTO UploadImage { get; set; }
+        public FileUploadDTO UploadImage { get; set; } = new FileUploadDTO();
 
     }
 }

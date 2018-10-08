@@ -1,6 +1,40 @@
-﻿@model IEnumerable<InventoryManagement.Models.ProductDTO>
+﻿@using InventoryManagement.Models
+@using InventoryManagement.Enums
+
+@model IEnumerable<InventoryManagement.Models.ProductDTO>
+
+@functions{
+
+    public SelectList GetMasterData(MasterDataType type)
+    {
+        if (Session["MasterData"] != null)
+        {
+            List<MasterDataDTO> masterData = (List<MasterDataDTO>)Session["MasterData"];
+            if (masterData != null && masterData.Any())
+            {
+                return new SelectList(masterData.Where(c => c.Type == type).Select(c => new SelectListItem
+                {
+                    Text = c.MasterName,
+                    Value = c.Id.ToString()
+                }), "Value", "Text");
+            }
+        }
+        return new SelectList(new List<MasterDataDTO>());
+    }
+}
 
 <div class="padding-md clearfix">
+    <table class="table table-striped" style="border:double;">
+        <tr>
+            <td><h4>Search By</h4> </td>
+            <td>
+                @Html.DropDownList("PackingType", GetMasterData(MasterDataType.ProductType), "Packing Type", new { @id = "drpPackingType", @class = "form-control", @onchange = "SearchProduct()", @title = "Packing Type" })
+            </td>
+            <td>
+                @Html.DropDownList("Brand", GetMasterData(MasterDataType.Brand), "Brand Nmae", new { @id = "drpBrand", @class = "form-control", @onchange = "SearchProduct()", @title = "Brand Nmae" })
+            </td>
+        </tr>
+    </table>
     <table class="table table-striped" id="dataTable">
         <tr>
             <th>Product Name </th>
@@ -21,7 +55,16 @@
                     <td>@item.PackingType</td>
                     <td>@item.Dimensions</td>
                     <td>@item.ThresholdLimit</td>
-                    <td>Image</td>
+                    <td>
+                        @if (item.UploadImage != null && !string.IsNullOrWhiteSpace(item.UploadImage.FileName))
+                        {
+                            <img src="@(Href(("~/Images/Product/") + item.UploadImage.FileName))" style="width:100px;height:100px;" />
+                        }
+                        else
+                        {
+                            <span>Default image</span>
+                        }
+                    </td>
                     <td>
                         @Html.ActionLink("Edit", "EditProduct", new { id = item.Id }) @Html.Raw(" | ")
                         @Html.ActionLink("Delete", "DeleteProduct", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');" })
@@ -31,3 +74,11 @@
         }
     </table>
 </div>
+
+<script type="text/javascript">
+    function SearchProduct() {
+        $('#dvproductcontent').load('@Url.Action("SearchProduct", "Admin")', { brand: $('#drpBrand').val(), packingtype: $('#drpPackingType').val() }, function (response, status, xhr) {
+            OnSuccessetProducts(response);
+        });
+    }
+</script>

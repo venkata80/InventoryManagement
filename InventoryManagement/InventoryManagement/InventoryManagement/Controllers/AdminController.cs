@@ -1047,6 +1047,33 @@ namespace InventoryManagement.Controllers
             return RedirectToAction("UserLogin", "Account");
         }
 
+        public ActionResult SearchProduct(long? brand = null, long? packingtype = null)
+        {
+            if (Session["CurrentUser"] != null)
+            {
+                IList<ProductDTO> productlst = null;
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(value);
+                    var responseTask = client.GetAsync("Employer/GetProducts?CoreItemFL=1");
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<IList<ProductDTO>>();
+                        readTask.Wait();
+
+                        productlst = readTask.Result;
+                        if (brand.HasValue)
+                            productlst = productlst.Where(c => c.Brand == brand.Value).ToList();
+                        if (packingtype.HasValue)
+                            productlst = productlst.Where(c => c.PackingType == packingtype.Value).ToList();
+                    }
+                }
+                return PartialView("Product/_CoreProducts", productlst);
+            }
+            return RedirectToAction("UserLogin", "Account");
+        }
 
         public ActionResult ProductTypeTaxes()
         {
@@ -1183,7 +1210,7 @@ namespace InventoryManagement.Controllers
             try
             {
                 string uploadPath = Server.MapPath("~/Images/Product");
-                fileName = string.Concat(Path.GetFileNameWithoutExtension(hpf.File.FileName), "_", productImageID,Path.GetExtension(hpf.File.FileName));
+                fileName = string.Concat(productImageID, Path.GetExtension(hpf.File.FileName));
                 if (Path.GetFileName(hpf.File.FileName) != null)
                 {
                     string path = Path.Combine(uploadPath, fileName);
