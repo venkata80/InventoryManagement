@@ -656,7 +656,7 @@ namespace InventoryManagement.Controllers
             return Json(new Response { Status = AjaxResponse.SessionExpired }, JsonRequestBehavior.AllowGet);
         }
 
-        List<MasterDataDTO> ReadMasterData(MasterDataType type)
+       public List<MasterDataDTO> ReadMasterData(MasterDataType type)
         {
             List<MasterDataDTO> masterlist = new List<MasterDataDTO>();
             using (var client = new HttpClient())
@@ -707,6 +707,7 @@ namespace InventoryManagement.Controllers
                         var readTask = result.Content.ReadAsAsync<IList<SupplierPriceListDTO>>();
                         readTask.Wait();
                         supplierlst = readTask.Result;
+                        Session["SupplierList"] = supplierlst;
                     }
                 }
 

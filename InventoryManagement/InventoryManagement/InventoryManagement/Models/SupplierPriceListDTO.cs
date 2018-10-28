@@ -31,5 +31,182 @@ namespace InventoryManagement.Models
         public long? VenderUnits { get; set; }
         public string ExpectedDays { get; set; }
         public bool IsActive { get; set; }
+        //Display
+        public string BrandName
+        {
+            get
+            {
+                string bname = string.Empty;
+                if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
+                {
+                    List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
+                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    {
+                        bname = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Brand && c.Id == Brand)?.MasterName;
+                    }
+                }
+                return bname;
+            }
+        }
+        public string FreezingTypeName
+        {
+            get
+            {
+                string Fname = string.Empty;
+                if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
+                {
+                    List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
+                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    {
+                        Fname = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.FreezingType && c.Id == FreezingType)?.MasterName;
+                    }
+                }
+                return Fname;
+            }
+        }
+        public string VarietyName
+        {
+            get
+            {
+                string Fname = string.Empty;
+                if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
+                {
+                    List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
+                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    {
+                        Fname = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Variety && c.Id == Variety)?.MasterName;
+                    }
+                }
+                return Fname;
+            }
+        }
+        public string SpecieName
+        {
+            get
+            {
+                string Fname = string.Empty;
+                if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
+                {
+                    List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
+                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    {
+                        Fname = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Specie && c.Id == Specie)?.MasterName;
+                    }
+                }
+                return Fname;
+            }
+        }
+        public string PackingTypeName
+        {
+            get
+            {
+                string Fname = string.Empty;
+                if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
+                {
+                    List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
+                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    {
+                        Fname = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.PackingType && c.Id == PackingType)?.MasterName;
+                    }
+                }
+                return Fname;
+            }
+        }
+        public string ProductFormName
+        {
+            get
+            {
+                string name = string.Empty;
+                if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
+                {
+                    List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
+                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    {
+                        name = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.ProductForm && c.Id == ProductForm)?.MasterName;
+                    }
+                }
+                return name;
+            }
+        }
+        public string GradeName
+        {
+            get
+            {
+                string name = string.Empty;
+                if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
+                {
+                    List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
+                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    {
+                        name = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Grades && c.Id == Grade)?.MasterName;
+                    }
+                }
+                return name;
+            }
+        }
+        public string ProductTypeName
+        {
+            get
+            {
+                string name = string.Empty;
+                if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
+                {
+                    List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
+                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    {
+                        name = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.ProductType && c.Id == ProductType)?.MasterName;
+                    }
+                }
+                return name;
+            }
+        }
+        public string PlyName
+        {
+            get
+            {
+                string name = string.Empty;
+                if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
+                {
+                    List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
+                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    {
+                        name = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Ply && c.Id == Ply)?.MasterName;
+                    }
+                }
+                return name;
+            }
+        }
+        public string CategoryName
+        {
+            get
+            {
+                string name = string.Empty;
+                if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
+                {
+                    List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
+                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    {
+                        name = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.PoductCategory && c.Id == Category)?.MasterName;
+                    }
+                }
+                return name;
+            }
+        }
+        public string SoakedName
+        {
+            get
+            {
+                string name = string.Empty;
+                if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
+                {
+                    List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
+                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    {
+                        name = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Soaked && c.Id == Soaked)?.MasterName;
+                    }
+                }
+                return name;
+            }
+        }
     }
 }

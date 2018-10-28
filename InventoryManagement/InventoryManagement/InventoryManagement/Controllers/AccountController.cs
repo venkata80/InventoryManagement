@@ -74,6 +74,11 @@ namespace InventoryManagement.Controllers
 
                                         UserSecurityToken userSecurityToken = readUserDTOTask.Result;
                                         Session["CurrentUser"] = userSecurityToken;
+                                        if (Session["MasterData"] == null)
+                                            Session["MasterData"] =new AdminController().ReadMasterData(MasterDataType.None);
+                                        if (Session["SupplierList"] == null)
+                                            Session["SupplierList"] = new AdminController().SupplierPriceList();
+
                                         if (userSecurityToken != null)
                                         {
                                             if (userSecurityToken.Role.Guid == RoleType.Admin.Guid)
