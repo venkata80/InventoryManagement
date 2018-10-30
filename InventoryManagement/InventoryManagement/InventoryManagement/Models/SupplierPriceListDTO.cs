@@ -74,7 +74,7 @@ namespace InventoryManagement.Models
                 if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
                 {
                     List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
-                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    if (Convert.ToInt32(FreezingType) > int.MinValue)
                     {
                         Fname = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.FreezingType && c.Id == FreezingType)?.MasterName;
                     }
@@ -90,7 +90,7 @@ namespace InventoryManagement.Models
                 if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
                 {
                     List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
-                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    if (Convert.ToInt32(Variety) > int.MinValue)
                     {
                         Fname = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Variety && c.Id == Variety)?.MasterName;
                     }
@@ -106,7 +106,7 @@ namespace InventoryManagement.Models
                 if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
                 {
                     List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
-                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    if (Convert.ToInt32(Specie) > int.MinValue)
                     {
                         Fname = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Specie && c.Id == Specie)?.MasterName;
                     }
@@ -122,7 +122,7 @@ namespace InventoryManagement.Models
                 if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
                 {
                     List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
-                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    if (Convert.ToInt32(PackingType) > int.MinValue)
                     {
                         Fname = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.PackingType && c.Id == PackingType)?.MasterName;
                     }
@@ -138,7 +138,7 @@ namespace InventoryManagement.Models
                 if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
                 {
                     List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
-                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    if (Convert.ToInt32(ProductForm) > int.MinValue)
                     {
                         name = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.ProductForm && c.Id == ProductForm)?.MasterName;
                     }
@@ -154,7 +154,7 @@ namespace InventoryManagement.Models
                 if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
                 {
                     List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
-                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    if (Convert.ToInt32(Grade) > int.MinValue)
                     {
                         name = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Grades && c.Id == Grade)?.MasterName;
                     }
@@ -170,7 +170,7 @@ namespace InventoryManagement.Models
                 if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
                 {
                     List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
-                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    if (Convert.ToInt32(ProductType) > int.MinValue)
                     {
                         name = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.ProductType && c.Id == ProductType)?.MasterName;
                     }
@@ -186,7 +186,7 @@ namespace InventoryManagement.Models
                 if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
                 {
                     List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
-                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    if (Convert.ToInt32(Ply) > int.MinValue)
                     {
                         name = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Ply && c.Id == Ply)?.MasterName;
                     }
@@ -202,7 +202,7 @@ namespace InventoryManagement.Models
                 if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
                 {
                     List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
-                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    if (Convert.ToInt32(Category) > int.MinValue)
                     {
                         name = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.PoductCategory && c.Id == Category)?.MasterName;
                     }
@@ -218,7 +218,7 @@ namespace InventoryManagement.Models
                 if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["MasterData"] != null)
                 {
                     List<MasterDataDTO> MasterDataDetails = (List<MasterDataDTO>)HttpContext.Current.Session["MasterData"];
-                    if (Convert.ToInt32(Brand) > int.MinValue)
+                    if (Convert.ToInt32(Soaked) > int.MinValue)
                     {
                         name = MasterDataDetails.FirstOrDefault(c => c.Type == MasterDataType.Soaked && c.Id == Soaked)?.MasterName;
                     }

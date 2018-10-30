@@ -5,7 +5,7 @@
         <tr>
             <th>Product Name </th>
             <th>Product Category</th>
-            <th>Units</th>
+            <th>Packing</th>
             <th>Threshold Limit</th>
             <th></th>
         </tr>
@@ -15,8 +15,8 @@
             {
                 <tr class="tremployers">
                     <td>@item.Name</td>
-                    <td>@item.Category</td>
-                    <td>@item.PackingType</td>
+                    <td>@item.CategoryName</td>
+                    <td>@item.PackingTypeName</td>
                     <td>@item.ThresholdLimit</td>
                     <td>
                         @Html.ActionLink("Edit", "EditProduct", new { id = item.Id }) @Html.Raw(" | ")
