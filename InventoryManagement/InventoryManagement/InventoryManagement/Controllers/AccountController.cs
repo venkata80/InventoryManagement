@@ -76,8 +76,8 @@ namespace InventoryManagement.Controllers
                                         Session["CurrentUser"] = userSecurityToken;
                                         if (Session["MasterData"] == null)
                                             Session["MasterData"] =new AdminController().ReadMasterData(MasterDataType.None);
-                                        if (Session["SupplierList"] == null)
-                                            Session["SupplierList"] = new AdminController().SupplierPriceList();
+                                       // if (Session["SupplierList"] == null)
+                                        //    Session["SupplierList"] = new AdminController().GetSupplierList();
 
                                         if (userSecurityToken != null)
                                         {

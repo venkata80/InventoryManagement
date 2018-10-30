@@ -293,6 +293,9 @@ namespace InventoryManagement.Controllers
                     suppleirli = readTask.Result;
                     if (suppleirli == null)
                         suppleirli = new List<SuppliersDTO>();
+                    if (Session["SupplierList"] == null)
+                        Session["SupplierList"] = suppleirli;
+
                 }
                 else //web api sent error response 
                 {
@@ -656,7 +659,7 @@ namespace InventoryManagement.Controllers
             return Json(new Response { Status = AjaxResponse.SessionExpired }, JsonRequestBehavior.AllowGet);
         }
 
-       public List<MasterDataDTO> ReadMasterData(MasterDataType type)
+        public List<MasterDataDTO> ReadMasterData(MasterDataType type)
         {
             List<MasterDataDTO> masterlist = new List<MasterDataDTO>();
             using (var client = new HttpClient())
@@ -707,7 +710,6 @@ namespace InventoryManagement.Controllers
                         var readTask = result.Content.ReadAsAsync<IList<SupplierPriceListDTO>>();
                         readTask.Wait();
                         supplierlst = readTask.Result;
-                        Session["SupplierList"] = supplierlst;
                     }
                 }
 
