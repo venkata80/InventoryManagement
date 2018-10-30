@@ -32,6 +32,24 @@ namespace InventoryManagement.Models
         public string ExpectedDays { get; set; }
         public bool IsActive { get; set; }
         //Display
+      //  public Guid SupplierId { get; set; }
+        public string SupplierName
+        {
+            get
+            {
+                string bname = string.Empty;
+                if (HttpContext.Current != null && HttpContext.Current.Session != null && HttpContext.Current.Session["SupplierList"] != null)
+                {
+                    List<SuppliersDTO> MasterDataDetails = (List<SuppliersDTO>)HttpContext.Current.Session["SupplierList"];
+                    if (SupplierId !=Guid.Empty)
+                    {
+                        bname = MasterDataDetails.FirstOrDefault(c => c.Id == SupplierId)?.SupplierBussinessName;
+                    }
+                }
+                return bname;
+            }
+        }
+
         public string BrandName
         {
             get
